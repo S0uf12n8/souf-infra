@@ -1,4 +1,4 @@
-# souf-infra
+# Souf-infra
 
 Personal portfolio — CS student building toward DevOps/DevSecOps. Terminal/infra aesthetic: the site presents itself as a system you're SSH'd into, not a resume page.
 
@@ -68,3 +68,5 @@ Edit `src/data/projects.ts` — add an entry with `name`, `description`, `stack[
 - [ ] "Infra Lab" project card — add once there's an actual working artifact (Docker/k3s/CI-CD sandbox), not before
 
 ## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
