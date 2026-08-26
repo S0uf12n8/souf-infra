@@ -1,0 +1,50 @@
+---
+// LabGrid.astro — projects grid, iterates over projects.ts data
+import { projects } from '../data/projects';
+import ProjectCard from './ProjectCard.astro';
+---
+
+<section id="lab" class="lab-section">
+  <h2 class="section-label">// LAB — PROJECTS</h2>
+  <div class="lab-grid">
+    {projects.map((project) => (
+      <ProjectCard
+        name={project.name}
+        description={project.description}
+        stack={project.stack}
+        status={project.status}
+        url={project.url}
+      />
+    ))}
+  </div>
+</section>
+
+<style>
+  .lab-section {
+    padding: 6rem 2rem;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--accent-2);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1.5rem;
+  }
+
+  .lab-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+
+  @media (max-width: 680px) {
+    .lab-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

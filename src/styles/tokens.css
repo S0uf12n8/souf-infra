@@ -1,0 +1,12 @@
+:root {
+  --bg:        #0b0e14;   /* near-black, slight blue */
+  --surface:   #11161d;   /* card/panel bg */
+  --surface-2: #171d26;   /* hover/elevated */
+  --border:    #22293380;
+  --text:      #d8dee9;
+  --text-dim:  #838fa1;
+  --accent:    #39ff88;   /* terminal green — primary */
+  --accent-2:  #5eead4;   /* cyan — secondary, links */
+  --warn:      #f5b942;   /* amber — "in progress" / status badges */
+  --danger:    #ff5f5f;   /* red — rarely used, e.g. "deprecated" tag */
+}

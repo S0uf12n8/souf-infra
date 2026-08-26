@@ -1,0 +1,105 @@
+---
+// StackGrid.astro — skills/tools inventory, grouped by category
+const categories = [
+  {
+    label: 'Languages',
+    items: ['C++', 'Python', 'SQL', 'JavaScript/TypeScript'],
+  },
+  {
+    label: 'Infra & DevOps',
+    items: ['Docker', 'Docker Compose', 'k3s', 'GitHub Actions', 'Prometheus', 'Grafana'],
+  },
+  {
+    label: 'Systems',
+    items: ['Linux administration', 'Networking (DTS/DEWEB background)'],
+  },
+  {
+    label: 'Currently learning',
+    items: ['Kubernetes in depth', 'Terraform', 'CI/CD pipeline hardening'],
+  },
+];
+---
+
+<section id="stack" class="stack-section">
+  <h2 class="section-label">// STACK — INVENTORY</h2>
+  <div class="stack-grid">
+    {categories.map((cat) => (
+      <div class="stack-group">
+        <h3 class="stack-label">{cat.label}</h3>
+        <ul class="stack-items">
+          {cat.items.map((item) => (
+            <li class="stack-item">{item}</li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  .stack-section {
+    padding: 6rem 2rem;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--accent-2);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1.5rem;
+  }
+
+  .stack-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+
+  .stack-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .stack-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .stack-items {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .stack-item {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    padding-left: 1rem;
+    position: relative;
+  }
+
+  .stack-item::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+    color: var(--border);
+  }
+
+  @media (max-width: 520px) {
+    .stack-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

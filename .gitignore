@@ -1,0 +1,20 @@
+# build output
+dist/
+
+# generated types
+.astro/
+
+# dependencies
+node_modules/
+
+# environment
+.env
+.env.production
+
+# editor
+.vscode/
+.idea/
+
+# os
+.DS_Store
+Thumbs.db

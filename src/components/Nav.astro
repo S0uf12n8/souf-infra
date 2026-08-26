@@ -1,0 +1,51 @@
+---
+// Nav.astro — fixed minimal nav: System · Lab · Stack · Comms
+---
+
+<nav class="nav">
+  <a href="#system" class="nav-link">System</a>
+  <span class="nav-sep">·</span>
+  <a href="#lab" class="nav-link">Lab</a>
+  <span class="nav-sep">·</span>
+  <a href="#stack" class="nav-link">Stack</a>
+  <span class="nav-sep">·</span>
+  <a href="#comms" class="nav-link">Comms</a>
+</nav>
+
+<style>
+  .nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.85rem 2rem;
+    background: rgba(11, 14, 20, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+  }
+
+  .nav-link {
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: color 0.2s;
+    letter-spacing: 0.03em;
+  }
+
+  .nav-link:hover {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .nav-sep {
+    color: var(--border);
+    user-select: none;
+  }
+</style>
