@@ -68,5 +68,3 @@ Edit `src/data/projects.ts` — add an entry with `name`, `description`, `stack[
 - [ ] "Infra Lab" project card — add once there's an actual working artifact (Docker/k3s/CI-CD sandbox), not before
 
 ## License
-
-TODO — add if you want this public under a specific license (MIT is the standard default for a portfolio repo if you don't have a strong preference).
