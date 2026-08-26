@@ -2,6 +2,7 @@
 // LabGrid.astro — projects grid, iterates over projects.ts data
 import { projects } from '../data/projects';
 import ProjectCard from './ProjectCard.astro';
+import ProjectDetail from './ProjectDetail.astro';
 ---
 
 <section id="lab" class="lab-section">
@@ -18,6 +19,121 @@ import ProjectCard from './ProjectCard.astro';
     ))}
   </div>
 </section>
+
+<ProjectDetail
+  name=""
+  description=""
+  stack={[]}
+  status=""
+  url={null}
+/>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const overlay = document.getElementById('project-detail') as HTMLElement;
+    if (!overlay) return;
+
+    const backdrop = overlay.querySelector('.detail-backdrop') as HTMLElement;
+    const closeBtn = document.getElementById('detail-close') as HTMLElement;
+    const nameEl = document.getElementById('detail-name') as HTMLElement;
+    const descEl = document.getElementById('detail-desc') as HTMLElement;
+    const stackEl = document.getElementById('detail-stack') as HTMLElement;
+    const pillEl = document.getElementById('detail-pill') as HTMLElement;
+    const pillText = document.getElementById('detail-pill-text') as HTMLElement;
+    const linkEl = document.getElementById('detail-link') as HTMLElement;
+    const titleEl = document.getElementById('detail-title') as HTMLElement;
+
+    const statusColor: Record<string, string> = {
+      'ACTIVE': 'var(--accent)',
+      'STABLE': 'var(--accent-2)',
+      'IN PROGRESS': 'var(--warn)',
+      'PRIVATE': 'var(--text-dim)',
+    };
+
+    let lastFocused: HTMLElement | null = null;
+
+    function populate(card: HTMLElement) {
+      const name = card.dataset.name ?? '';
+      const desc = card.dataset.description ?? '';
+      const stack: string[] = JSON.parse(card.dataset.stack ?? '[]');
+      const status = card.dataset.status ?? '';
+      const url = card.dataset.url ?? '';
+
+      nameEl.textContent = name;
+      descEl.textContent = desc;
+      titleEl.textContent = `${name.toLowerCase().replace(/\s+/g, '-')}`;
+
+      if (status && status !== 'PUBLIC') {
+        pillEl.hidden = false;
+        pillText.textContent = status;
+        pillEl.style.setProperty('--pill-color', statusColor[status] ?? 'var(--text-dim)');
+      } else {
+        pillEl.hidden = true;
+      }
+
+      stackEl.innerHTML = stack
+        .map((t) => `<span class="tag">${t}</span>`)
+        .join('');
+
+      if (url) {
+        const label = url.includes('github.com') ? 'GitHub →' : 'Link →';
+        linkEl.innerHTML = `<a href="${url}" target="_blank" rel="noopener noreferrer">${label}</a>`;
+      } else {
+        linkEl.innerHTML = `<span class="no-link">no public link</span>`;
+      }
+    }
+
+    function open(card: HTMLElement) {
+      lastFocused = card;
+      populate(card);
+      overlay.hidden = false;
+      document.body.style.overflow = 'hidden';
+      closeBtn.focus();
+    }
+
+    function close() {
+      overlay.hidden = true;
+      document.body.style.overflow = '';
+      lastFocused?.focus();
+      lastFocused = null;
+    }
+
+    document.querySelectorAll<HTMLElement>('.card[data-name]').forEach((card) => {
+      card.addEventListener('click', () => open(card));
+      card.addEventListener('keydown', (e: KeyboardEvent) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          open(card);
+        }
+      });
+    });
+
+    closeBtn.addEventListener('click', close);
+    backdrop.addEventListener('click', close);
+
+    overlay.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        close();
+        return;
+      }
+      if (e.key === 'Tab') {
+        const focusable = overlay.querySelectorAll<HTMLElement>(
+          'button, [href], [tabindex]:not([tabindex="-1"])'
+        );
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    });
+  });
+</script>
 
 <style>
   .lab-section {

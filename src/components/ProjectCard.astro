@@ -21,7 +21,16 @@ const pillColor = statusColor[status] ?? 'var(--text-dim)';
 const isPublic = status === 'PUBLIC';
 ---
 
-<div class="card">
+<div
+  class="card"
+  role="button"
+  tabindex="0"
+  data-name={name}
+  data-description={description}
+  data-stack={JSON.stringify(stack)}
+  data-status={status}
+  data-url={url ?? ''}
+>
   <div class="card-top">
     <h3 class="card-name">{name}</h3>
     {!isPublic && (
@@ -39,11 +48,9 @@ const isPublic = status === 'PUBLIC';
       ))}
     </div>
     {url ? (
-      <a href={url} target="_blank" rel="noopener noreferrer" class="card-link">
-        {url.includes('github.com') ? 'GitHub →' : 'Link →'}
-      </a>
+      <span class="card-expand-hint">details →</span>
     ) : (
-      <span class="card-private">no public link</span>
+      <span class="card-expand-hint">details →</span>
     )}
   </div>
 </div>
@@ -58,11 +65,17 @@ const isPublic = status === 'PUBLIC';
     flex-direction: column;
     gap: 0.75rem;
     transition: border-color 0.2s, background 0.2s;
+    cursor: pointer;
   }
 
   .card:hover {
     border-color: var(--accent-2);
     background: var(--surface-2);
+  }
+
+  .card:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
   }
 
   .card-top {
@@ -106,6 +119,10 @@ const isPublic = status === 'PUBLIC';
     line-height: 1.6;
     color: var(--text-dim);
     flex: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   .card-bottom {
@@ -132,22 +149,16 @@ const isPublic = status === 'PUBLIC';
     border: 1px solid var(--border);
   }
 
-  .card-link {
+  .card-expand-hint {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     color: var(--accent-2);
+    opacity: 0;
+    transition: opacity 0.2s;
     white-space: nowrap;
   }
 
-  .card-link:hover {
-    text-decoration: underline;
-  }
-
-  .card-private {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.7rem;
-    color: var(--text-dim);
-    opacity: 0.6;
-    font-style: italic;
+  .card:hover .card-expand-hint {
+    opacity: 1;
   }
 </style>

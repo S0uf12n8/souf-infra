@@ -1,0 +1,220 @@
+---
+// ProjectDetail.astro — expandable terminal panel for project details
+interface Props {
+  name: string;
+  description: string;
+  stack: string[];
+  status: string;
+  url: string | null;
+}
+
+const { name, description, stack, status, url } = Astro.props;
+
+const statusColor: Record<string, string> = {
+  'ACTIVE': 'var(--accent)',
+  'STABLE': 'var(--accent-2)',
+  'IN PROGRESS': 'var(--warn)',
+  'PRIVATE': 'var(--text-dim)',
+};
+
+const pillColor = statusColor[status] ?? 'var(--text-dim)';
+const isPublic = status === 'PUBLIC';
+---
+
+<div class="detail-overlay" id="project-detail" role="dialog" aria-modal="true" aria-label="Project details" hidden>
+  <div class="detail-backdrop"></div>
+  <div class="detail-panel">
+    <div class="terminal-window">
+      <div class="terminal-chrome">
+        <span class="dot dot-red"></span>
+        <span class="dot dot-yellow"></span>
+        <span class="dot dot-green"></span>
+        <span class="terminal-title" id="detail-title">project</span>
+        <button class="detail-close" id="detail-close" aria-label="Close detail panel">✕</button>
+      </div>
+      <div class="terminal-body">
+        <div class="detail-header">
+          <h3 class="detail-name" id="detail-name"></h3>
+          <span class="detail-pill" id="detail-pill" hidden>
+            <span class="pill-dot"></span>
+            <span id="detail-pill-text"></span>
+          </span>
+        </div>
+        <p class="detail-desc" id="detail-desc"></p>
+        <div class="detail-stack" id="detail-stack"></div>
+        <div class="detail-link" id="detail-link"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .detail-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .detail-overlay[hidden] {
+    display: none;
+  }
+
+  .detail-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(11, 14, 20, 0.8);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  .detail-panel {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 640px;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  .terminal-window {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .terminal-chrome {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0.75rem 1rem;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+
+  .dot-red    { background: var(--danger); }
+  .dot-yellow { background: var(--warn); }
+  .dot-green  { background: var(--accent); }
+
+  .terminal-title {
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+  }
+
+  .detail-close {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text-dim);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+    margin-left: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .detail-close:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .terminal-body {
+    padding: 1.5rem;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .detail-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .detail-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .detail-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.65rem;
+    color: var(--pill-color);
+    border: 1px solid var(--pill-color);
+    border-radius: 999px;
+    padding: 0.2rem 0.6rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .pill-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--pill-color);
+  }
+
+  .detail-desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    line-height: 1.7;
+    color: var(--text-dim);
+    margin-bottom: 1.25rem;
+  }
+
+  .detail-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .detail-stack :global(.tag) {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    background: var(--surface-2);
+    color: var(--text-dim);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+
+  .detail-link a {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--accent-2);
+  }
+
+  .detail-link a:hover {
+    text-decoration: underline;
+  }
+
+  .detail-link .no-link {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    opacity: 0.6;
+    font-style: italic;
+  }
+</style>

@@ -1,28 +1,54 @@
 ---
-// Comms.astro — contact/socials section
+// Comms.astro — contact/socials section + Formspree contact form
 const links = [
   { label: 'GitHub', url: 'https://github.com/S0uf12n8', display: 'github.com/S0uf12n8' },
+  { label: 'LinkedIn', url: 'TODO_LINKEDIN_URL', display: 'TODO' },
 ];
 ---
 
 <section id="comms" class="comms-section">
   <h2 class="section-label">// COMMS — CONTACT</h2>
-  <div class="terminal-window">
-    <div class="terminal-chrome">
-      <span class="dot dot-red"></span>
-      <span class="dot dot-yellow"></span>
-      <span class="dot dot-green"></span>
-      <span class="terminal-title">souf@infra:~</span>
+  <div class="comms-grid">
+    <div class="terminal-window">
+      <div class="terminal-chrome">
+        <span class="dot dot-red"></span>
+        <span class="dot dot-yellow"></span>
+        <span class="dot dot-green"></span>
+        <span class="terminal-title">souf@infra:~</span>
+      </div>
+      <div class="terminal-body">
+        <p class="comms-line"><span class="caret">></span> Reach out via:</p>
+        {links.map((link) => (
+          <p class="comms-line">
+            <span class="comms-label">{link.label}</span>{' '}
+            {link.url.startsWith('TODO') ? (
+              <span class="comms-todo">{link.display}</span>
+            ) : (
+              <a href={link.url} target="_blank" rel="noopener noreferrer" class="comms-link">{link.display}</a>
+            )}
+          </p>
+        ))}
+        <p class="comms-line"><span class="caret">></span> Or send a message:</p>
+      </div>
     </div>
-    <div class="terminal-body">
-      <p class="comms-line"><span class="caret">></span> Reach out via:</p>
-      {links.map((link) => (
-        <p class="comms-line">
-          <span class="comms-label">{link.label}</span>{' '}
-          <a href={link.url} target="_blank" rel="noopener noreferrer" class="comms-link">{link.display}</a>
-        </p>
-      ))}
-    </div>
+
+    <form class="contact-form" action="TODO_FORMSPREE_URL" method="POST">
+      <div class="form-row">
+        <label class="form-label" for="comms-name">name</label>
+        <input class="form-input" type="text" id="comms-name" name="name" required autocomplete="name" />
+      </div>
+      <div class="form-row">
+        <label class="form-label" for="comms-email">email</label>
+        <input class="form-input" type="email" id="comms-email" name="email" required autocomplete="email" />
+      </div>
+      <div class="form-row">
+        <label class="form-label" for="comms-message">message</label>
+        <textarea class="form-input form-textarea" id="comms-message" name="message" rows="5" required></textarea>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="form-submit">[ send ]</button>
+      </div>
+    </form>
   </div>
 </section>
 
@@ -41,6 +67,12 @@ const links = [
     text-transform: uppercase;
     letter-spacing: 0.05em;
     margin-bottom: 1.5rem;
+  }
+
+  .comms-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
   }
 
   .terminal-window {
@@ -107,5 +139,83 @@ const links = [
 
   .comms-link:hover {
     text-decoration: underline;
+  }
+
+  .comms-todo {
+    color: var(--text-dim);
+    opacity: 0.5;
+    font-style: italic;
+  }
+
+  .contact-form {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .form-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text-dim);
+    text-transform: lowercase;
+  }
+
+  .form-input {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--text);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.55rem 0.75rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .form-input:focus {
+    border-color: var(--accent);
+  }
+
+  .form-input::placeholder {
+    color: var(--text-dim);
+    opacity: 0.4;
+  }
+
+  .form-textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .form-submit {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--accent);
+    background: transparent;
+    border: 1px solid var(--accent);
+    border-radius: 4px;
+    padding: 0.5rem 1.2rem;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .form-submit:hover {
+    background: var(--accent);
+    color: var(--bg);
   }
 </style>

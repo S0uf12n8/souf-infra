@@ -11,6 +11,43 @@
       <span class="terminal-title">souf@infra:~</span>
     </div>
     <div class="terminal-body">
+      <div class="log-stream" aria-hidden="true">
+        <div class="log-track">
+          <span class="log-line">[2026-08-26T01:12:03Z] systemd[1]: Reached target Multi-User System</span>
+          <span class="log-line">[2026-08-26T01:12:03Z] dockerd[842]: API listen on /var/run/docker.sock</span>
+          <span class="log-line">[2026-08-26T01:12:04Z] kubelet[1102]: Started container runtime</span>
+          <span class="log-line">[2026-08-26T01:12:05Z] sshd[671]: Accepted publickey for souf from 10.0.2.15</span>
+          <span class="log-line">[2026-08-26T01:12:06Z] kernel: [UFW BLOCK] IN=eth0 SRC=185.224.128.0 DST=10.0.2.15</span>
+          <span class="log-line">[2026-08-26T01:12:07Z] containerd[839]: containerd: healthy</span>
+          <span class="log-line">[2026-08-26T01:12:08Z] cron[512]: (CRON) CMD (/usr/local/bin/backup.sh)</span>
+          <span class="log-line">[2026-08-26T01:12:09Z] node_exporter[923]: Listening on :9100</span>
+          <span class="log-line">[2026-08-26T01:12:10Z] prometheus[1044]: TSDB started</span>
+          <span class="log-line">[2026-08-26T01:12:11Z] nginx[756]: worker process 1247 started</span>
+          <span class="log-line">[2026-08-26T01:12:12Z] systemd[1]: Starting Kubernetes API Server...</span>
+          <span class="log-line">[2026-08-26T01:12:13Z] kube-apiserver[1201]: Serving securely on :6443</span>
+          <span class="log-line">[2026-08-26T01:12:14Z] etcd[1187]: ready to serve client requests</span>
+          <span class="log-line">[2026-08-26T01:12:15Z] github-actions-runner[892]: Listening for jobs</span>
+          <span class="log-line">[2026-08-26T01:12:16Z] grafana[1304]: HTTP Server Listen on :3000</span>
+          <span class="log-line">[2026-08-26T01:12:17Z] alertmanager[1356]: Listening on :9093</span>
+          <!-- duplicate block for seamless loop -->
+          <span class="log-line">[2026-08-26T01:12:03Z] systemd[1]: Reached target Multi-User System</span>
+          <span class="log-line">[2026-08-26T01:12:03Z] dockerd[842]: API listen on /var/run/docker.sock</span>
+          <span class="log-line">[2026-08-26T01:12:04Z] kubelet[1102]: Started container runtime</span>
+          <span class="log-line">[2026-08-26T01:12:05Z] sshd[671]: Accepted publickey for souf from 10.0.2.15</span>
+          <span class="log-line">[2026-08-26T01:12:06Z] kernel: [UFW BLOCK] IN=eth0 SRC=185.224.128.0 DST=10.0.2.15</span>
+          <span class="log-line">[2026-08-26T01:12:07Z] containerd[839]: containerd: healthy</span>
+          <span class="log-line">[2026-08-26T01:12:08Z] cron[512]: (CRON) CMD (/usr/local/bin/backup.sh)</span>
+          <span class="log-line">[2026-08-26T01:12:09Z] node_exporter[923]: Listening on :9100</span>
+          <span class="log-line">[2026-08-26T01:12:10Z] prometheus[1044]: TSDB started</span>
+          <span class="log-line">[2026-08-26T01:12:11Z] nginx[756]: worker process 1247 started</span>
+          <span class="log-line">[2026-08-26T01:12:12Z] systemd[1]: Starting Kubernetes API Server...</span>
+          <span class="log-line">[2026-08-26T01:12:13Z] kube-apiserver[1201]: Serving securely on :6443</span>
+          <span class="log-line">[2026-08-26T01:12:14Z] etcd[1187]: ready to serve client requests</span>
+          <span class="log-line">[2026-08-26T01:12:15Z] github-actions-runner[892]: Listening for jobs</span>
+          <span class="log-line">[2026-08-26T01:12:16Z] grafana[1304]: HTTP Server Listen on :3000</span>
+          <span class="log-line">[2026-08-26T01:12:17Z] alertmanager[1356]: Listening on :9093</span>
+        </div>
+      </div>
       <p class="line"><span class="prompt">$</span> ssh souf@infra</p>
       <p class="line dim">Connecting...</p>
       <p class="line dim">Authenticated as S0uf12n8</p>
@@ -53,6 +90,7 @@
   }
 
   .terminal-window {
+    position: relative;
     width: 100%;
     max-width: 640px;
     background: var(--surface);
@@ -62,6 +100,8 @@
   }
 
   .terminal-chrome {
+    position: relative;
+    z-index: 2;
     display: flex;
     align-items: center;
     gap: 6px;
@@ -88,12 +128,53 @@
   }
 
   .terminal-body {
+    position: relative;
+    z-index: 1;
     padding: 1.25rem 1.5rem;
     font-family: 'JetBrains Mono', monospace;
     line-height: 1.8;
   }
 
+  .log-stream {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+    mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+  }
+
+  .log-track {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    animation: scroll-logs 25s linear infinite;
+  }
+
+  .log-line {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    opacity: 0.07;
+    white-space: nowrap;
+    line-height: 1.6;
+  }
+
+  @keyframes scroll-logs {
+    from { transform: translateY(0); }
+    to   { transform: translateY(-50%); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .log-track {
+      animation: none;
+    }
+  }
+
   .line {
+    position: relative;
+    z-index: 1;
     color: var(--text);
     font-size: 0.875rem;
     font-weight: 400;
