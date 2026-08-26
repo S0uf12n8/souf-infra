@@ -1,16 +1,34 @@
 ---
-// Nav.astro — fixed minimal nav: System · Lab · Stack · Comms
+// Nav.astro — fixed minimal nav: System · Lab · Stack · Comms + live uptime
 ---
 
 <nav class="nav">
-  <a href="#system" class="nav-link">System</a>
-  <span class="nav-sep">·</span>
-  <a href="#lab" class="nav-link">Lab</a>
-  <span class="nav-sep">·</span>
-  <a href="#stack" class="nav-link">Stack</a>
-  <span class="nav-sep">·</span>
-  <a href="#comms" class="nav-link">Comms</a>
+  <div class="nav-links">
+    <a href="#system" class="nav-link">System</a>
+    <span class="nav-sep">·</span>
+    <a href="#lab" class="nav-link">Lab</a>
+    <span class="nav-sep">·</span>
+    <a href="#stack" class="nav-link">Stack</a>
+    <span class="nav-sep">·</span>
+    <a href="#comms" class="nav-link">Comms</a>
+  </div>
+  <span class="nav-uptime" id="uptime">uptime: 00:00:00</span>
 </nav>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const el = document.getElementById('uptime');
+    if (!el) return;
+    const start = Date.now();
+    const pad = (n: number) => String(n).padStart(2, '0');
+    const tick = () => {
+      const s = Math.floor((Date.now() - start) / 1000);
+      el.textContent = `uptime: ${pad(Math.floor(s / 3600))}:${pad(Math.floor((s % 3600) / 60))}:${pad(s % 60)}`;
+      setTimeout(tick, 1000);
+    };
+    tick();
+  });
+</script>
 
 <style>
   .nav {
@@ -20,9 +38,8 @@
     right: 0;
     z-index: 100;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    gap: 0.5rem;
     padding: 0.85rem 2rem;
     background: rgba(11, 14, 20, 0.85);
     backdrop-filter: blur(8px);
@@ -30,6 +47,14 @@
     border-bottom: 1px solid var(--border);
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.8rem;
+  }
+
+  .nav-links {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
   }
 
   .nav-link {
@@ -47,5 +72,14 @@
   .nav-sep {
     color: var(--border);
     user-select: none;
+  }
+
+  .nav-uptime {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    opacity: 0.7;
   }
 </style>

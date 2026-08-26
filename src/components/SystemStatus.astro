@@ -12,12 +12,12 @@
       <span class="terminal-title">souf@infra:~</span>
     </div>
     <div class="terminal-body">
-      <p class="status-line"><span class="caret">></span> System_Status: <span class="val-active">Active</span></p>
-      <p class="status-line"><span class="caret">></span> Base: Taroudant, Morocco</p>
-      <p class="status-line"><span class="caret">></span> Background: Bac+2 DTS Systems &amp; Network (ISTA Taroudant) → Systems &amp; Network technician at DEWEB Technology, Casablanca (intern → full-time) → Licence GI, final year</p>
-      <p class="status-line"><span class="caret">></span> Current_Focus: [ Docker, Docker Compose, Kubernetes (k3s), CI/CD (GitHub Actions), Prometheus/Grafana observability ]</p>
-      <p class="status-line"><span class="caret">></span> Target: DevOps / DevSecOps engineer</p>
-      <p class="status-line"><span class="caret">></span> Next: Master's abroad (France/Italy) — Autumn 2027</p>
+      <p class="status-line"><span class="caret">></span> <span class="status-label">System_Status:</span> <span class="status-val status-active">Active</span></p>
+      <p class="status-line"><span class="caret">></span> <span class="status-label">Base:</span> <span class="status-val">Taroudant, Morocco</span></p>
+      <p class="status-line"><span class="caret">></span> <span class="status-label">Background:</span> <span class="status-val">Bac+2 DTS Systems &amp; Network (ISTA Taroudant) → Systems &amp; Network technician at DEWEB Technology, Casablanca (intern → full-time) → Licence GI, final year</span></p>
+      <p class="status-line"><span class="caret">></span> <span class="status-label">Current_Focus:</span> <span class="status-val">[ Docker, Docker Compose, Kubernetes (k3s), CI/CD (GitHub Actions), Prometheus/Grafana observability ]</span></p>
+      <p class="status-line"><span class="caret">></span> <span class="status-label">Target:</span> <span class="status-val">DevOps / DevSecOps engineer</span></p>
+      <p class="status-line"><span class="caret">></span> <span class="status-label">Next:</span> <span class="status-val">Master's abroad (France/Italy) — Autumn 2027</span></p>
     </div>
   </div>
   <p class="bio">
@@ -81,7 +81,6 @@
   .terminal-body {
     padding: 1.25rem 1.5rem;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.875rem;
     line-height: 1.9;
   }
 
@@ -90,11 +89,25 @@
   }
 
   .caret {
+    font-size: 0.95rem;
+    font-weight: 700;
     color: var(--accent);
     margin-right: 0.5rem;
   }
 
-  .val-active {
+  .status-label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-dim);
+  }
+
+  .status-val {
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: var(--text);
+  }
+
+  .status-active {
     color: var(--accent);
   }
 
