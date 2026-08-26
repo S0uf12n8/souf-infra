@@ -32,23 +32,33 @@ const links = [
       </div>
     </div>
 
-    <form class="contact-form" action="TODO_FORMSPREE_URL" method="POST">
-      <div class="form-row">
-        <label class="form-label" for="comms-name">name</label>
-        <input class="form-input" type="text" id="comms-name" name="name" required autocomplete="name" />
+    <div class="terminal-window">
+      <div class="terminal-chrome">
+        <span class="dot dot-red"></span>
+        <span class="dot dot-yellow"></span>
+        <span class="dot dot-green"></span>
+        <span class="terminal-title">compose</span>
       </div>
-      <div class="form-row">
-        <label class="form-label" for="comms-email">email</label>
-        <input class="form-input" type="email" id="comms-email" name="email" required autocomplete="email" />
+      <div class="terminal-body">
+        <form class="contact-form" action="TODO_FORMSPREE_URL" method="POST">
+          <div class="form-row">
+            <label class="form-label" for="comms-name">name_</label>
+            <input class="form-input" type="text" id="comms-name" name="name" required autocomplete="name" placeholder="$ " />
+          </div>
+          <div class="form-row">
+            <label class="form-label" for="comms-email">email_</label>
+            <input class="form-input" type="email" id="comms-email" name="email" required autocomplete="email" placeholder="$ " />
+          </div>
+          <div class="form-row">
+            <label class="form-label" for="comms-message">message_</label>
+            <textarea class="form-input form-textarea" id="comms-message" name="message" rows="5" required placeholder="$ "></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="form-submit">[ send ]</button>
+          </div>
+        </form>
       </div>
-      <div class="form-row">
-        <label class="form-label" for="comms-message">message</label>
-        <textarea class="form-input form-textarea" id="comms-message" name="message" rows="5" required></textarea>
-      </div>
-      <div class="form-actions">
-        <button type="submit" class="form-submit">[ send ]</button>
-      </div>
-    </form>
+    </div>
   </div>
 </section>
 
@@ -148,10 +158,6 @@ const links = [
   }
 
   .contact-form {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 1.5rem;
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -167,39 +173,49 @@ const links = [
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.75rem;
     font-weight: 500;
-    color: var(--text-dim);
-    text-transform: lowercase;
+    color: var(--accent);
+    letter-spacing: 0.02em;
   }
 
   .form-input {
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.85rem;
     color: var(--text);
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 0.55rem 0.75rem;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    border-radius: 0;
+    padding: 0.45rem 0;
     outline: none;
     transition: border-color 0.2s;
   }
 
   .form-input:focus {
-    border-color: var(--accent);
+    border-bottom-color: var(--accent);
   }
 
   .form-input::placeholder {
     color: var(--text-dim);
-    opacity: 0.4;
+    opacity: 0.3;
   }
 
   .form-textarea {
     resize: vertical;
     min-height: 80px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.55rem 0.75rem;
+    background: var(--bg);
+  }
+
+  .form-textarea:focus {
+    border-color: var(--accent);
   }
 
   .form-actions {
     display: flex;
     justify-content: flex-end;
+    padding-top: 0.25rem;
   }
 
   .form-submit {
@@ -210,7 +226,6 @@ const links = [
     border: 1px solid var(--accent);
     border-radius: 4px;
     padding: 0.5rem 1.2rem;
-    cursor: pointer;
     transition: background 0.2s, color 0.2s;
   }
 

@@ -1,21 +1,21 @@
 ---
 // StackGrid.astro — skills/tools inventory as a columnar status table
 const rows = [
-  { tool: 'C++',                  category: 'Languages',    status: 'STABLE' },
-  { tool: 'Python',               category: 'Languages',    status: 'STABLE' },
-  { tool: 'SQL',                  category: 'Languages',    status: 'RUNNING' },
-  { tool: 'JavaScript/TypeScript', category: 'Languages',   status: 'RUNNING' },
+  { tool: 'C++',                  category: 'Languages',      status: 'STABLE' },
+  { tool: 'Python',               category: 'Languages',      status: 'STABLE' },
+  { tool: 'SQL',                  category: 'Languages',      status: 'RUNNING' },
+  { tool: 'JavaScript/TypeScript', category: 'Languages',     status: 'RUNNING' },
   { tool: 'Docker',               category: 'Infra & DevOps', status: 'RUNNING' },
   { tool: 'Docker Compose',       category: 'Infra & DevOps', status: 'RUNNING' },
   { tool: 'k3s',                  category: 'Infra & DevOps', status: 'LEARNING' },
   { tool: 'GitHub Actions',       category: 'Infra & DevOps', status: 'RUNNING' },
   { tool: 'Prometheus',           category: 'Infra & DevOps', status: 'LEARNING' },
   { tool: 'Grafana',              category: 'Infra & DevOps', status: 'LEARNING' },
-  { tool: 'Linux administration', category: 'Systems',      status: 'RUNNING' },
-  { tool: 'Networking',           category: 'Systems',      status: 'RUNNING' },
-  { tool: 'Kubernetes (depth)',   category: 'Learning',     status: 'LEARNING' },
-  { tool: 'Terraform',            category: 'Learning',     status: 'LEARNING' },
-  { tool: 'CI/CD hardening',      category: 'Learning',     status: 'LEARNING' },
+  { tool: 'Linux administration', category: 'Systems',        status: 'RUNNING' },
+  { tool: 'Networking',           category: 'Systems',        status: 'RUNNING' },
+  { tool: 'Kubernetes (depth)',   category: 'Learning',       status: 'LEARNING' },
+  { tool: 'Terraform',            category: 'Learning',       status: 'LEARNING' },
+  { tool: 'CI/CD hardening',      category: 'Learning',       status: 'LEARNING' },
 ];
 
 const statusClass: Record<string, string> = {
@@ -70,15 +70,22 @@ const statusClass: Record<string, string> = {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 8px;
-    overflow: hidden;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .stack-table {
     width: 100%;
+    min-width: 480px;
     border-collapse: collapse;
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.8rem;
+    table-layout: fixed;
   }
+
+  .stack-table .col-tool    { width: 45%; }
+  .stack-table .col-category { width: 35%; }
+  .stack-table .col-status   { width: 20%; }
 
   thead {
     background: var(--surface-2);
@@ -99,6 +106,9 @@ const statusClass: Record<string, string> = {
     padding: 0.55rem 1rem;
     color: var(--text);
     border-bottom: 1px solid var(--border);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   tr:last-child td {
@@ -109,20 +119,14 @@ const statusClass: Record<string, string> = {
     background: var(--surface-2);
   }
 
-  .col-tool {
-    min-width: 180px;
-  }
-
   .col-category {
     color: var(--text-dim);
-    min-width: 140px;
   }
 
   .col-status {
     text-align: right;
     font-weight: 500;
     letter-spacing: 0.04em;
-    min-width: 100px;
   }
 
   .status-running {
@@ -138,12 +142,16 @@ const statusClass: Record<string, string> = {
   }
 
   @media (max-width: 520px) {
-    .col-category {
-      display: none;
+    .stack-table {
+      min-width: 0;
     }
 
+    .stack-table .col-category,
     th.col-category {
       display: none;
     }
+
+    .stack-table .col-tool    { width: 65%; }
+    .stack-table .col-status  { width: 35%; }
   }
 </style>

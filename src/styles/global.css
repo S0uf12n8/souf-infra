@@ -18,8 +18,22 @@ body {
   background-color: var(--bg);
   color: var(--text);
   line-height: 1.6;
+  cursor: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+a, button, [role="button"], input, textarea, select {
+  cursor: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body {
+    cursor: default;
+  }
+  a, button, [role="button"], input, textarea, select {
+    cursor: default;
+  }
 }
 
 a {
