@@ -1,41 +1,98 @@
 ---
-// TimelineEntry.astro: one timeline row: rail node + image slot + text
+// TimelineEntry.astro: one timeline row: rail node + optional media (logo or placeholder) + text body
+interface Sub {
+  title: string;
+  kind?: string;
+  period?: string;
+  points?: string[];
+  skills?: string[];
+}
+
 interface Props {
   tag: string;
   title: string;
   meta: string;
-  imageAlt: string;
+  image?: string;
+  imageAlt?: string;
+  placeholder?: boolean;
+  note?: string;
+  subs?: Sub[];
   last?: boolean;
 }
 
-const { tag, title, meta, imageAlt, last = false } = Astro.props;
+const { tag, title, meta, image, imageAlt, placeholder = false, note, subs = [], last = false } = Astro.props;
+const hasMedia = Boolean(image) || placeholder;
 ---
 
-<div class:list={['t-entry', { last }]}>
+<div
+  class:list={['t-entry', { last }, { 'has-media': hasMedia }]}
+>
   <div class="t-rail" aria-hidden="true">
     <span class="t-node"></span>
     <span class="t-line"></span>
   </div>
-  <figure class="t-media">
-    <div class="media-placeholder" role="img" aria-label={imageAlt}>
-      <span class="ph-glyph" aria-hidden="true">▦</span>
-      <span class="ph-label">[ image pending ]</span>
-    </div>
-  </figure>
+
+  {hasMedia && (
+    <figure class="t-media">
+      {image ? (
+        <img class="t-logo" src={image} alt={imageAlt ?? ''} width="92" height="92" loading="lazy" />
+      ) : (
+        <div class="media-placeholder" role="img" aria-label={imageAlt}>
+          <span class="ph-glyph" aria-hidden="true">▦</span>
+          <span class="ph-label">[ pending ]</span>
+        </div>
+      )}
+    </figure>
+  )}
+
   <div class="t-body">
     <span class="t-tag">{tag}</span>
     <h3 class="t-title">{title}</h3>
     <p class="t-meta">{meta}</p>
+
+    {subs.map((s) => (
+      <div class="t-sub">
+        <p class="t-sub-head">{s.title}</p>
+        {(s.kind || s.period) && (
+          <p class="t-sub-meta">
+            {s.kind && <span class="t-sub-kind">{s.kind}</span>}
+            {s.period && <span class="t-sub-period">{s.period}</span>}
+          </p>
+        )}
+        {s.points && s.points.length > 0 && (
+          <ul class="t-sub-list">
+            {s.points.map((p) => (
+              <li>{p}</li>
+            ))}
+          </ul>
+        )}
+        {s.skills && s.skills.length > 0 && (
+          <div class="t-skills">
+            {s.skills.map((k) => (
+              <span class="t-skill">{k}</span>
+            ))}
+          </div>
+        )}
+      </div>
+    ))}
+
+    {note && <p class="t-note">{note}</p>}
   </div>
 </div>
 
 <style>
   .t-entry {
     display: grid;
-    grid-template-columns: 36px 200px minmax(0, 1fr);
-    grid-template-areas: 'rail media body';
+    grid-template-columns: 36px minmax(0, 1fr);
+    grid-template-areas: 'rail body';
     gap: 1.15rem;
     align-items: start;
+    margin-bottom: 2.25rem;
+  }
+
+  .t-entry.has-media {
+    grid-template-columns: 36px 96px minmax(0, 1fr);
+    grid-template-areas: 'rail media body';
   }
 
   .t-rail {
@@ -66,15 +123,30 @@ const { tag, title, meta, imageAlt, last = false } = Astro.props;
     flex: 0 0 1.5rem;
   }
 
+  .t-entry.last {
+    margin-bottom: 0;
+  }
+
   .t-media {
     grid-area: media;
-    margin: 0;
+    margin: 0.15rem 0 0;
+    width: 96px;
+  }
+
+  .t-logo {
+    display: block;
+    width: 96px;
+    height: 96px;
+    object-fit: contain;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.35rem;
   }
 
   .media-placeholder {
-    width: 100%;
-    aspect-ratio: 4 / 3;
-    min-height: 108px;
+    width: 96px;
+    height: 96px;
     border: 1px dashed var(--border);
     border-radius: 8px;
     background:
@@ -84,12 +156,12 @@ const { tag, title, meta, imageAlt, last = false } = Astro.props;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0.45rem;
+    gap: 0.4rem;
   }
 
   .ph-glyph {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 1.4rem;
+    font-size: 1.15rem;
     color: var(--accent-2);
     opacity: 0.5;
     line-height: 1;
@@ -97,8 +169,8 @@ const { tag, title, meta, imageAlt, last = false } = Astro.props;
 
   .ph-label {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.56rem;
-    letter-spacing: 0.09em;
+    font-size: 0.5rem;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--text-dim);
     opacity: 0.75;
@@ -107,6 +179,7 @@ const { tag, title, meta, imageAlt, last = false } = Astro.props;
   .t-body {
     grid-area: body;
     padding-top: 0.1rem;
+    min-width: 0;
   }
 
   .t-tag {
@@ -134,8 +207,109 @@ const { tag, title, meta, imageAlt, last = false } = Astro.props;
     color: var(--text-dim);
   }
 
+  .t-sub {
+    margin-top: 1.4rem;
+    padding-left: 0.9rem;
+    border-left: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .t-sub + .t-sub {
+    margin-top: 1.6rem;
+    padding-top: 1.3rem;
+    border-top: 1px dashed var(--border);
+  }
+
+  .t-sub-head {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .t-sub-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .t-sub-kind {
+    color: var(--text-dim);
+  }
+
+  .t-sub-kind::after {
+    content: '·';
+    margin-left: 0.4rem;
+    color: var(--text-dim);
+    opacity: 0.5;
+  }
+
+  .t-sub-period {
+    color: var(--accent-2);
+  }
+
+  .t-sub-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .t-sub-list li {
+    position: relative;
+    padding-left: 1.15rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.62;
+    color: var(--text-dim);
+  }
+
+  .t-sub-list li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--accent-2);
+  }
+
+  .t-skills {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 0.6rem;
+  }
+
+  .t-skill {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 0.2rem 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    background: var(--surface-2);
+    color: var(--text-dim);
+    margin: 0 0.5rem 0.5rem 0;
+  }
+
+  .t-note {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.84rem;
+    line-height: 1.6;
+    color: var(--text-dim);
+    margin-top: 1rem;
+  }
+
   @media (max-width: 620px) {
-    .t-entry {
+    .t-entry,
+    .t-entry.has-media {
       grid-template-columns: 24px minmax(0, 1fr);
       grid-template-areas:
         'rail media'
@@ -144,8 +318,11 @@ const { tag, title, meta, imageAlt, last = false } = Astro.props;
       column-gap: 0.9rem;
     }
 
+    .t-media,
+    .t-logo,
     .media-placeholder {
-      aspect-ratio: 16 / 9;
+      width: 72px;
+      height: 72px;
     }
   }
 </style>

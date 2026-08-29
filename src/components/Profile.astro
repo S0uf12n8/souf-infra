@@ -19,6 +19,16 @@ const tabs = [
         <span class="dot dot-green"></span>
         <span class="terminal-title">souf@infra: ~/profile</span>
       </div>
+      <div class="profile-actions">
+        <!-- TODO: place the real CV at /public/cv.pdf, then remove this comment -->
+        <a class="profile-btn profile-btn-primary" href="/cv.pdf" title="CV upload pending">[ Download CV ]</a>
+        <a
+          class="profile-btn profile-btn-secondary"
+          href="https://www.linkedin.com/in/soufiane-oulkadi/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >[ View Profile ]</a>
+      </div>
       <div class="profile-body">
         <div class="tab-rail" role="tablist" aria-label="Profile sections" aria-orientation="vertical">
           {tabs.map((t, i) => (
@@ -73,10 +83,51 @@ const tabs = [
           >
             <div class="panel-path">
               <TimelineEntry
-                tag="infra &amp; networking"
-                title="Systems &amp; Network technician"
-                meta="general infrastructure &amp; networking role: the background that feeds the current DevOps focus"
-                imageAlt="Photo placeholder for Systems & Network technician role"
+                tag="networking & voip"
+                title="DEWEB Technology"
+                meta="Casablanca, Morocco · on-site"
+                image="/images/deweb.png"
+                imageAlt="DEWEB Technology logo"
+                subs={[
+                  {
+                    title: 'Network & IT Technician',
+                    kind: 'full-time',
+                    period: 'Nov 2025 – Jan 2026',
+                    points: [
+                      'Configuration and administration of network equipment (switches, routers, VLANs, DHCP, IP addressing)',
+                      'Installation and management of IP telephony systems (SIP accounts, extensions, provisioning)',
+                    ],
+                    skills: ['Windows Server', 'VoIP'],
+                  },
+                  {
+                    title: 'IT Infrastructure & Support Intern',
+                    kind: 'intern',
+                    period: 'Sep 2025 – Nov 2025',
+                    points: [
+                      'Assisted in configuring network devices, basic VLAN setup, and IP assignments',
+                      'Supported deployment of surveillance systems, NVR settings, and access control configurations',
+                    ],
+                  },
+                ]}
+              />
+              <TimelineEntry
+                tag="cctv & networking"
+                title="Access Point IT"
+                meta="Taroudant, Souss-Massa, Morocco · on-site"
+                image="/images/accesspoint.png"
+                imageAlt="Access Point IT logo"
+                subs={[
+                  {
+                    title: 'Internship Trainee',
+                    kind: 'intern',
+                    period: 'Feb 2023 – Mar 2023',
+                    points: [
+                      'Assisted with network device configuration, Wi-Fi setup, and troubleshooting',
+                      'Participated in installation and maintenance of CCTV systems and security servers',
+                    ],
+                    skills: ['Networking', 'Cabling'],
+                  },
+                ]}
                 last
               />
             </div>
@@ -92,16 +143,26 @@ const tabs = [
           >
             <div class="panel-path">
               <TimelineEntry
-                tag="bac+2 dts"
-                title="Systems &amp; Network"
-                meta="ISTA Taroudant"
-                imageAlt="Photo placeholder for Bac+2 DTS, Systems & Network"
+                tag="secondary"
+                title="Baccalauréat en physique chimie"
+                meta="Lycée Ibn Soulaiman · 2017–2020"
+                note="Mention Assez-Bien"
               />
               <TimelineEntry
-                tag="licence gi · final year"
-                title="Génie Informatique"
-                meta="Faculté Polydisciplinaire de Taroudant"
-                imageAlt="Photo placeholder for Licence GI, Génie Informatique"
+                tag="ofppt · ntic"
+                title="Specialized Technician, Digital Infrastructure / Network and System Administration"
+                meta="Specialized Institute of Applied Technology NTIC (OFPPT) · 2021–2023"
+              />
+              <TimelineEntry
+                tag="deug"
+                title="DEUG, Computer Science"
+                meta="Université Ibn Zohr · 2023–2026"
+                note="Two-year foundation: algorithmics, Python, C, object-oriented programming"
+              />
+              <TimelineEntry
+                tag="licence · final year"
+                title="Licence, Computer Science"
+                meta="Université Ibn Zohr · 2023–2027 (final year)"
                 last
               />
             </div>
@@ -191,6 +252,45 @@ const tabs = [
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.75rem;
     color: var(--text-dim);
+  }
+
+  .profile-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 0.85rem 1.75rem;
+    border-bottom: 1px solid var(--border);
+    background: rgba(23, 29, 38, 0.35);
+  }
+
+  .profile-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    padding: 0.5rem 1.05rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .profile-btn-primary {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+  }
+
+  .profile-btn-primary:hover {
+    background: var(--accent-hover);
+  }
+
+  .profile-btn-secondary {
+    background: transparent;
+    color: var(--accent-2);
+    border-color: var(--accent-2);
+  }
+
+  .profile-btn-secondary:hover {
+    background: var(--accent-2);
+    color: var(--bg);
   }
 
   .profile-body {
