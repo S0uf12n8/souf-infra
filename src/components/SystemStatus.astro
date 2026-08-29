@@ -2,37 +2,48 @@
 // SystemStatus.astro — about/bio as whoami / system-status readout
 ---
 
-<section id="system" class="system-section">
-  <h2 class="section-label">// SYSTEM — WHOAMI</h2>
-  <div class="terminal-window">
-    <div class="terminal-chrome">
-      <span class="dot dot-red"></span>
-      <span class="dot dot-yellow"></span>
-      <span class="dot dot-green"></span>
-      <span class="terminal-title">souf@infra:~</span>
-    </div>
-    <div class="terminal-body">
-      <p class="status-line"><span class="caret">></span> <span class="status-label">System_Status:</span> <span class="status-val status-active">Active</span></p>
-      <p class="status-line"><span class="caret">></span> <span class="status-label">Base:</span> <span class="status-val">Taroudant, Morocco</span></p>
-      <p class="status-line"><span class="caret">></span> <span class="status-label">Background:</span> <span class="status-val">Bac+2 DTS Systems &amp; Network (ISTA Taroudant) → Systems &amp; Network technician at DEWEB Technology, Casablanca (intern → full-time) → Licence GI, final year</span></p>
-      <p class="status-line"><span class="caret">></span> <span class="status-label">Current_Focus:</span> <span class="status-val">[ Docker, Docker Compose, Kubernetes (k3s), CI/CD (GitHub Actions), Prometheus/Grafana observability ]</span></p>
-      <p class="status-line"><span class="caret">></span> <span class="status-label">Target:</span> <span class="status-val">DevOps / DevSecOps engineer</span></p>
-      <p class="status-line"><span class="caret">></span> <span class="status-label">Next:</span> <span class="status-val">Master's abroad (France/Italy) — Autumn 2027</span></p>
+<section id="system" class="system-section zone">
+  <div class="wrap">
+    <h2 class="section-label">// SYSTEM — WHOAMI</h2>
+    <div class="system-grid">
+      <div class="terminal-window">
+        <div class="terminal-chrome">
+          <span class="dot dot-red"></span>
+          <span class="dot dot-yellow"></span>
+          <span class="dot dot-green"></span>
+          <span class="terminal-title">souf@infra:~</span>
+        </div>
+        <div class="terminal-body">
+          <p class="status-line"><span class="caret">></span> <span class="status-label">System_Status:</span> <span class="status-val status-active">Active</span></p>
+          <p class="status-line"><span class="caret">></span> <span class="status-label">Base:</span> <span class="status-val">Taroudant, Morocco</span></p>
+          <p class="status-line"><span class="caret">></span> <span class="status-label">Background:</span> <span class="status-val">Bac+2 DTS Systems &amp; Network (ISTA Taroudant) → Systems &amp; Network technician at DEWEB Technology, Casablanca (intern → full-time) → Licence GI, final year</span></p>
+          <p class="status-line"><span class="caret">></span> <span class="status-label">Current_Focus:</span> <span class="status-val">[ Docker, Docker Compose, Kubernetes (k3s), CI/CD (GitHub Actions), Prometheus/Grafana observability ]</span></p>
+          <p class="status-line"><span class="caret">></span> <span class="status-label">Target:</span> <span class="status-val">DevOps / DevSecOps engineer</span></p>
+          <p class="status-line"><span class="caret">></span> <span class="status-label">Next:</span> <span class="status-val">Master's abroad (France/Italy) — Autumn 2027</span></p>
+        </div>
+      </div>
+
+      <div class="system-aside">
+        <p class="aside-kicker">// context</p>
+        <p class="bio">
+          Spent two years as a systems &amp; network technician at a managed services shop in Casablanca —
+          enough to know that the interesting problems live upstream of the hardware, in the pipelines and
+          infrastructure that make deployments repeatable and failures observable. DevOps is where that
+          background meets the CS theory I'm finishing now.
+        </p>
+        <div class="chips">
+          <span class="chip">DTS Systems &amp; Network</span>
+          <span class="chip">Systems &amp; Network technician — DEWEB</span>
+          <span class="chip">devops / devsecops</span>
+        </div>
+      </div>
     </div>
   </div>
-  <p class="bio">
-    Spent two years as a systems & network technician at a managed services shop in Casablanca — 
-    enough to know that the interesting problems live upstream of the hardware, in the pipelines and 
-    infrastructure that make deployments repeatable and failures observable. DevOps is where that 
-    background meets the CS theory I'm finishing now.
-  </p>
 </section>
 
 <style>
   .system-section {
-    padding: 6rem 2rem;
-    max-width: 720px;
-    margin: 0 auto;
+    padding-block: clamp(4.5rem, 10vh, 7rem);
   }
 
   .section-label {
@@ -42,7 +53,14 @@
     color: var(--accent-2);
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .system-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+    gap: clamp(1.75rem, 4vw, 4rem);
+    align-items: start;
   }
 
   .terminal-window {
@@ -111,11 +129,47 @@
     color: var(--accent);
   }
 
+  .system-aside {
+    padding-top: 0.35rem;
+  }
+
+  .aside-kicker {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent-2);
+    opacity: 0.85;
+    margin-bottom: 1rem;
+  }
+
   .bio {
-    margin-top: 1.75rem;
     font-family: 'Inter', sans-serif;
     font-size: 1rem;
     line-height: 1.7;
     color: var(--text-dim);
+    margin-bottom: 1.5rem;
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .chip {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.35rem 0.6rem;
+  }
+
+  @media (max-width: 900px) {
+    .system-grid {
+      grid-template-columns: 1fr;
+    }
   }
 </style>

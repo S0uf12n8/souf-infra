@@ -10,7 +10,7 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 3.5rem;
+  scroll-padding-top: 4.5rem;
 }
 
 body {
@@ -18,22 +18,21 @@ body {
   background-color: var(--bg);
   color: var(--text);
   line-height: 1.6;
-  cursor: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-a, button, [role="button"], input, textarea, select {
-  cursor: none;
+/* Shared full-width section container — sections are zones, not centered columns */
+.wrap {
+  width: 100%;
+  max-width: 1400px;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 4vw, 3rem);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  body {
-    cursor: default;
-  }
-  a, button, [role="button"], input, textarea, select {
-    cursor: default;
-  }
+/* Hairline that marks each section as its own band */
+.zone {
+  border-top: 1px solid var(--border);
 }
 
 a {
@@ -43,4 +42,37 @@ a {
 
 a:hover {
   text-decoration: underline;
+}
+
+::selection {
+  background: var(--accent-2);
+  color: var(--bg);
+}
+
+/* Custom pointer only on capable devices; inputs keep the native I-beam.
+   Defined here, filled in by the cursor implementation (Base layout). */
+@media (hover: hover) and (pointer: fine) {
+  body,
+  a,
+  button,
+  [role='button'],
+  label,
+  select,
+  summary,
+  input[type='submit'] {
+    cursor: none;
+  }
+  input,
+  textarea {
+    cursor: text;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body,
+  a,
+  button,
+  [role='button'] {
+    cursor: default;
+  }
 }

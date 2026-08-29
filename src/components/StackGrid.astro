@@ -1,5 +1,5 @@
 ---
-// StackGrid.astro — skills/tools inventory as a columnar status table
+// StackGrid.astro — skills/tools inventory as a columnar status table + learning pipeline
 const rows = [
   { tool: 'C++',                  category: 'Languages',      status: 'STABLE' },
   { tool: 'Python',               category: 'Languages',      status: 'STABLE' },
@@ -18,6 +18,9 @@ const rows = [
   { tool: 'CI/CD hardening',      category: 'Learning',       status: 'LEARNING' },
 ];
 
+const tableRows = rows.filter((r) => r.category !== 'Learning');
+const learningRows = rows.filter((r) => r.category === 'Learning');
+
 const statusClass: Record<string, string> = {
   RUNNING: 'status-running',
   LEARNING: 'status-learning',
@@ -25,35 +28,50 @@ const statusClass: Record<string, string> = {
 };
 ---
 
-<section id="stack" class="stack-section">
-  <h2 class="section-label">// STACK — INVENTORY</h2>
-  <div class="table-wrapper">
-    <table class="stack-table">
-      <thead>
-        <tr>
-          <th class="col-tool">TOOL</th>
-          <th class="col-category">CATEGORY</th>
-          <th class="col-status">STATUS</th>
-        </tr>
-      </thead>
-      <tbody>
-        {rows.map((row) => (
-          <tr>
-            <td class="col-tool">{row.tool}</td>
-            <td class="col-category">{row.category}</td>
-            <td class={`col-status ${statusClass[row.status]}`}>{row.status}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+<section id="stack" class="stack-section zone">
+  <div class="wrap">
+    <h2 class="section-label">// STACK — INVENTORY</h2>
+    <div class="stack-grid">
+      <div class="table-wrapper">
+        <table class="stack-table">
+          <thead>
+            <tr>
+              <th class="col-tool">TOOL</th>
+              <th class="col-category">CATEGORY</th>
+              <th class="col-status">STATUS</th>
+            </tr>
+          </thead>
+          <tbody>
+            {tableRows.map((row) => (
+              <tr>
+                <td class="col-tool">{row.tool}</td>
+                <td class="col-category">{row.category}</td>
+                <td class={`col-status ${statusClass[row.status]}`}>{row.status}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <aside class="learning-panel">
+        <div class="learning-head">// LEARNING PIPELINE</div>
+        <div class="learning-list">
+          {learningRows.map((row) => (
+            <div class="learning-item">
+              <span class="learning-tool">{row.tool}</span>
+              <span class="learning-state">learning</span>
+            </div>
+          ))}
+        </div>
+        <p class="learning-note">on the bench — in progress, not yet in production.</p>
+      </aside>
+    </div>
   </div>
 </section>
 
 <style>
   .stack-section {
-    padding: 6rem 2rem;
-    max-width: 720px;
-    margin: 0 auto;
+    padding-block: clamp(4.5rem, 10vh, 7rem);
   }
 
   .section-label {
@@ -63,7 +81,14 @@ const statusClass: Record<string, string> = {
     color: var(--accent-2);
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .stack-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+    gap: clamp(1.75rem, 4vw, 3.5rem);
+    align-items: start;
   }
 
   .table-wrapper {
@@ -139,6 +164,72 @@ const statusClass: Record<string, string> = {
 
   .status-stable {
     color: var(--accent-2);
+  }
+
+  .learning-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+  }
+
+  .learning-head {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent-2);
+    margin-bottom: 1rem;
+  }
+
+  .learning-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .learning-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.75rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+  }
+
+  .learning-tool {
+    color: var(--text);
+  }
+
+  .learning-state {
+    font-size: 0.68rem;
+    color: var(--warn);
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+
+  .learning-state::before {
+    content: '● ';
+    font-size: 0.6rem;
+    vertical-align: 1px;
+  }
+
+  .learning-note {
+    margin-top: 1rem;
+    padding-top: 0.85rem;
+    border-top: 1px dashed var(--border);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.78rem;
+    line-height: 1.6;
+    color: var(--text-dim);
+    opacity: 0.75;
+  }
+
+  @media (max-width: 900px) {
+    .stack-grid {
+      grid-template-columns: 1fr;
+    }
   }
 
   @media (max-width: 520px) {

@@ -1,16 +1,20 @@
 ---
-// ProjectCard.astro — single project card
+// ProjectCard.astro — single project card (standard or featured/full-width)
 interface Props {
   name: string;
+  tagline?: string;
   description: string;
+  sections?: { heading: string; items: string[] }[];
   stack: string[];
   status: string;
   url: string | null;
+  featured?: boolean;
 }
 
-const { name, description, stack, status, url } = Astro.props;
+const { name, tagline, description, sections = [], stack, status, url, featured = false } = Astro.props;
 
 const statusColor: Record<string, string> = {
+  'PUBLIC': 'var(--accent-2)',
   'ACTIVE': 'var(--accent)',
   'STABLE': 'var(--accent-2)',
   'IN PROGRESS': 'var(--warn)',
@@ -18,40 +22,55 @@ const statusColor: Record<string, string> = {
 };
 
 const pillColor = statusColor[status] ?? 'var(--text-dim)';
-const isPublic = status === 'PUBLIC';
 ---
 
 <div
-  class="card"
+  class:list={['card', { featured }]}
   role="button"
   tabindex="0"
   data-name={name}
   data-description={description}
+  data-sections={JSON.stringify(sections)}
   data-stack={JSON.stringify(stack)}
   data-status={status}
   data-url={url ?? ''}
 >
   <div class="card-top">
     <h3 class="card-name">{name}</h3>
-    {!isPublic && (
-      <span class="status-pill" style={`--pill-color: ${pillColor}`}>
-        <span class="pill-dot"></span>
-        {status}
-      </span>
-    )}
+    <span class="status-pill" style={`--pill-color: ${pillColor}`}>
+      <span class="pill-dot"></span>
+      {status}
+    </span>
   </div>
-  <p class="card-desc">{description}</p>
+
+  {featured ? (
+    <p class="card-desc card-desc-full">{description}</p>
+  ) : (
+    <p class="card-desc">{tagline || description}</p>
+  )}
+
+  {featured && sections.length > 0 && (
+    <div class="card-sections">
+      {sections.map((sec) => (
+        <div class="card-sec">
+          <h4 class="card-sec-head">{sec.heading}</h4>
+          <ul class="card-sec-list">
+            {sec.items.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  )}
+
   <div class="card-bottom">
     <div class="stack-tags">
       {stack.map((tag) => (
         <span class="tag">{tag}</span>
       ))}
     </div>
-    {url ? (
-      <span class="card-expand-hint">details →</span>
-    ) : (
-      <span class="card-expand-hint">details →</span>
-    )}
+    <span class="card-expand-hint">details →</span>
   </div>
 </div>
 
@@ -77,6 +96,13 @@ const isPublic = status === 'PUBLIC';
     outline-offset: 2px;
   }
 
+  .card.featured {
+    grid-column: 1 / -1;
+    padding: 1.75rem 2rem;
+    gap: 1rem;
+    border-color: var(--accent-2);
+  }
+
   .card-top {
     display: flex;
     justify-content: space-between;
@@ -89,6 +115,10 @@ const isPublic = status === 'PUBLIC';
     font-size: 1rem;
     font-weight: 600;
     color: var(--text);
+  }
+
+  .card.featured .card-name {
+    font-size: 1.3rem;
   }
 
   .status-pill {
@@ -124,12 +154,58 @@ const isPublic = status === 'PUBLIC';
     overflow: hidden;
   }
 
+  .card-desc-full {
+    display: block;
+    -webkit-line-clamp: none;
+    -webkit-box-orient: unset;
+    overflow: visible;
+    font-size: 0.95rem;
+    max-width: 70ch;
+  }
+
+  .card-sections {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .card-sec-head {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent-2);
+    margin-bottom: 0.5rem;
+  }
+
+  .card-sec-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .card-sec-list li {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--text-dim);
+  }
+
+  .card-sec-list li::before {
+    content: '▸ ';
+    color: var(--accent-2);
+  }
+
   .card-bottom {
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 0.5rem;
     flex-wrap: wrap;
+    margin-top: auto;
+    padding-top: 0.25rem;
   }
 
   .stack-tags {

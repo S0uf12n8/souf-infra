@@ -3,14 +3,16 @@
 interface Props {
   name: string;
   description: string;
+  sections?: { heading: string; items: string[] }[];
   stack: string[];
   status: string;
   url: string | null;
 }
 
-const { name, description, stack, status, url } = Astro.props;
+const { name, description, sections, stack, status, url } = Astro.props;
 
 const statusColor: Record<string, string> = {
+  'PUBLIC': 'var(--accent-2)',
   'ACTIVE': 'var(--accent)',
   'STABLE': 'var(--accent-2)',
   'IN PROGRESS': 'var(--warn)',
@@ -18,7 +20,6 @@ const statusColor: Record<string, string> = {
 };
 
 const pillColor = statusColor[status] ?? 'var(--text-dim)';
-const isPublic = status === 'PUBLIC';
 ---
 
 <div class="detail-overlay" id="project-detail" role="dialog" aria-modal="true" aria-label="Project details" hidden>
@@ -35,12 +36,13 @@ const isPublic = status === 'PUBLIC';
       <div class="terminal-body">
         <div class="detail-header">
           <h3 class="detail-name" id="detail-name"></h3>
-          <span class="detail-pill" id="detail-pill" hidden>
+          <span class="detail-pill" id="detail-pill">
             <span class="pill-dot"></span>
             <span id="detail-pill-text"></span>
           </span>
         </div>
         <p class="detail-desc" id="detail-desc"></p>
+        <div class="detail-sections" id="detail-sections"></div>
         <div class="detail-stack" id="detail-stack"></div>
         <div class="detail-link" id="detail-link"></div>
       </div>
@@ -180,6 +182,38 @@ const isPublic = status === 'PUBLIC';
     line-height: 1.7;
     color: var(--text-dim);
     margin-bottom: 1.25rem;
+  }
+
+  .detail-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .detail-sec-head {
+    font-size: 0.68rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent-2);
+    margin-bottom: 0.45rem;
+  }
+
+  .detail-sec-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--text-dim);
+  }
+
+  .detail-sec-list li::before {
+    content: '▸ ';
+    color: var(--accent-2);
   }
 
   .detail-stack {

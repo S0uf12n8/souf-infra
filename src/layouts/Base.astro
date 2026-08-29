@@ -47,10 +47,47 @@ import '../styles/global.css';
         <span class="log-line">[2026-08-26T01:12:17Z] alertmanager[1356]: Listening on :9093</span>
       </div>
     </div>
+      <div class="log-track">
+        <span class="log-line">[2026-08-26T01:12:03Z] systemd[1]: Reached target Multi-User System</span>
+        <span class="log-line">[2026-08-26T01:12:03Z] dockerd[842]: API listen on /var/run/docker.sock</span>
+        <span class="log-line">[2026-08-26T01:12:04Z] kubelet[1102]: Started container runtime</span>
+        <span class="log-line">[2026-08-26T01:12:05Z] sshd[671]: Accepted publickey for souf from 10.0.2.15</span>
+        <span class="log-line">[2026-08-26T01:12:06Z] kernel: [UFW BLOCK] IN=eth0 SRC=185.224.128.0 DST=10.0.2.15</span>
+        <span class="log-line">[2026-08-26T01:12:07Z] containerd[839]: containerd: healthy</span>
+        <span class="log-line">[2026-08-26T01:12:08Z] cron[512]: (CRON) CMD (/usr/local/bin/backup.sh)</span>
+        <span class="log-line">[2026-08-26T01:12:09Z] node_exporter[923]: Listening on :9100</span>
+        <span class="log-line">[2026-08-26T01:12:10Z] prometheus[1044]: TSDB started</span>
+        <span class="log-line">[2026-08-26T01:12:11Z] nginx[756]: worker process 1247 started</span>
+        <span class="log-line">[2026-08-26T01:12:12Z] systemd[1]: Starting Kubernetes API Server...</span>
+        <span class="log-line">[2026-08-26T01:12:13Z] kube-apiserver[1201]: Serving securely on :6443</span>
+        <span class="log-line">[2026-08-26T01:12:14Z] etcd[1187]: ready to serve client requests</span>
+        <span class="log-line">[2026-08-26T01:12:15Z] github-actions-runner[892]: Listening for jobs</span>
+        <span class="log-line">[2026-08-26T01:12:16Z] grafana[1304]: HTTP Server Listen on :3000</span>
+        <span class="log-line">[2026-08-26T01:12:17Z] alertmanager[1356]: Listening on :9093</span>
+        <span class="log-line">[2026-08-26T01:12:03Z] systemd[1]: Reached target Multi-User System</span>
+        <span class="log-line">[2026-08-26T01:12:03Z] dockerd[842]: API listen on /var/run/docker.sock</span>
+        <span class="log-line">[2026-08-26T01:12:04Z] kubelet[1102]: Started container runtime</span>
+        <span class="log-line">[2026-08-26T01:12:05Z] sshd[671]: Accepted publickey for souf from 10.0.2.15</span>
+        <span class="log-line">[2026-08-26T01:12:06Z] kernel: [UFW BLOCK] IN=eth0 SRC=185.224.128.0 DST=10.0.2.15</span>
+        <span class="log-line">[2026-08-26T01:12:07Z] containerd[839]: containerd: healthy</span>
+        <span class="log-line">[2026-08-26T01:12:08Z] cron[512]: (CRON) CMD (/usr/local/bin/backup.sh)</span>
+        <span class="log-line">[2026-08-26T01:12:09Z] node_exporter[923]: Listening on :9100</span>
+        <span class="log-line">[2026-08-26T01:12:10Z] prometheus[1044]: TSDB started</span>
+        <span class="log-line">[2026-08-26T01:12:11Z] nginx[756]: worker process 1247 started</span>
+        <span class="log-line">[2026-08-26T01:12:12Z] systemd[1]: Starting Kubernetes API Server...</span>
+        <span class="log-line">[2026-08-26T01:12:13Z] kube-apiserver[1201]: Serving securely on :6443</span>
+        <span class="log-line">[2026-08-26T01:12:14Z] etcd[1187]: ready to serve client requests</span>
+        <span class="log-line">[2026-08-26T01:12:15Z] github-actions-runner[892]: Listening for jobs</span>
+        <span class="log-line">[2026-08-26T01:12:16Z] grafana[1304]: HTTP Server Listen on :3000</span>
+        <span class="log-line">[2026-08-26T01:12:17Z] alertmanager[1356]: Listening on :9093</span>
+      </div>
+    </div>
 
     <div id="block-cursor" class="block-cursor" aria-hidden="true"></div>
 
-    <slot />
+    <div class="content">
+      <slot />
+    </div>
   </body>
 </html>
 
@@ -86,6 +123,11 @@ import '../styles/global.css';
     z-index: 0;
     mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
     -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
+  }
+
+  .content {
+    position: relative;
+    z-index: 1;
   }
 
   .log-track {

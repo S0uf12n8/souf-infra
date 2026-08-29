@@ -6,9 +6,10 @@ const links = [
 ];
 ---
 
-<section id="comms" class="comms-section">
-  <h2 class="section-label">// COMMS — CONTACT</h2>
-  <div class="comms-grid">
+<section id="comms" class="comms-section zone">
+  <div class="wrap">
+    <h2 class="section-label">// COMMS — CONTACT</h2>
+    <div class="comms-grid">
     <div class="terminal-window">
       <div class="terminal-chrome">
         <span class="dot dot-red"></span>
@@ -60,13 +61,12 @@ const links = [
       </div>
     </div>
   </div>
+  </div>
 </section>
 
 <style>
   .comms-section {
-    padding: 6rem 2rem;
-    max-width: 720px;
-    margin: 0 auto;
+    padding-block: clamp(4.5rem, 10vh, 7rem);
   }
 
   .section-label {
@@ -76,13 +76,14 @@ const links = [
     color: var(--accent-2);
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
   }
 
   .comms-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: start;
   }
 
   .terminal-window {
@@ -232,5 +233,11 @@ const links = [
   .form-submit:hover {
     background: var(--accent);
     color: var(--bg);
+  }
+
+  @media (max-width: 900px) {
+    .comms-grid {
+      grid-template-columns: 1fr;
+    }
   }
 </style>

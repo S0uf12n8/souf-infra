@@ -1,9 +1,21 @@
+export interface ProjectSection {
+  heading: string;
+  items: string[];
+}
+
 export interface Project {
   name: string;
+  /** one-line summary used on standard-size cards */
+  tagline?: string;
+  /** full detail — used on featured cards and in the detail panel */
   description: string;
+  /** optional structured detail blocks (subsystems, phases, limitations) */
+  sections?: ProjectSection[];
   stack: string[];
   status: 'PUBLIC' | 'PRIVATE' | 'IN PROGRESS' | 'STABLE' | 'ACTIVE';
   url: string | null;
+  /** featured cards span the full grid row */
+  featured?: boolean;
 }
 
 export const projects: Project[] = [
@@ -14,6 +26,7 @@ export const projects: Project[] = [
     stack: ['React Native', 'SQLite', 'Node.js', 'PostgreSQL'],
     status: 'PRIVATE',
     url: null,
+    featured: true,
   },
   {
     name: 'rpg-combat-cpp',

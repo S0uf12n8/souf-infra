@@ -1,28 +1,81 @@
 ---
-// Hero.astro — terminal boot sequence with typewriter effect
+// Hero.astro — asymmetric split: terminal boot sequence + infra-topology visual
 ---
 
 <section class="hero">
-  <div class="terminal-window">
-    <div class="terminal-chrome">
-      <span class="dot dot-red"></span>
-      <span class="dot dot-yellow"></span>
-      <span class="dot dot-green"></span>
-      <span class="terminal-title">souf@infra:~</span>
+  <div class="hero-inner">
+    <div class="hero-terminal">
+      <div class="terminal-window">
+        <div class="terminal-chrome">
+          <span class="dot dot-red"></span>
+          <span class="dot dot-yellow"></span>
+          <span class="dot dot-green"></span>
+          <span class="terminal-title">souf@infra:~</span>
+        </div>
+        <div class="terminal-body">
+          <p class="line"><span class="prompt">$</span> ssh souf@infra</p>
+          <p class="line dim">Connecting...</p>
+          <p class="line dim">Authenticated as S0uf12n8</p>
+          <p class="line"><span class="prompt">></span> whoami</p>
+          <p class="line">Souf — CS student, ex-Systems & Network technician, building toward DevOps/DevSecOps.</p>
+          <p class="line"><span class="prompt">></span> status</p>
+          <p class="line">Final-year Licence GI · Faculty of Taroudant, Morocco</p>
+        </div>
+      </div>
+      <div class="hero-actions">
+        <a href="#lab" class="btn btn-primary">[ View Lab ]</a>
+        <a href="#comms" class="btn btn-secondary">[ Contact ]</a>
+      </div>
     </div>
-    <div class="terminal-body">
-      <p class="line"><span class="prompt">$</span> ssh souf@infra</p>
-      <p class="line dim">Connecting...</p>
-      <p class="line dim">Authenticated as S0uf12n8</p>
-      <p class="line"><span class="prompt">></span> whoami</p>
-      <p class="line">Souf — CS student, ex-Systems & Network technician, building toward DevOps/DevSecOps.</p>
-      <p class="line"><span class="prompt">></span> status</p>
-      <p class="line">Final-year Licence GI · Faculty of Taroudant, Morocco</p>
+
+    <div class="hero-visual" aria-hidden="true">
+      <div class="viz-panel">
+        <div class="viz-head">// INFRA TOPOLOGY</div>
+        <svg class="viz-svg" viewBox="0 0 560 380">
+          <!-- spine bus -->
+          <line class="v-spine" x1="280" y1="36" x2="280" y2="324" />
+          <circle class="v-pulse" cx="280" cy="64" r="4" />
+          <!-- taps -->
+          <line class="v-tap" x1="180" y1="76" x2="280" y2="76" />
+          <line class="v-tap" x1="180" y1="188" x2="280" y2="188" />
+          <line class="v-tap" x1="180" y1="300" x2="280" y2="300" />
+          <line class="v-tap" x1="280" y1="76" x2="380" y2="76" />
+          <line class="v-tap" x1="280" y1="188" x2="380" y2="188" />
+          <line class="v-tap" x1="280" y1="300" x2="380" y2="300" />
+          <!-- node dots -->
+          <circle class="v-drop" cx="280" cy="76" r="3" />
+          <circle class="v-drop" cx="280" cy="188" r="3" />
+          <circle class="v-drop" cx="280" cy="300" r="3" />
+          <!-- left column -->
+          <rect class="v-rect" x="40" y="48" width="140" height="56" rx="6" />
+          <circle class="v-dot-ok" cx="58" cy="76" r="4" />
+          <text class="v-txt" x="110" y="79" text-anchor="middle">gateway</text>
+          <rect class="v-rect" x="40" y="160" width="140" height="56" rx="6" />
+          <circle class="v-dot-ok" cx="58" cy="188" r="4" />
+          <text class="v-txt" x="110" y="191" text-anchor="middle">app-svc</text>
+          <rect class="v-rect" x="40" y="272" width="140" height="56" rx="6" />
+          <circle class="v-dot-warn" cx="58" cy="300" r="4" />
+          <text class="v-txt" x="110" y="303" text-anchor="middle">db-primary</text>
+          <!-- right column -->
+          <rect class="v-rect" x="380" y="48" width="140" height="56" rx="6" />
+          <circle class="v-dot-ok" cx="398" cy="76" r="4" />
+          <text class="v-txt" x="450" y="79" text-anchor="middle">worker-01</text>
+          <rect class="v-rect" x="380" y="160" width="140" height="56" rx="6" />
+          <circle class="v-dot-ok" cx="398" cy="188" r="4" />
+          <text class="v-txt" x="450" y="191" text-anchor="middle">prometheus</text>
+          <rect class="v-rect" x="380" y="272" width="140" height="56" rx="6" />
+          <circle class="v-dot-warn" cx="398" cy="300" r="4" />
+          <text class="v-txt" x="450" y="303" text-anchor="middle">grafana</text>
+          <!-- spine annotation -->
+          <text class="v-cap" x="280" y="26" text-anchor="middle">spine</text>
+        </svg>
+        <div class="viz-status">
+          <span class="viz-line"><i class="viz-dot ok"></i> k8s-control-plane&nbsp;&nbsp;&nbsp;ok</span>
+          <span class="viz-line"><i class="viz-dot ok"></i> object-store&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ok</span>
+          <span class="viz-line"><i class="viz-dot warn"></i> gitops-sync&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;deploying</span>
+        </div>
+      </div>
     </div>
-  </div>
-  <div class="hero-actions">
-    <a href="#lab" class="btn btn-primary">[ View Lab ]</a>
-    <a href="#comms" class="btn btn-secondary">[ Contact ]</a>
   </div>
 </section>
 
@@ -44,19 +97,24 @@
 
 <style>
   .hero {
-    position: relative;
-    z-index: 1;
     min-height: 100vh;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
     align-items: center;
-    padding: 2rem;
+  }
+
+  .hero-inner {
+    width: 100%;
+    max-width: 1520px;
+    margin-inline: auto;
+    padding: clamp(6rem, 14vh, 9rem) clamp(1.25rem, 4vw, 3rem) clamp(4rem, 9vh, 6rem);
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: clamp(2rem, 6vw, 6rem);
+    align-items: center;
   }
 
   .terminal-window {
     width: 100%;
-    max-width: 640px;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 8px;
@@ -161,5 +219,180 @@
     text-decoration: none;
     background: var(--accent-2);
     color: var(--bg);
+  }
+
+  /* --- right-hand visual column --- */
+  .hero-visual {
+    position: relative;
+  }
+
+  /* ambient glow that peaks behind the panel */
+  .hero-visual::before {
+    content: '';
+    position: absolute;
+    inset: -15%;
+    background: radial-gradient(460px 340px at 55% 45%, rgba(217, 154, 78, 0.14), transparent 70%),
+      radial-gradient(340px 280px at 80% 75%, rgba(91, 122, 157, 0.14), transparent 70%);
+    pointer-events: none;
+  }
+
+  .viz-panel {
+    position: relative;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background:
+      linear-gradient(180deg, rgba(23, 29, 38, 0.55), rgba(17, 22, 29, 0.8));
+    padding: 1rem 1.25rem 1.1rem;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+  }
+
+  /* local drafting grid inside the panel */
+  .viz-panel::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 10px;
+    background-image:
+      linear-gradient(rgba(91, 122, 157, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(91, 122, 157, 0.05) 1px, transparent 1px);
+    background-size: 28px 28px;
+    mask-image: radial-gradient(ellipse at 50% 30%, black 20%, transparent 78%);
+    -webkit-mask-image: radial-gradient(ellipse at 50% 30%, black 20%, transparent 78%);
+    pointer-events: none;
+  }
+
+  .viz-head {
+    position: relative;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent-2);
+    opacity: 0.85;
+    margin-bottom: 0.6rem;
+  }
+
+  .viz-svg {
+    position: relative;
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .v-spine {
+    stroke: rgba(91, 122, 157, 0.5);
+    stroke-width: 1;
+  }
+
+  .v-tap {
+    stroke: rgba(91, 122, 157, 0.35);
+    stroke-width: 1;
+    stroke-dasharray: 3 4;
+  }
+
+  .v-drop {
+    fill: var(--accent-2);
+    opacity: 0.7;
+  }
+
+  .v-rect {
+    fill: rgba(23, 29, 38, 0.72);
+    stroke: rgba(131, 143, 161, 0.38);
+    stroke-width: 1;
+  }
+
+  .v-txt {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    fill: rgba(216, 222, 233, 0.6);
+    letter-spacing: 0.02em;
+  }
+
+  .v-cap {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    fill: rgba(131, 143, 161, 0.5);
+  }
+
+  .v-dot-ok   { fill: var(--accent); }
+  .v-dot-warn { fill: var(--warn); }
+
+  .v-pulse {
+    fill: var(--accent);
+    opacity: 0;
+    animation: pulse-spine 10s linear infinite;
+  }
+
+  @keyframes pulse-spine {
+    0%   { opacity: 0; transform: translateY(0); }
+    6%   { opacity: 0.9; }
+    92%  { opacity: 0.9; transform: translateY(300px); }
+    100% { opacity: 0; transform: translateY(300px); }
+  }
+
+  .viz-status {
+    position: relative;
+    margin-top: 0.75rem;
+    padding-top: 0.7rem;
+    border-top: 1px dashed var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .viz-line {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .viz-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .viz-dot.ok {
+    background: var(--accent);
+    box-shadow: 0 0 6px rgba(217, 154, 78, 0.5);
+    animation: viz-blink 3s ease-in-out infinite;
+  }
+
+  .viz-dot.warn {
+    background: var(--warn);
+    box-shadow: 0 0 6px rgba(245, 185, 66, 0.5);
+    animation: viz-blink 1.6s ease-in-out infinite;
+  }
+
+  @keyframes viz-blink {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.35; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .v-pulse { animation: none; opacity: 0.8; }
+    .viz-dot { animation: none; }
+  }
+
+  @media (max-width: 1020px) {
+    .hero-inner {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+      max-width: 720px;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .hero-visual {
+      display: none;
+    }
   }
 </style>

@@ -1,28 +1,34 @@
 ---
-// LabGrid.astro — projects grid, iterates over projects.ts data
+// LabGrid.astro — projects zone, iterates over projects.ts data
 import { projects } from '../data/projects';
 import ProjectCard from './ProjectCard.astro';
 import ProjectDetail from './ProjectDetail.astro';
 ---
 
-<section id="lab" class="lab-section">
-  <h2 class="section-label">// LAB — PROJECTS</h2>
-  <div class="lab-grid">
-    {projects.map((project) => (
-      <ProjectCard
-        name={project.name}
-        description={project.description}
-        stack={project.stack}
-        status={project.status}
-        url={project.url}
-      />
-    ))}
+<section id="lab" class="lab-section zone">
+  <div class="wrap">
+    <h2 class="section-label">// LAB — PROJECTS</h2>
+    <div class="lab-grid">
+      {projects.map((project) => (
+        <ProjectCard
+          name={project.name}
+          tagline={project.tagline}
+          description={project.description}
+          sections={project.sections ?? []}
+          stack={project.stack}
+          status={project.status}
+          url={project.url}
+          featured={project.featured ?? false}
+        />
+      ))}
+    </div>
   </div>
 </section>
 
 <ProjectDetail
   name=""
   description=""
+  sections={[]}
   stack={[]}
   status=""
   url={null}
@@ -37,6 +43,7 @@ import ProjectDetail from './ProjectDetail.astro';
     const closeBtn = document.getElementById('detail-close') as HTMLElement;
     const nameEl = document.getElementById('detail-name') as HTMLElement;
     const descEl = document.getElementById('detail-desc') as HTMLElement;
+    const sectionsEl = document.getElementById('detail-sections') as HTMLElement;
     const stackEl = document.getElementById('detail-stack') as HTMLElement;
     const pillEl = document.getElementById('detail-pill') as HTMLElement;
     const pillText = document.getElementById('detail-pill-text') as HTMLElement;
@@ -44,6 +51,7 @@ import ProjectDetail from './ProjectDetail.astro';
     const titleEl = document.getElementById('detail-title') as HTMLElement;
 
     const statusColor: Record<string, string> = {
+      'PUBLIC': 'var(--accent-2)',
       'ACTIVE': 'var(--accent)',
       'STABLE': 'var(--accent-2)',
       'IN PROGRESS': 'var(--warn)',
@@ -58,18 +66,32 @@ import ProjectDetail from './ProjectDetail.astro';
       const stack: string[] = JSON.parse(card.dataset.stack ?? '[]');
       const status = card.dataset.status ?? '';
       const url = card.dataset.url ?? '';
+      let sections: { heading: string; items: string[] }[] = [];
+      try {
+        sections = JSON.parse(card.dataset.sections ?? '[]');
+      } catch {
+        sections = [];
+      }
 
       nameEl.textContent = name;
       descEl.textContent = desc;
       titleEl.textContent = `${name.toLowerCase().replace(/\s+/g, '-')}`;
 
-      if (status && status !== 'PUBLIC') {
-        pillEl.hidden = false;
-        pillText.textContent = status;
-        pillEl.style.setProperty('--pill-color', statusColor[status] ?? 'var(--text-dim)');
-      } else {
-        pillEl.hidden = true;
-      }
+      pillEl.hidden = false;
+      pillText.textContent = status;
+      pillEl.style.setProperty('--pill-color', statusColor[status] ?? 'var(--text-dim)');
+
+      sectionsEl.innerHTML = sections
+        .map(
+          (s) => `
+            <div class="detail-sec">
+              <h4 class="detail-sec-head">// ${s.heading}</h4>
+              <ul class="detail-sec-list">
+                ${s.items.map((i) => `<li>${i}</li>`).join('')}
+              </ul>
+            </div>`
+        )
+        .join('');
 
       stackEl.innerHTML = stack
         .map((t) => `<span class="tag">${t}</span>`)
@@ -137,9 +159,7 @@ import ProjectDetail from './ProjectDetail.astro';
 
 <style>
   .lab-section {
-    padding: 6rem 2rem;
-    max-width: 960px;
-    margin: 0 auto;
+    padding-block: clamp(4.5rem, 10vh, 7rem);
   }
 
   .section-label {
@@ -149,16 +169,16 @@ import ProjectDetail from './ProjectDetail.astro';
     color: var(--accent-2);
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
   }
 
   .lab-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.25rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
   }
 
-  @media (max-width: 680px) {
+  @media (max-width: 760px) {
     .lab-grid {
       grid-template-columns: 1fr;
     }
