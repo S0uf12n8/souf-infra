@@ -44,4 +44,12 @@ export const projects: Project[] = [
     status: 'IN PROGRESS',
     url: 'https://github.com/S0uf12n8/homelab-as-code',
   },
+  {
+    name: 'rpg-combat-cpp',
+    description:
+      "C++ RPG combat engine — OOP coursework project. The repo structure, Makefile, branching strategy, and work-order docs the team worked against. As much a 'got a team project under control' story as a combat-engine one.",
+    stack: ['C++'],
+    status: 'PUBLIC',
+    url: 'https://github.com/S0uf12n8/rpg-combat-cpp',
+  },
 ];

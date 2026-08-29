@@ -104,7 +104,7 @@
     width: 100%;
     max-width: 1520px;
     margin-inline: auto;
-    padding: clamp(3.5rem, 8vh, 5.5rem) clamp(1.25rem, 4vw, 3rem);
+    padding: clamp(3.5rem, 7vh, 5rem) clamp(1.25rem, 4vw, 3rem);
     display: grid;
     grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
     gap: clamp(2rem, 6vw, 6rem);
@@ -123,7 +123,7 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    padding: 0.75rem 1rem;
+    padding: 0.65rem 1rem;
     background: var(--surface-2);
     border-bottom: 1px solid var(--border);
   }
@@ -146,14 +146,14 @@
   }
 
   .terminal-body {
-    padding: 1.25rem 1.5rem;
+    padding: 1rem 1.25rem;
     font-family: 'JetBrains Mono', monospace;
-    line-height: 1.8;
+    line-height: 1.75;
   }
 
   .line {
     color: var(--text);
-    font-size: 0.875rem;
+    font-size: 0.83rem;
     font-weight: 400;
     opacity: 0;
     transition: opacity 0.15s ease-in;
@@ -164,12 +164,12 @@
   }
 
   .line.dim {
-    font-size: 0.75rem;
+    font-size: 0.73rem;
     color: var(--text-dim);
   }
 
   .prompt {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     font-weight: 700;
     color: var(--accent);
     margin-right: 0.5rem;
@@ -229,8 +229,8 @@
     content: '';
     position: absolute;
     inset: -15%;
-    background: radial-gradient(460px 340px at 55% 45%, rgba(217, 154, 78, 0.14), transparent 70%),
-      radial-gradient(340px 280px at 80% 75%, rgba(91, 122, 157, 0.14), transparent 70%);
+    background: radial-gradient(460px 340px at 55% 45%, rgba(217, 154, 78, 0.1), transparent 70%),
+      radial-gradient(340px 280px at 80% 75%, rgba(91, 122, 157, 0.1), transparent 70%);
     pointer-events: none;
   }
 
@@ -252,8 +252,8 @@
     inset: 0;
     border-radius: 10px;
     background-image:
-      linear-gradient(rgba(91, 122, 157, 0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(91, 122, 157, 0.05) 1px, transparent 1px);
+      linear-gradient(rgba(91, 122, 157, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(91, 122, 157, 0.035) 1px, transparent 1px);
     background-size: 28px 28px;
     mask-image: radial-gradient(ellipse at 50% 30%, black 20%, transparent 78%);
     -webkit-mask-image: radial-gradient(ellipse at 50% 30%, black 20%, transparent 78%);

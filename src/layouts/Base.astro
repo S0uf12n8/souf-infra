@@ -1,5 +1,5 @@
 ---
-// Base.astro — base layout with <html>, <head>, font imports, global CSS
+// Base.astro — base layout: <html>, <head>, fonts, full-page background stack, custom cursor
 import '../styles/tokens.css';
 import '../styles/global.css';
 ---
@@ -11,79 +11,120 @@ import '../styles/global.css';
     <title>Souf — DevOps Portfolio</title>
   </head>
   <body>
-    <div class="log-stream" aria-hidden="true">
-      <div class="log-track">
-        <span class="log-line">[2026-08-26T01:12:03Z] systemd[1]: Reached target Multi-User System</span>
-        <span class="log-line">[2026-08-26T01:12:03Z] dockerd[842]: API listen on /var/run/docker.sock</span>
-        <span class="log-line">[2026-08-26T01:12:04Z] kubelet[1102]: Started container runtime</span>
-        <span class="log-line">[2026-08-26T01:12:05Z] sshd[671]: Accepted publickey for souf from 10.0.2.15</span>
-        <span class="log-line">[2026-08-26T01:12:06Z] kernel: [UFW BLOCK] IN=eth0 SRC=185.224.128.0 DST=10.0.2.15</span>
-        <span class="log-line">[2026-08-26T01:12:07Z] containerd[839]: containerd: healthy</span>
-        <span class="log-line">[2026-08-26T01:12:08Z] cron[512]: (CRON) CMD (/usr/local/bin/backup.sh)</span>
-        <span class="log-line">[2026-08-26T01:12:09Z] node_exporter[923]: Listening on :9100</span>
-        <span class="log-line">[2026-08-26T01:12:10Z] prometheus[1044]: TSDB started</span>
-        <span class="log-line">[2026-08-26T01:12:11Z] nginx[756]: worker process 1247 started</span>
-        <span class="log-line">[2026-08-26T01:12:12Z] systemd[1]: Starting Kubernetes API Server...</span>
-        <span class="log-line">[2026-08-26T01:12:13Z] kube-apiserver[1201]: Serving securely on :6443</span>
-        <span class="log-line">[2026-08-26T01:12:14Z] etcd[1187]: ready to serve client requests</span>
-        <span class="log-line">[2026-08-26T01:12:15Z] github-actions-runner[892]: Listening for jobs</span>
-        <span class="log-line">[2026-08-26T01:12:16Z] grafana[1304]: HTTP Server Listen on :3000</span>
-        <span class="log-line">[2026-08-26T01:12:17Z] alertmanager[1356]: Listening on :9093</span>
-        <span class="log-line">[2026-08-26T01:12:03Z] systemd[1]: Reached target Multi-User System</span>
-        <span class="log-line">[2026-08-26T01:12:03Z] dockerd[842]: API listen on /var/run/docker.sock</span>
-        <span class="log-line">[2026-08-26T01:12:04Z] kubelet[1102]: Started container runtime</span>
-        <span class="log-line">[2026-08-26T01:12:05Z] sshd[671]: Accepted publickey for souf from 10.0.2.15</span>
-        <span class="log-line">[2026-08-26T01:12:06Z] kernel: [UFW BLOCK] IN=eth0 SRC=185.224.128.0 DST=10.0.2.15</span>
-        <span class="log-line">[2026-08-26T01:12:07Z] containerd[839]: containerd: healthy</span>
-        <span class="log-line">[2026-08-26T01:12:08Z] cron[512]: (CRON) CMD (/usr/local/bin/backup.sh)</span>
-        <span class="log-line">[2026-08-26T01:12:09Z] node_exporter[923]: Listening on :9100</span>
-        <span class="log-line">[2026-08-26T01:12:10Z] prometheus[1044]: TSDB started</span>
-        <span class="log-line">[2026-08-26T01:12:11Z] nginx[756]: worker process 1247 started</span>
-        <span class="log-line">[2026-08-26T01:12:12Z] systemd[1]: Starting Kubernetes API Server...</span>
-        <span class="log-line">[2026-08-26T01:12:13Z] kube-apiserver[1201]: Serving securely on :6443</span>
-        <span class="log-line">[2026-08-26T01:12:14Z] etcd[1187]: ready to serve client requests</span>
-        <span class="log-line">[2026-08-26T01:12:15Z] github-actions-runner[892]: Listening for jobs</span>
-        <span class="log-line">[2026-08-26T01:12:16Z] grafana[1304]: HTTP Server Listen on :3000</span>
-        <span class="log-line">[2026-08-26T01:12:17Z] alertmanager[1356]: Listening on :9093</span>
+    <div class="site-bg" aria-hidden="true">
+      <div class="bg-grid"></div>
+      <div class="bg-schematic">
+        <svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet">
+          <!-- schematic sheet frame -->
+          <rect class="s-frame" x="90" y="70" width="1420" height="760" rx="6" />
+          <line class="s-tick" x1="90" y1="62" x2="90" y2="78" />
+          <line class="s-tick" x1="250" y1="62" x2="250" y2="78" />
+          <line class="s-tick" x1="410" y1="62" x2="410" y2="78" />
+          <line class="s-tick" x1="570" y1="62" x2="570" y2="78" />
+          <line class="s-tick" x1="730" y1="62" x2="730" y2="78" />
+          <line class="s-tick" x1="890" y1="62" x2="890" y2="78" />
+          <line class="s-tick" x1="1050" y1="62" x2="1050" y2="78" />
+          <line class="s-tick" x1="1210" y1="62" x2="1210" y2="78" />
+          <line class="s-tick" x1="1370" y1="62" x2="1370" y2="78" />
+          <line class="s-tick" x1="1510" y1="62" x2="1510" y2="78" />
+
+          <!-- uplink off-canvas -->
+          <line class="s-link" x1="110" y1="430" x2="20" y2="430" />
+          <circle class="s-dot" cx="110" cy="430" r="3" />
+
+          <!-- edge rack -->
+          <rect class="s-rack" x="110" y="300" width="280" height="200" rx="8" />
+          <text class="s-cap" x="140" y="288">edge rack</text>
+          <rect class="s-node" x="130" y="320" width="240" height="40" rx="5" />
+          <circle class="s-drop-ok" cx="148" cy="340" r="3" />
+          <text class="s-lbl" x="172" y="345">lb-01</text>
+          <rect class="s-node" x="130" y="410" width="240" height="40" rx="5" />
+          <circle class="s-drop-ok" cx="148" cy="430" r="3" />
+          <text class="s-lbl" x="172" y="435">ssh-gw</text>
+          <path class="s-link" d="M370 340 H500 V140 H690" />
+          <path class="s-link" d="M370 430 H520 V230 H690" />
+
+          <!-- app rack + spine -->
+          <rect class="s-rack" x="550" y="90" width="280" height="580" rx="8" />
+          <text class="s-cap" x="580" y="78">app rack</text>
+          <line class="s-spine" x1="690" y1="90" x2="690" y2="630" />
+          <rect class="s-node" x="570" y="120" width="240" height="40" rx="5" />
+          <circle class="s-drop-ok" cx="588" cy="140" r="3" />
+          <text class="s-lbl" x="612" y="145">app-svc</text>
+          <rect class="s-node" x="570" y="210" width="240" height="40" rx="5" />
+          <circle class="s-drop-ok" cx="588" cy="230" r="3" />
+          <text class="s-lbl" x="612" y="235">worker-a</text>
+          <rect class="s-node" x="570" y="300" width="240" height="40" rx="5" />
+          <circle class="s-drop-warn" cx="588" cy="320" r="3" />
+          <text class="s-lbl" x="612" y="325">worker-b</text>
+          <rect class="s-node" x="570" y="490" width="240" height="40" rx="5" />
+          <circle class="s-drop-ok" cx="588" cy="510" r="3" />
+          <text class="s-lbl" x="612" y="515">db-primary</text>
+          <rect class="s-node" x="570" y="580" width="240" height="40" rx="5" />
+          <circle class="s-drop-warn" cx="588" cy="600" r="3" />
+          <text class="s-lbl" x="612" y="605">db-replica</text>
+          <circle class="s-drop" cx="690" cy="140" r="2" />
+          <circle class="s-drop" cx="690" cy="230" r="2" />
+          <circle class="s-drop" cx="690" cy="320" r="2" />
+          <circle class="s-drop" cx="690" cy="510" r="2" />
+          <circle class="s-drop" cx="690" cy="600" r="2" />
+
+          <!-- observability rack -->
+          <rect class="s-rack" x="1150" y="180" width="300" height="240" rx="8" />
+          <text class="s-cap" x="1180" y="168">observability</text>
+          <rect class="s-node" x="1170" y="200" width="260" height="40" rx="5" />
+          <circle class="s-drop-ok" cx="1188" cy="220" r="3" />
+          <text class="s-lbl" x="1212" y="225">prometheus</text>
+          <rect class="s-node" x="1170" y="300" width="260" height="40" rx="5" />
+          <circle class="s-drop-ok" cx="1188" cy="320" r="3" />
+          <text class="s-lbl" x="1212" y="325">grafana</text>
+          <path class="s-link" d="M810 230 H1090 V220 H1170" />
+          <path class="s-link" d="M810 510 H1090 V320 H1170" />
+        </svg>
       </div>
-    </div>
-      <div class="log-track">
-        <span class="log-line">[2026-08-26T01:12:03Z] systemd[1]: Reached target Multi-User System</span>
-        <span class="log-line">[2026-08-26T01:12:03Z] dockerd[842]: API listen on /var/run/docker.sock</span>
-        <span class="log-line">[2026-08-26T01:12:04Z] kubelet[1102]: Started container runtime</span>
-        <span class="log-line">[2026-08-26T01:12:05Z] sshd[671]: Accepted publickey for souf from 10.0.2.15</span>
-        <span class="log-line">[2026-08-26T01:12:06Z] kernel: [UFW BLOCK] IN=eth0 SRC=185.224.128.0 DST=10.0.2.15</span>
-        <span class="log-line">[2026-08-26T01:12:07Z] containerd[839]: containerd: healthy</span>
-        <span class="log-line">[2026-08-26T01:12:08Z] cron[512]: (CRON) CMD (/usr/local/bin/backup.sh)</span>
-        <span class="log-line">[2026-08-26T01:12:09Z] node_exporter[923]: Listening on :9100</span>
-        <span class="log-line">[2026-08-26T01:12:10Z] prometheus[1044]: TSDB started</span>
-        <span class="log-line">[2026-08-26T01:12:11Z] nginx[756]: worker process 1247 started</span>
-        <span class="log-line">[2026-08-26T01:12:12Z] systemd[1]: Starting Kubernetes API Server...</span>
-        <span class="log-line">[2026-08-26T01:12:13Z] kube-apiserver[1201]: Serving securely on :6443</span>
-        <span class="log-line">[2026-08-26T01:12:14Z] etcd[1187]: ready to serve client requests</span>
-        <span class="log-line">[2026-08-26T01:12:15Z] github-actions-runner[892]: Listening for jobs</span>
-        <span class="log-line">[2026-08-26T01:12:16Z] grafana[1304]: HTTP Server Listen on :3000</span>
-        <span class="log-line">[2026-08-26T01:12:17Z] alertmanager[1356]: Listening on :9093</span>
-        <span class="log-line">[2026-08-26T01:12:03Z] systemd[1]: Reached target Multi-User System</span>
-        <span class="log-line">[2026-08-26T01:12:03Z] dockerd[842]: API listen on /var/run/docker.sock</span>
-        <span class="log-line">[2026-08-26T01:12:04Z] kubelet[1102]: Started container runtime</span>
-        <span class="log-line">[2026-08-26T01:12:05Z] sshd[671]: Accepted publickey for souf from 10.0.2.15</span>
-        <span class="log-line">[2026-08-26T01:12:06Z] kernel: [UFW BLOCK] IN=eth0 SRC=185.224.128.0 DST=10.0.2.15</span>
-        <span class="log-line">[2026-08-26T01:12:07Z] containerd[839]: containerd: healthy</span>
-        <span class="log-line">[2026-08-26T01:12:08Z] cron[512]: (CRON) CMD (/usr/local/bin/backup.sh)</span>
-        <span class="log-line">[2026-08-26T01:12:09Z] node_exporter[923]: Listening on :9100</span>
-        <span class="log-line">[2026-08-26T01:12:10Z] prometheus[1044]: TSDB started</span>
-        <span class="log-line">[2026-08-26T01:12:11Z] nginx[756]: worker process 1247 started</span>
-        <span class="log-line">[2026-08-26T01:12:12Z] systemd[1]: Starting Kubernetes API Server...</span>
-        <span class="log-line">[2026-08-26T01:12:13Z] kube-apiserver[1201]: Serving securely on :6443</span>
-        <span class="log-line">[2026-08-26T01:12:14Z] etcd[1187]: ready to serve client requests</span>
-        <span class="log-line">[2026-08-26T01:12:15Z] github-actions-runner[892]: Listening for jobs</span>
-        <span class="log-line">[2026-08-26T01:12:16Z] grafana[1304]: HTTP Server Listen on :3000</span>
-        <span class="log-line">[2026-08-26T01:12:17Z] alertmanager[1356]: Listening on :9093</span>
+      <div class="bg-radial"></div>
+      <div class="bg-vignette"></div>
+      <div class="log-stream">
+        <div class="log-track">
+          <span class="log-line">[2026-08-26T01:12:03Z] systemd[1]: Reached target Multi-User System</span>
+          <span class="log-line">[2026-08-26T01:12:03Z] dockerd[842]: API listen on /var/run/docker.sock</span>
+          <span class="log-line">[2026-08-26T01:12:04Z] kubelet[1102]: Started container runtime</span>
+          <span class="log-line">[2026-08-26T01:12:05Z] sshd[671]: Accepted publickey for souf from 10.0.2.15</span>
+          <span class="log-line">[2026-08-26T01:12:06Z] kernel: [UFW BLOCK] IN=eth0 SRC=185.224.128.0 DST=10.0.2.15</span>
+          <span class="log-line">[2026-08-26T01:12:07Z] containerd[839]: containerd: healthy</span>
+          <span class="log-line">[2026-08-26T01:12:08Z] cron[512]: (CRON) CMD (/usr/local/bin/backup.sh)</span>
+          <span class="log-line">[2026-08-26T01:12:09Z] node_exporter[923]: Listening on :9100</span>
+          <span class="log-line">[2026-08-26T01:12:10Z] prometheus[1044]: TSDB started</span>
+          <span class="log-line">[2026-08-26T01:12:11Z] nginx[756]: worker process 1247 started</span>
+          <span class="log-line">[2026-08-26T01:12:12Z] systemd[1]: Starting Kubernetes API Server...</span>
+          <span class="log-line">[2026-08-26T01:12:13Z] kube-apiserver[1201]: Serving securely on :6443</span>
+          <span class="log-line">[2026-08-26T01:12:14Z] etcd[1187]: ready to serve client requests</span>
+          <span class="log-line">[2026-08-26T01:12:15Z] github-actions-runner[892]: Listening for jobs</span>
+          <span class="log-line">[2026-08-26T01:12:16Z] grafana[1304]: HTTP Server Listen on :3000</span>
+          <span class="log-line">[2026-08-26T01:12:17Z] alertmanager[1356]: Listening on :9093</span>
+          <span class="log-line">[2026-08-26T01:12:03Z] systemd[1]: Reached target Multi-User System</span>
+          <span class="log-line">[2026-08-26T01:12:03Z] dockerd[842]: API listen on /var/run/docker.sock</span>
+          <span class="log-line">[2026-08-26T01:12:04Z] kubelet[1102]: Started container runtime</span>
+          <span class="log-line">[2026-08-26T01:12:05Z] sshd[671]: Accepted publickey for souf from 10.0.2.15</span>
+          <span class="log-line">[2026-08-26T01:12:06Z] kernel: [UFW BLOCK] IN=eth0 SRC=185.224.128.0 DST=10.0.2.15</span>
+          <span class="log-line">[2026-08-26T01:12:07Z] containerd[839]: containerd: healthy</span>
+          <span class="log-line">[2026-08-26T01:12:08Z] cron[512]: (CRON) CMD (/usr/local/bin/backup.sh)</span>
+          <span class="log-line">[2026-08-26T01:12:09Z] node_exporter[923]: Listening on :9100</span>
+          <span class="log-line">[2026-08-26T01:12:10Z] prometheus[1044]: TSDB started</span>
+          <span class="log-line">[2026-08-26T01:12:11Z] nginx[756]: worker process 1247 started</span>
+          <span class="log-line">[2026-08-26T01:12:12Z] systemd[1]: Starting Kubernetes API Server...</span>
+          <span class="log-line">[2026-08-26T01:12:13Z] kube-apiserver[1201]: Serving securely on :6443</span>
+          <span class="log-line">[2026-08-26T01:12:14Z] etcd[1187]: ready to serve client requests</span>
+          <span class="log-line">[2026-08-26T01:12:15Z] github-actions-runner[892]: Listening for jobs</span>
+          <span class="log-line">[2026-08-26T01:12:16Z] grafana[1304]: HTTP Server Listen on :3000</span>
+          <span class="log-line">[2026-08-26T01:12:17Z] alertmanager[1356]: Listening on :9093</span>
+        </div>
       </div>
     </div>
 
-    <div id="block-cursor" class="block-cursor" aria-hidden="true"></div>
+    <div id="site-cursor" class="cursor" aria-hidden="true">
+      <span class="cur-brk">[ ]</span>
+    </div>
 
     <div class="content">
       <slot />
@@ -93,41 +134,167 @@ import '../styles/global.css';
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    const cursor = document.getElementById('block-cursor');
+    const fine = window.matchMedia('(hover: hover) and (pointer: fine)');
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (!fine.matches || reduce.matches) return;
+
+    const cursor = document.getElementById('site-cursor');
     if (!cursor) return;
 
-    let visible = false;
+    const INTERACTIVE =
+      'a[href], button, [role="button"], [tabindex]:not([tabindex="-1"]), select, summary, label, input[type="submit"], input[type="checkbox"], input[type="radio"], input[type="range"]';
+    const TEXTUAL =
+      'input:not([type="submit"]):not([type="button"]):not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea, [contenteditable="true"]';
 
-    document.addEventListener('mousemove', (e) => {
-      cursor.style.left = `${e.clientX}px`;
-      cursor.style.top = `${e.clientY}px`;
-      if (!visible) {
-        cursor.style.opacity = '1';
-        visible = true;
+    let shown = false;
+
+    document.addEventListener(
+      'mousemove',
+      (e) => {
+        cursor.style.left = `${e.clientX}px`;
+        cursor.style.top = `${e.clientY}px`;
+        if (!shown) {
+          cursor.classList.add('on');
+          shown = true;
+        }
+      },
+      { passive: true }
+    );
+
+    document.addEventListener('mouseleave', () => {
+      if (shown) {
+        cursor.classList.remove('on');
+        shown = false;
       }
     });
 
-    document.addEventListener('mouseleave', () => {
-      cursor.style.opacity = '0';
-      visible = false;
+    document.addEventListener('mouseover', (e) => {
+      const target = e.target as HTMLElement | null;
+      cursor.classList.toggle('is-link', !!target?.closest(INTERACTIVE));
+      cursor.classList.toggle('is-text', !!target?.closest(TEXTUAL));
     });
   });
 </script>
 
 <style is:global>
-  .log-stream {
+  /* ============ site background ============ */
+  .site-bg {
     position: fixed;
     inset: 0;
+    z-index: 0;
     overflow: hidden;
     pointer-events: none;
-    z-index: 0;
-    mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
   }
 
-  .content {
-    position: relative;
-    z-index: 1;
+  .bg-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(91, 122, 157, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(91, 122, 157, 0.035) 1px, transparent 1px),
+      linear-gradient(rgba(91, 122, 157, 0.016) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(91, 122, 157, 0.016) 1px, transparent 1px);
+    background-size: 160px 160px, 160px 160px, 32px 32px, 32px 32px;
+  }
+
+  .bg-schematic {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    mask-image: radial-gradient(ellipse 115% 90% at 50% 42%, black 20%, transparent 72%);
+    -webkit-mask-image: radial-gradient(ellipse 115% 90% at 50% 42%, black 20%, transparent 72%);
+  }
+
+  .bg-schematic svg {
+    width: min(1400px, 120vw);
+    height: auto;
+    opacity: 0.32;
+  }
+
+  .s-frame {
+    fill: none;
+    stroke: rgba(91, 122, 157, 0.16);
+    stroke-width: 1;
+    stroke-dasharray: 6 8;
+  }
+
+  .s-tick {
+    stroke: rgba(91, 122, 157, 0.22);
+    stroke-width: 1;
+  }
+
+  .s-rack {
+    fill: rgba(17, 22, 29, 0.22);
+    stroke: rgba(91, 122, 157, 0.18);
+    stroke-width: 1;
+    stroke-dasharray: 4 5;
+  }
+
+  .s-node {
+    fill: rgba(23, 29, 38, 0.4);
+    stroke: rgba(131, 143, 161, 0.22);
+    stroke-width: 1;
+  }
+
+  .s-spine,
+  .s-link {
+    fill: none;
+    stroke: rgba(91, 122, 157, 0.2);
+    stroke-width: 1;
+  }
+
+  .s-link {
+    stroke-dasharray: 3 4;
+  }
+
+  .s-drop {
+    fill: rgba(139, 155, 175, 0.3);
+  }
+
+  .s-drop-ok {
+    fill: rgba(217, 154, 78, 0.5);
+  }
+
+  .s-drop-warn {
+    fill: rgba(245, 185, 66, 0.5);
+  }
+
+  .s-lbl {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    fill: rgba(216, 222, 233, 0.28);
+  }
+
+  .s-cap {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    fill: rgba(131, 143, 161, 0.32);
+  }
+
+  .bg-radial {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(820px 620px at 78% 18%, rgba(217, 154, 78, 0.07), transparent 65%),
+      radial-gradient(760px 560px at 14% 86%, rgba(91, 122, 157, 0.07), transparent 65%);
+  }
+
+  .bg-vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 30%, transparent 55%, rgba(11, 14, 20, 0.5) 100%);
+  }
+
+  .log-stream {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
   }
 
   .log-track {
@@ -141,7 +308,7 @@ import '../styles/global.css';
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.7rem;
     color: var(--text-dim);
-    opacity: 0.06;
+    opacity: 0.03;
     white-space: nowrap;
     line-height: 1.6;
   }
@@ -157,28 +324,89 @@ import '../styles/global.css';
     }
   }
 
-  .block-cursor {
+  .content {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ============ custom cursor ============ */
+  .cursor {
     position: fixed;
-    width: 2px;
-    height: 1.1em;
-    background: var(--accent);
+    top: 0;
+    left: 0;
+    width: 34px;
+    height: 34px;
+    margin: -17px 0 0 -17px;
     pointer-events: none;
     z-index: 9999;
+    display: none;
     opacity: 0;
-    transform: translate(-1px, -2px);
-    animation: blink-cursor 1s step-end infinite;
-    mix-blend-mode: difference;
+    transition: opacity 0.12s ease;
   }
 
-  @keyframes blink-cursor {
-    0%, 100% { opacity: 1; }
-    50%      { opacity: 0; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .block-cursor {
-      animation: none;
-      opacity: 1;
+  @media (hover: hover) and (pointer: fine) {
+    .cursor {
+      display: block;
     }
+  }
+
+  .cursor.on {
+    opacity: 1;
+  }
+
+  /* never double up over native text caret */
+  .cursor.is-text {
+    opacity: 0;
+  }
+
+  .cursor::before,
+  .cursor::after {
+    content: '';
+    position: absolute;
+    background: rgba(131, 143, 161, 0.55);
+    transition: opacity 0.1s ease;
+  }
+
+  .cursor::before {
+    left: 6px;
+    right: 6px;
+    top: 50%;
+    height: 1px;
+    transform: translateY(-50%);
+  }
+
+  .cursor::after {
+    top: 6px;
+    bottom: 6px;
+    left: 50%;
+    width: 1px;
+    transform: translateX(-50%);
+  }
+
+  .cur-brk {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: -1px;
+    line-height: 1;
+    color: var(--accent-2);
+    opacity: 0;
+    transform: scale(0.75);
+    transition: opacity 0.1s ease, transform 0.1s ease;
+  }
+
+  .cursor.is-link::before,
+  .cursor.is-link::after {
+    opacity: 0;
+  }
+
+  .cursor.is-link .cur-brk {
+    opacity: 1;
+    transform: scale(1);
   }
 </style>
