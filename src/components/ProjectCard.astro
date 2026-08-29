@@ -1,6 +1,7 @@
 ---
 // ProjectCard.astro — single project card (standard or featured/full-width)
 interface Props {
+  id?: string;
   name: string;
   tagline?: string;
   description: string;
@@ -11,7 +12,7 @@ interface Props {
   featured?: boolean;
 }
 
-const { name, tagline, description, sections = [], stack, status, url, featured = false } = Astro.props;
+const { id, name, tagline, description, sections = [], stack, status, url, featured = false } = Astro.props;
 
 const statusColor: Record<string, string> = {
   'PUBLIC': 'var(--accent-2)',
@@ -25,6 +26,7 @@ const pillColor = statusColor[status] ?? 'var(--text-dim)';
 ---
 
 <div
+  id={id}
   class:list={['card', { featured }]}
   role="button"
   tabindex="0"

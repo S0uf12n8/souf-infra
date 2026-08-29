@@ -1,70 +1,94 @@
 ---
-// StackGrid.astro — skills/tools inventory as a columnar status table + learning pipeline
-const rows = [
-  { tool: 'C++',                  category: 'Languages',      status: 'STABLE' },
-  { tool: 'Python',               category: 'Languages',      status: 'STABLE' },
-  { tool: 'SQL',                  category: 'Languages',      status: 'RUNNING' },
-  { tool: 'JavaScript/TypeScript', category: 'Languages',     status: 'RUNNING' },
-  { tool: 'Docker',               category: 'Infra & DevOps', status: 'RUNNING' },
-  { tool: 'Docker Compose',       category: 'Infra & DevOps', status: 'RUNNING' },
-  { tool: 'k3s',                  category: 'Infra & DevOps', status: 'LEARNING' },
-  { tool: 'GitHub Actions',       category: 'Infra & DevOps', status: 'RUNNING' },
-  { tool: 'Prometheus',           category: 'Infra & DevOps', status: 'LEARNING' },
-  { tool: 'Grafana',              category: 'Infra & DevOps', status: 'LEARNING' },
-  { tool: 'Linux administration', category: 'Systems',        status: 'RUNNING' },
-  { tool: 'Networking',           category: 'Systems',        status: 'RUNNING' },
-  { tool: 'Kubernetes (depth)',   category: 'Learning',       status: 'LEARNING' },
-  { tool: 'Terraform',            category: 'Learning',       status: 'LEARNING' },
-  { tool: 'CI/CD hardening',      category: 'Learning',       status: 'LEARNING' },
+// StackGrid.astro — skills/tools as floating cards, grouped by category, linked to Lab projects
+const ICON_TINT = '838fa1';
+
+const groups = [
+  {
+    label: 'Languages',
+    items: [
+      { name: 'C++',                   status: 'STABLE',   img: 'cplusplus' },
+      { name: 'Python',                status: 'STABLE',   img: 'python' },
+      { name: 'SQL',                   status: 'RUNNING',  glyph: 'database' },
+      { name: 'TypeScript',            status: 'RUNNING',  img: 'typescript', link: '#acomed-mobile' },
+      { name: 'JavaScript',            status: 'RUNNING',  img: 'javascript', link: '#cvbuilder' },
+      { name: 'HTML/CSS',              status: 'RUNNING',  img: 'html5',      link: '#cvbuilder' },
+    ],
+  },
+  {
+    label: 'Frameworks & Infra',
+    items: [
+      { name: 'React Native',          status: 'RUNNING',  img: 'react',      link: '#acomed-mobile' },
+      { name: 'Expo',                  status: 'RUNNING',  img: 'expo',       link: '#acomed-mobile' },
+      { name: 'Docker',                status: 'RUNNING',  img: 'docker',     link: '#homelab-as-code' },
+      { name: 'Docker Compose',        status: 'RUNNING',  img: 'docker' },
+      { name: 'Ansible',               status: 'RUNNING',  img: 'ansible',    link: '#homelab-as-code' },
+      { name: 'k3s / Kubernetes',      status: 'LEARNING', img: 'kubernetes' },
+      { name: 'GitHub Actions',        status: 'RUNNING',  img: 'githubactions' },
+      { name: 'Terraform',             status: 'LEARNING', img: 'terraform' },
+      { name: 'Prometheus',            status: 'LEARNING', img: 'prometheus' },
+      { name: 'Grafana',               status: 'LEARNING', img: 'grafana' },
+    ],
+  },
+  {
+    label: 'Systems & Security',
+    items: [
+      { name: 'Linux administration',  status: 'STABLE',   img: 'linux' },
+      { name: 'Networking',            status: 'STABLE',   glyph: 'network' },
+      { name: 'CI/CD hardening',       status: 'LEARNING', glyph: 'shield' },
+    ],
+  },
 ];
 
-const tableRows = rows.filter((r) => r.category !== 'Learning');
-const learningRows = rows.filter((r) => r.category === 'Learning');
+const glyphs: Record<string, string> = {
+  database: `<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.66 3.58 3 8 3s8-1.34 8-3V5"/><path d="M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3"/></svg>`,
+  network: `<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="5" cy="5" r="2.5"/><circle cx="19" cy="5" r="2.5"/><circle cx="12" cy="19" r="2.5"/><path d="M7 6.5l3.2 10M17 6.5l-3.2 10M7.6 5h8.8"/></svg>`,
+  shield: `<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
+};
 
 const statusClass: Record<string, string> = {
-  RUNNING: 'status-running',
-  LEARNING: 'status-learning',
-  STABLE: 'status-stable',
+  RUNNING: 'badge-running',
+  LEARNING: 'badge-learning',
+  STABLE: 'badge-stable',
 };
+
+let idx = 0;
+const cards = groups.map((group) => ({
+  ...group,
+  items: group.items.map((tool) => ({ ...tool, delay: (idx++ % 8) * 0.5 })),
+}));
 ---
 
 <section id="stack" class="stack-section zone">
   <div class="wrap">
     <h2 class="section-label">// STACK — INVENTORY</h2>
-    <div class="stack-grid">
-      <div class="table-wrapper">
-        <table class="stack-table">
-          <thead>
-            <tr>
-              <th class="col-tool">TOOL</th>
-              <th class="col-category">CATEGORY</th>
-              <th class="col-status">STATUS</th>
-            </tr>
-          </thead>
-          <tbody>
-            {tableRows.map((row) => (
-              <tr>
-                <td class="col-tool">{row.tool}</td>
-                <td class="col-category">{row.category}</td>
-                <td class={`col-status ${statusClass[row.status]}`}>{row.status}</td>
-              </tr>
+    <div class="stack-groups">
+      {cards.map((group) => (
+        <div class="stack-group">
+          <h3 class="group-label">//- {group.label.toLowerCase()}</h3>
+          <div class="card-grid">
+            {group.items.map((tool) => (
+              <a
+                class:list={['stack-card', { linked: !!tool.link }]}
+                href={tool.link}
+                style={`--d: ${tool.delay}s`}
+              >
+                <div class="card-bob">
+                  <div class="card-line">
+                    <span class="stack-icon">
+                      {tool.img
+                        ? <img src={`https://cdn.simpleicons.org/${tool.img}/${ICON_TINT}`} alt="" width="26" height="26" loading="lazy" />
+                        : <span class="glyph-zone" set:html={glyphs[tool.glyph]}></span>}
+                    </span>
+                    {tool.link ? <span class="link-hint" aria-hidden="true">→</span> : <span class="link-hint spacer" aria-hidden="true"></span>}
+                  </div>
+                  <span class="card-name">{tool.name}</span>
+                  <span class:list={['status-badge', statusClass[tool.status]]}>{tool.status}</span>
+                </div>
+              </a>
             ))}
-          </tbody>
-        </table>
-      </div>
-
-      <aside class="learning-panel">
-        <div class="learning-head">// LEARNING PIPELINE</div>
-        <div class="learning-list">
-          {learningRows.map((row) => (
-            <div class="learning-item">
-              <span class="learning-tool">{row.tool}</span>
-              <span class="learning-state">learning</span>
-            </div>
-          ))}
+          </div>
         </div>
-        <p class="learning-note">on the bench — in progress, not yet in production.</p>
-      </aside>
+      ))}
     </div>
   </div>
 </section>
@@ -84,165 +108,144 @@ const statusClass: Record<string, string> = {
     margin-bottom: 2rem;
   }
 
-  .stack-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
-    gap: clamp(1.75rem, 4vw, 3.5rem);
-    align-items: start;
-  }
-
-  .table-wrapper {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .stack-table {
-    width: 100%;
-    min-width: 480px;
-    border-collapse: collapse;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.8rem;
-    table-layout: fixed;
-  }
-
-  .stack-table .col-tool    { width: 45%; }
-  .stack-table .col-category { width: 35%; }
-  .stack-table .col-status   { width: 20%; }
-
-  thead {
-    background: var(--surface-2);
-    border-bottom: 1px solid var(--border);
-  }
-
-  th {
-    text-align: left;
-    font-weight: 500;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    font-size: 0.7rem;
-    padding: 0.65rem 1rem;
-  }
-
-  td {
-    padding: 0.55rem 1rem;
-    color: var(--text);
-    border-bottom: 1px solid var(--border);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  tr:last-child td {
-    border-bottom: none;
-  }
-
-  tr:hover td {
-    background: var(--surface-2);
-  }
-
-  .col-category {
-    color: var(--text-dim);
-  }
-
-  .col-status {
-    text-align: right;
-    font-weight: 500;
-    letter-spacing: 0.04em;
-  }
-
-  .status-running {
-    color: var(--accent);
-  }
-
-  .status-learning {
-    color: var(--warn);
-  }
-
-  .status-stable {
-    color: var(--accent-2);
-  }
-
-  .learning-panel {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 1.25rem 1.5rem;
-  }
-
-  .learning-head {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.68rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--accent-2);
-    margin-bottom: 1rem;
-  }
-
-  .learning-list {
+  .stack-groups {
     display: flex;
     flex-direction: column;
-    gap: 0.55rem;
   }
 
-  .learning-item {
+  .stack-group + .stack-group {
+    margin-top: 2.5rem;
+  }
+
+  .group-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent-2);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.25rem;
+    border-bottom: 1px dashed var(--border);
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 1.25rem 1.1rem;
+  }
+
+  .stack-card {
+    display: block;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.9rem 1rem;
+    text-decoration: none;
+    color: var(--text-dim);
+    transition: transform 0.25s ease, border-color 0.2s ease, background 0.2s ease;
+  }
+
+  .stack-card:hover {
+    transform: translateY(-6px);
+    background: var(--surface-2);
+    border-color: var(--accent-2);
+  }
+
+  .stack-card.linked:hover {
+    border-color: var(--accent);
+  }
+
+  .card-bob {
     display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    animation: bob 7s ease-in-out infinite;
+    animation-delay: var(--d);
+  }
+
+  @keyframes bob {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-6px); }
+  }
+
+  .card-line {
+    display: flex;
+    align-items: flex-start;
     justify-content: space-between;
-    align-items: baseline;
-    gap: 0.75rem;
+    gap: 0.5rem;
+  }
+
+  .stack-icon {
+    display: inline-flex;
+    color: var(--text-dim);
+    transition: color 0.2s ease, filter 0.2s ease;
+  }
+
+  .glyph-zone {
+    display: inline-flex;
+  }
+
+  .stack-card:hover .stack-icon {
+    color: var(--text);
+    filter: brightness(1.5);
+  }
+
+  .link-hint {
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+    opacity: 0.35;
+    transition: opacity 0.2s ease;
   }
 
-  .learning-tool {
-    color: var(--text);
+  .link-hint.spacer {
+    opacity: 0;
   }
 
-  .learning-state {
-    font-size: 0.68rem;
-    color: var(--warn);
-    letter-spacing: 0.04em;
-    white-space: nowrap;
+  .stack-card.linked:hover .link-hint {
+    opacity: 1;
   }
 
-  .learning-state::before {
-    content: '● ';
-    font-size: 0.6rem;
-    vertical-align: 1px;
-  }
-
-  .learning-note {
-    margin-top: 1rem;
-    padding-top: 0.85rem;
-    border-top: 1px dashed var(--border);
-    font-family: 'Inter', sans-serif;
+  .card-name {
+    font-family: 'JetBrains Mono', monospace;
     font-size: 0.78rem;
-    line-height: 1.6;
-    color: var(--text-dim);
-    opacity: 0.75;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.35;
   }
 
-  @media (max-width: 900px) {
-    .stack-grid {
-      grid-template-columns: 1fr;
+  .status-badge {
+    align-self: flex-start;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.56rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    padding: 0.15rem 0.45rem;
+    color: var(--text-dim);
+  }
+
+  .badge-running { color: var(--accent); }
+  .badge-learning { color: var(--warn); }
+  .badge-stable { color: var(--accent-2); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card-bob {
+      animation: none;
+    }
+
+    .stack-card {
+      transition: none;
     }
   }
 
   @media (max-width: 520px) {
-    .stack-table {
-      min-width: 0;
+    .card-grid {
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     }
-
-    .stack-table .col-category,
-    th.col-category {
-      display: none;
-    }
-
-    .stack-table .col-tool    { width: 65%; }
-    .stack-table .col-status  { width: 35%; }
   }
 </style>

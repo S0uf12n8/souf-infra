@@ -11,6 +11,7 @@ import ProjectDetail from './ProjectDetail.astro';
     <div class="lab-grid">
       {projects.map((project) => (
         <ProjectCard
+          id={project.name.toLowerCase().replace(/\s+/g, '-')}
           name={project.name}
           tagline={project.tagline}
           description={project.description}
