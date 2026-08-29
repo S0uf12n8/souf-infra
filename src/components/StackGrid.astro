@@ -1,48 +1,41 @@
 ---
-// StackGrid.astro — skills/tools as floating cards, grouped by category, linked to Lab projects
+// StackGrid.astro — scattered floating stack cards, click-to-reveal which Lab project uses each tool
 const ICON_TINT = '838fa1';
 
-const groups = [
-  {
-    label: 'Languages',
-    items: [
-      { name: 'C++',                   status: 'STABLE',   img: 'cplusplus' },
-      { name: 'Python',                status: 'STABLE',   img: 'python' },
-      { name: 'SQL',                   status: 'RUNNING',  glyph: 'database' },
-      { name: 'TypeScript',            status: 'RUNNING',  img: 'typescript', link: '#acomed-mobile' },
-      { name: 'JavaScript',            status: 'RUNNING',  img: 'javascript', link: '#cvbuilder' },
-      { name: 'HTML/CSS',              status: 'RUNNING',  img: 'html5',      link: '#cvbuilder' },
-    ],
-  },
-  {
-    label: 'Frameworks & Infra',
-    items: [
-      { name: 'React Native',          status: 'RUNNING',  img: 'react',      link: '#acomed-mobile' },
-      { name: 'Expo',                  status: 'RUNNING',  img: 'expo',       link: '#acomed-mobile' },
-      { name: 'Docker',                status: 'RUNNING',  img: 'docker',     link: '#homelab-as-code' },
-      { name: 'Docker Compose',        status: 'RUNNING',  img: 'docker' },
-      { name: 'Ansible',               status: 'RUNNING',  img: 'ansible',    link: '#homelab-as-code' },
-      { name: 'k3s / Kubernetes',      status: 'LEARNING', img: 'kubernetes' },
-      { name: 'GitHub Actions',        status: 'RUNNING',  img: 'githubactions' },
-      { name: 'Terraform',             status: 'LEARNING', img: 'terraform' },
-      { name: 'Prometheus',            status: 'LEARNING', img: 'prometheus' },
-      { name: 'Grafana',               status: 'LEARNING', img: 'grafana' },
-    ],
-  },
-  {
-    label: 'Systems & Security',
-    items: [
-      { name: 'Linux administration',  status: 'STABLE',   img: 'linux' },
-      { name: 'Networking',            status: 'STABLE',   glyph: 'network' },
-      { name: 'CI/CD hardening',       status: 'LEARNING', glyph: 'shield' },
-    ],
-  },
+interface StackTool {
+  name: string;
+  status: 'RUNNING' | 'LEARNING' | 'STABLE';
+  img?: string;
+  glyph?: string;
+  project?: { name: string; href: string };
+}
+
+const tools: StackTool[] = [
+  { name: 'C++',                  status: 'STABLE',   img: 'cplusplus' },
+  { name: 'Python',               status: 'STABLE',   img: 'python' },
+  { name: 'SQL',                  status: 'RUNNING',  glyph: 'database' },
+  { name: 'TypeScript',           status: 'RUNNING',  img: 'typescript', project: { name: 'ACOMED Mobile',   href: '#acomed-mobile' } },
+  { name: 'JavaScript',           status: 'RUNNING',  img: 'javascript', project: { name: 'CVBuilder',       href: '#cvbuilder' } },
+  { name: 'HTML/CSS',             status: 'RUNNING',  img: 'html5',      project: { name: 'CVBuilder',       href: '#cvbuilder' } },
+  { name: 'React Native',         status: 'RUNNING',  img: 'react',      project: { name: 'ACOMED Mobile',   href: '#acomed-mobile' } },
+  { name: 'Expo',                 status: 'RUNNING',  img: 'expo',       project: { name: 'ACOMED Mobile',   href: '#acomed-mobile' } },
+  { name: 'Docker',               status: 'RUNNING',  img: 'docker',     project: { name: 'Homelab-as-Code', href: '#homelab-as-code' } },
+  { name: 'Docker Compose',       status: 'RUNNING',  img: 'docker' },
+  { name: 'Ansible',              status: 'RUNNING',  img: 'ansible',    project: { name: 'Homelab-as-Code', href: '#homelab-as-code' } },
+  { name: 'k3s / Kubernetes',     status: 'LEARNING', img: 'kubernetes' },
+  { name: 'GitHub Actions',       status: 'RUNNING',  img: 'githubactions' },
+  { name: 'Terraform',            status: 'LEARNING', img: 'terraform' },
+  { name: 'Prometheus',           status: 'LEARNING', img: 'prometheus' },
+  { name: 'Grafana',              status: 'LEARNING', img: 'grafana' },
+  { name: 'Linux administration', status: 'STABLE',   img: 'linux' },
+  { name: 'Networking',           status: 'STABLE',   glyph: 'network' },
+  { name: 'CI/CD hardening',      status: 'LEARNING', glyph: 'shield' },
 ];
 
 const glyphs: Record<string, string> = {
-  database: `<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.66 3.58 3 8 3s8-1.34 8-3V5"/><path d="M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3"/></svg>`,
-  network: `<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="5" cy="5" r="2.5"/><circle cx="19" cy="5" r="2.5"/><circle cx="12" cy="19" r="2.5"/><path d="M7 6.5l3.2 10M17 6.5l-3.2 10M7.6 5h8.8"/></svg>`,
-  shield: `<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
+  database: `<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.66 3.58 3 8 3s8-1.34 8-3V5"/><path d="M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3"/></svg>`,
+  network: `<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="5" cy="5" r="2.5"/><circle cx="19" cy="5" r="2.5"/><circle cx="12" cy="19" r="2.5"/><path d="M7 6.5l3.2 10M17 6.5l-3.2 10M7.6 5h8.8"/></svg>`,
+  shield: `<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
 };
 
 const statusClass: Record<string, string> = {
@@ -51,47 +44,88 @@ const statusClass: Record<string, string> = {
   STABLE: 'badge-stable',
 };
 
-let idx = 0;
-const cards = groups.map((group) => ({
-  ...group,
-  items: group.items.map((tool) => ({ ...tool, delay: (idx++ % 8) * 0.5 })),
-}));
+const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+
+const cards = tools.map((tool, i) => {
+  const w = 148 + ((i * 13) % 30);              // 148..177 px
+  const drop = ((i * 11) % 5) * 5;              // stair-step 0..20px
+  const sway = (i % 2 === 0 ? -1 : 1) * (4 + ((i * 7) % 5)); // alternating ±4..8px
+  const delay = ((i % 8) * 0.55).toFixed(2);
+  const dur = (5 + (i % 4) * 1.3).toFixed(2);   // 5..8.9s drift period
+  return { ...tool, w, drop, sway, delay, dur, revealId: `reveal-${slug(tool.name)}` };
+});
 ---
 
 <section id="stack" class="stack-section zone">
   <div class="wrap">
     <h2 class="section-label">// STACK — INVENTORY</h2>
-    <div class="stack-groups">
-      {cards.map((group) => (
-        <div class="stack-group">
-          <h3 class="group-label">//- {group.label.toLowerCase()}</h3>
-          <div class="card-grid">
-            {group.items.map((tool) => (
-              <a
-                class:list={['stack-card', { linked: !!tool.link }]}
-                href={tool.link}
-                style={`--d: ${tool.delay}s`}
-              >
-                <div class="card-bob">
-                  <div class="card-line">
-                    <span class="stack-icon">
-                      {tool.img
-                        ? <img src={`https://cdn.simpleicons.org/${tool.img}/${ICON_TINT}`} alt="" width="26" height="26" loading="lazy" />
-                        : <span class="glyph-zone" set:html={glyphs[tool.glyph]}></span>}
-                    </span>
-                    {tool.link ? <span class="link-hint" aria-hidden="true">→</span> : <span class="link-hint spacer" aria-hidden="true"></span>}
-                  </div>
-                  <span class="card-name">{tool.name}</span>
-                  <span class:list={['status-badge', statusClass[tool.status]]}>{tool.status}</span>
-                </div>
-              </a>
-            ))}
+    <div class="scatter-band">
+      {cards.map((card) => (
+        <div class="card-scatter" style={`--sway:${card.sway}px; --drop:${card.drop}px; --w:${card.w}px`}>
+          <div class="stack-card" data-name={card.name}>
+            <button
+              type="button"
+              class="card-hit"
+              style={`--d:${card.delay}s; --dur:${card.dur}s`}
+              aria-expanded="false"
+              aria-controls={card.revealId}
+            >
+              <div class="card-line">
+                <span class="stack-icon">
+                  {card.img
+                    ? <img src={`https://cdn.simpleicons.org/${card.img}/${ICON_TINT}`} alt="" width="24" height="24" loading="lazy" />
+                    : <span class="glyph-zone" set:html={glyphs[card.glyph]}></span>}
+                </span>
+                <span class="reveal-cue" aria-hidden="true">▾</span>
+              </div>
+              <span class="card-name">{card.name}</span>
+              <span class:list={['status-badge', statusClass[card.status]]}>{card.status}</span>
+            </button>
+
+            <div class="card-reveal" id={card.revealId}>
+              <span class="reveal-kicker">&gt; used in</span>
+              {card.project ? (
+                <a class="reveal-link" href={card.project.href}>{card.project.name} →</a>
+              ) : (
+                <span class="reveal-empty">not yet used in a Lab project</span>
+              )}
+            </div>
           </div>
         </div>
       ))}
     </div>
   </div>
 </section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const cards = Array.from(document.querySelectorAll<HTMLElement>('.stack-card'));
+
+    function closeAll() {
+      cards.forEach((card) => {
+        card.classList.remove('open');
+        card.querySelector<HTMLElement>('.card-hit')?.setAttribute('aria-expanded', 'false');
+      });
+    }
+
+    cards.forEach((card) => {
+      card.querySelector<HTMLElement>('.card-hit')?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const willOpen = !card.classList.contains('open');
+        closeAll();
+        if (willOpen) {
+          card.classList.add('open');
+          card.querySelector<HTMLElement>('.card-hit')?.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+
+    document.addEventListener('click', closeAll);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeAll();
+    });
+  });
+</script>
 
 <style>
   .stack-section {
@@ -105,68 +139,65 @@ const cards = groups.map((group) => ({
     color: var(--accent-2);
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
   }
 
-  .stack-groups {
+  .scatter-band {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem 1.15rem;
+    align-items: flex-start;
   }
 
-  .stack-group + .stack-group {
-    margin-top: 2.5rem;
-  }
-
-  .group-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.68rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--accent-2);
-    padding-bottom: 0.5rem;
-    margin-bottom: 1.25rem;
-    border-bottom: 1px dashed var(--border);
-  }
-
-  .card-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-    gap: 1.25rem 1.1rem;
+  .card-scatter {
+    width: var(--w);
+    flex: 0 0 var(--w);
+    max-width: 100%;
+    margin-top: var(--drop, 0);
+    transform: translateX(var(--sway, 0));
   }
 
   .stack-card {
-    display: block;
+    position: relative;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 8px;
-    padding: 0.9rem 1rem;
-    text-decoration: none;
-    color: var(--text-dim);
-    transition: transform 0.25s ease, border-color 0.2s ease, background 0.2s ease;
+    padding: 0.8rem 0.85rem;
+    transition: transform 0.22s ease, border-color 0.2s ease, background 0.2s ease;
+    z-index: 1;
   }
 
   .stack-card:hover {
-    transform: translateY(-6px);
+    transform: translateY(-4px);
     background: var(--surface-2);
     border-color: var(--accent-2);
+    z-index: 5;
   }
 
-  .stack-card.linked:hover {
+  .stack-card.open {
     border-color: var(--accent);
+    background: var(--surface-2);
+    z-index: 20;
   }
 
-  .card-bob {
+  .card-hit {
     display: flex;
     flex-direction: column;
     gap: 0.45rem;
-    animation: bob 7s ease-in-out infinite;
-    animation-delay: var(--d);
+    width: 100%;
+    padding: 0;
+    border: none;
+    background: none;
+    font: inherit;
+    text-align: left;
+    animation: bob var(--dur, 6s) ease-in-out infinite;
+    animation-delay: var(--d, 0s);
   }
 
   @keyframes bob {
     0%, 100% { transform: translateY(0); }
-    50%      { transform: translateY(-6px); }
+    50%      { transform: translateY(-5px); }
   }
 
   .card-line {
@@ -191,27 +222,27 @@ const cards = groups.map((group) => ({
     filter: brightness(1.5);
   }
 
-  .link-hint {
+  .reveal-cue {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: var(--accent);
+    font-size: 0.7rem;
+    color: var(--text-dim);
     line-height: 1;
-    opacity: 0.35;
-    transition: opacity 0.2s ease;
+    opacity: 0.55;
+    transition: transform 0.22s ease, color 0.2s ease;
   }
 
-  .link-hint.spacer {
-    opacity: 0;
+  .stack-card:hover .reveal-cue {
+    color: var(--accent);
   }
 
-  .stack-card.linked:hover .link-hint {
-    opacity: 1;
+  .stack-card.open .reveal-cue {
+    transform: rotate(180deg);
+    color: var(--accent);
   }
 
   .card-name {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.78rem;
+    font-size: 0.75rem;
     font-weight: 500;
     color: var(--text);
     line-height: 1.35;
@@ -233,19 +264,72 @@ const cards = groups.map((group) => ({
   .badge-learning { color: var(--warn); }
   .badge-stable { color: var(--accent-2); }
 
+  .card-reveal {
+    position: absolute;
+    top: calc(100% + 12px);
+    left: 50%;
+    width: 184px;
+    max-width: calc(100vw - 2rem);
+    transform: translateX(-50%) translateY(-4px);
+    background: var(--surface-2);
+    border: 1px solid var(--accent-2);
+    border-radius: 6px;
+    padding: 0.6rem 0.75rem;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    z-index: 30;
+    transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
+  }
+
+  .stack-card.open .card-reveal {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .reveal-kicker {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.56rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent-2);
+    opacity: 0.75;
+    margin-bottom: 0.3rem;
+  }
+
+  .reveal-link {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.74rem;
+    color: var(--accent);
+    line-height: 1.4;
+  }
+
+  .reveal-link:hover {
+    text-decoration: underline;
+  }
+
+  .reveal-empty {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    opacity: 0.85;
+    line-height: 1.45;
+  }
+
   @media (prefers-reduced-motion: reduce) {
-    .card-bob {
+    .card-hit {
       animation: none;
     }
 
-    .stack-card {
+    .stack-card,
+    .stack-card .reveal-cue,
+    .card-reveal {
       transition: none;
-    }
-  }
-
-  @media (max-width: 520px) {
-    .card-grid {
-      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     }
   }
 </style>
