@@ -1,0 +1,337 @@
+---
+// Profile.astro: vertical tab interface for About (whoami) / Experience / Education
+import TimelineEntry from './TimelineEntry.astro';
+
+const tabs = [
+  { id: 'about', label: 'About' },
+  { id: 'experience', label: 'Experience' },
+  { id: 'education', label: 'Education' },
+];
+---
+
+<section id="about" class="profile-section zone">
+  <div class="wrap">
+    <h2 class="section-label">// PROFILE</h2>
+    <div class="terminal-window">
+      <div class="terminal-chrome">
+        <span class="dot dot-red"></span>
+        <span class="dot dot-yellow"></span>
+        <span class="dot dot-green"></span>
+        <span class="terminal-title">souf@infra: ~/profile</span>
+      </div>
+      <div class="profile-body">
+        <div class="tab-rail" role="tablist" aria-label="Profile sections" aria-orientation="vertical">
+          {tabs.map((t, i) => (
+            <button
+              type="button"
+              id={`ptab-${t.id}`}
+              role="tab"
+              aria-selected={i === 0 ? 'true' : 'false'}
+              aria-controls={`ppanel-${t.id}`}
+              data-tab={t.id}
+              class:list={['tab-btn', { active: i === 0 }]}
+            >
+              <span class="tab-tick" aria-hidden="true">&gt;</span>
+              {t.label}
+            </button>
+          ))}
+        </div>
+
+        <div class="tab-panels">
+          <div
+            id="ppanel-about"
+            role="tabpanel"
+            aria-labelledby="ptab-about"
+            data-panel="about"
+            class="tab-panel"
+          >
+            <div class="whoami">
+              <p class="status-line"><span class="caret">&gt;</span> <span class="status-label">System_Status:</span> <span class="status-val status-active">Active</span></p>
+              <p class="status-line"><span class="caret">&gt;</span> <span class="status-label">Base:</span> <span class="status-val">Taroudant, Morocco</span></p>
+              <p class="status-line"><span class="caret">&gt;</span> <span class="status-label">Background:</span> <span class="status-val">Bac+2 DTS Systems &amp; Network (ISTA Taroudant) → Systems &amp; Network technician, Casablanca → Licence GI, final year</span></p>
+              <p class="status-line"><span class="caret">&gt;</span> <span class="status-label">Current_Focus:</span> <span class="status-val">[ Docker, Docker Compose, Kubernetes (k3s), CI/CD (GitHub Actions), Prometheus/Grafana observability ]</span></p>
+              <p class="status-line"><span class="caret">&gt;</span> <span class="status-label">Target:</span> <span class="status-val">Infrastructure engineering</span></p>
+            </div>
+            <div class="profile-aside">
+              <p class="aside-kicker">// context</p>
+              <p class="bio">
+                Worked as a systems &amp; network technician at a networking enterprise in Casablanca.
+                It was enough time to learn that the interesting problems live upstream of the hardware, in the
+                pipelines and infrastructure that make deployments repeatable and failures observable. DevOps is
+                where that background meets the CS theory I'm finishing now.
+              </p>
+            </div>
+          </div>
+
+          <div
+            id="ppanel-experience"
+            role="tabpanel"
+            aria-labelledby="ptab-experience"
+            data-panel="experience"
+            class="tab-panel"
+            hidden
+          >
+            <div class="panel-path">
+              <TimelineEntry
+                tag="infra &amp; networking"
+                title="Systems &amp; Network technician"
+                meta="general infrastructure &amp; networking role: the background that feeds the current DevOps focus"
+                imageAlt="Photo placeholder for Systems & Network technician role"
+                last
+              />
+            </div>
+          </div>
+
+          <div
+            id="ppanel-education"
+            role="tabpanel"
+            aria-labelledby="ptab-education"
+            data-panel="education"
+            class="tab-panel"
+            hidden
+          >
+            <div class="panel-path">
+              <TimelineEntry
+                tag="bac+2 dts"
+                title="Systems &amp; Network"
+                meta="ISTA Taroudant"
+                imageAlt="Photo placeholder for Bac+2 DTS, Systems & Network"
+              />
+              <TimelineEntry
+                tag="licence gi · final year"
+                title="Génie Informatique"
+                meta="Faculté Polydisciplinaire de Taroudant"
+                imageAlt="Photo placeholder for Licence GI, Génie Informatique"
+                last
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const tabs = Array.from(document.querySelectorAll<HTMLElement>('.tab-btn'));
+    const panels = Array.from(document.querySelectorAll<HTMLElement>('.tab-panel'));
+
+    function activate(id: string) {
+      tabs.forEach((t) => {
+        const on = t.dataset.tab === id;
+        t.classList.toggle('active', on);
+        t.setAttribute('aria-selected', String(on));
+      });
+      panels.forEach((p) => {
+        p.hidden = p.dataset.panel !== id;
+      });
+    }
+
+    tabs.forEach((t) => {
+      t.addEventListener('click', () => activate(t.dataset.tab ?? 'about'));
+    });
+
+    const rail = document.querySelector<HTMLElement>('.tab-rail');
+    rail?.addEventListener('keydown', (e) => {
+      if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+      e.preventDefault();
+      const idx = tabs.findIndex((t) => t === document.activeElement);
+      if (idx === -1) return;
+      const next = e.key === 'ArrowDown' ? (idx + 1) % tabs.length : (idx - 1 + tabs.length) % tabs.length;
+      tabs[next].focus();
+      activate(tabs[next].dataset.tab ?? 'about');
+    });
+  });
+</script>
+
+<style>
+  .profile-section {
+    padding-block: clamp(4.5rem, 10vh, 7rem);
+  }
+
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--accent-2);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 2rem;
+  }
+
+  .terminal-window {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .terminal-chrome {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0.75rem 1rem;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+
+  .dot-red    { background: var(--danger); }
+  .dot-yellow { background: var(--warn); }
+  .dot-green  { background: var(--accent); }
+
+  .terminal-title {
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+  }
+
+  .profile-body {
+    display: grid;
+    grid-template-columns: 168px minmax(0, 1fr);
+  }
+
+  .tab-rail {
+    border-right: 1px solid var(--border);
+    background: rgba(23, 29, 38, 0.35);
+    padding: 1rem 0.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-dim);
+    background: none;
+    border: none;
+    border-radius: 4px;
+    padding: 0.55rem 0.7rem;
+    text-align: left;
+    cursor: pointer;
+    transition: color 0.2s, background 0.2s;
+  }
+
+  .tab-btn:hover {
+    color: var(--text);
+    background: var(--surface-2);
+  }
+
+  .tab-btn:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+  }
+
+  .tab-btn.active {
+    color: var(--accent);
+    background: var(--surface-2);
+  }
+
+  .tab-tick {
+    font-weight: 700;
+    color: var(--accent);
+    visibility: hidden;
+    min-width: 0.6rem;
+  }
+
+  .tab-btn.active .tab-tick {
+    visibility: visible;
+  }
+
+  .tab-panels {
+    padding: 1.35rem 1.75rem;
+    min-width: 0;
+  }
+
+  .whoami {
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .status-line {
+    color: var(--text);
+    line-height: 1.9;
+  }
+
+  .caret {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-right: 0.5rem;
+  }
+
+  .status-label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-dim);
+  }
+
+  .status-val {
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: var(--text);
+  }
+
+  .status-active {
+    color: var(--accent);
+  }
+
+  .profile-aside {
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px dashed var(--border);
+  }
+
+  .aside-kicker {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent-2);
+    opacity: 0.85;
+    margin-bottom: 0.9rem;
+  }
+
+  .bio {
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--text-dim);
+    max-width: 68ch;
+  }
+
+  .panel-path {
+    display: flex;
+    flex-direction: column;
+  }
+
+  @media (max-width: 900px) {
+    .profile-body {
+      grid-template-columns: 1fr;
+    }
+
+    .tab-rail {
+      flex-direction: row;
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+      gap: 0.25rem;
+      padding: 0.5rem;
+    }
+
+    .tab-btn {
+      flex: 1;
+    }
+  }
+</style>

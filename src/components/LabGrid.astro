@@ -1,5 +1,5 @@
 ---
-// LabGrid.astro — projects zone, iterates over projects.ts data
+// LabGrid.astro: projects zone, iterates over projects.ts data
 import { projects, projectSlug } from '../data/projects';
 import ProjectCard from './ProjectCard.astro';
 import ProjectDetail from './ProjectDetail.astro';
@@ -7,7 +7,7 @@ import ProjectDetail from './ProjectDetail.astro';
 
 <section id="lab" class="lab-section zone">
   <div class="wrap">
-    <h2 class="section-label">// LAB — PROJECTS</h2>
+    <h2 class="section-label">// LAB / PROJECTS</h2>
     <div class="lab-grid">
       {projects.map((project) => (
         <ProjectCard

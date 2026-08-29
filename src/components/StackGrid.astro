@@ -1,8 +1,6 @@
 ---
-// StackGrid.astro — single-row marquee of stack cards; click a card to reveal how it maps into a Lab project
+// StackGrid.astro: marquee row of stack cards; local brand SVGs; click reveals how each tool maps into Lab
 import { projects, projectSlug, stackTools } from '../data/projects';
-
-const ICON_TINT = '838fa1';
 
 const projectBySlug = new Map<string, { name: string; href: string }>();
 for (const p of projects) {
@@ -41,15 +39,19 @@ const groups = [
 
 <section id="stack" class="stack-section zone">
   <div class="wrap">
-    <h2 class="section-label">// STACK — INVENTORY</h2>
+    <h2 class="section-label">// STACK / INVENTORY</h2>
     <div class="marquee">
       <div class="marquee-track">
         {groups.map((g) => (
           <div class="marquee-group" aria-hidden={g.ariaHidden ? 'true' : undefined}>
-            {cards.map((card) => {
+            {cards.map((card, i) => {
               const revealId = `reveal-${card.slug}${g.suffix}`;
               return (
-                <div class="stack-card" data-name={card.tool}>
+                <div
+                  class="stack-card"
+                  data-name={card.tool}
+                  style={`--enter-delay: ${i * 45}ms`}
+                >
                   <button
                     type="button"
                     class="card-hit"
@@ -59,7 +61,7 @@ const groups = [
                   >
                     <div class="card-line">
                       <span class="stack-icon">
-                        <img src={`https://cdn.simpleicons.org/${card.icon}/${ICON_TINT}`} alt="" width="24" height="24" loading="lazy" />
+                        <img src={`/icons/${card.icon}.svg`} alt="" width="32" height="32" loading="lazy" />
                       </span>
                       <span class="reveal-cue" aria-hidden="true">▾</span>
                     </div>
@@ -87,6 +89,23 @@ const groups = [
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
+    const section = document.querySelector<HTMLElement>('.stack-section');
+
+    if (section && 'IntersectionObserver' in window) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              section.classList.add('in');
+              io.disconnect();
+            }
+          });
+        },
+        { threshold: 0.15 }
+      );
+      io.observe(section);
+    }
+
     const cards = Array.from(document.querySelectorAll<HTMLElement>('.stack-card'));
 
     function closeAll() {
@@ -117,7 +136,7 @@ const groups = [
 
 <style>
   .stack-section {
-    padding-block: clamp(4.5rem, 10vh, 7rem);
+    padding-block: clamp(4rem, 8vh, 6rem);
   }
 
   .section-label {
@@ -127,11 +146,11 @@ const groups = [
     color: var(--accent-2);
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    margin-bottom: 2.5rem;
+    margin-bottom: 1.75rem;
   }
 
   .marquee {
-    --marquee-dur: 46s;
+    --marquee-dur: 58s;
     position: relative;
     overflow: hidden;
     padding-bottom: 8.5rem;
@@ -151,8 +170,8 @@ const groups = [
 
   .marquee-group {
     display: flex;
-    gap: 1.15rem;
-    padding-right: 1.15rem;
+    gap: 1.5rem;
+    padding-right: 1.5rem;
   }
 
   @keyframes marquee-scroll {
@@ -162,14 +181,25 @@ const groups = [
 
   .stack-card {
     position: relative;
-    flex: 0 0 156px;
-    width: 156px;
+    flex: 0 0 224px;
+    width: 224px;
+    min-height: 150px;
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 0.8rem 0.85rem;
+    border-radius: 10px;
+    padding: 1.2rem 1.15rem;
     transition: transform 0.22s ease, border-color 0.2s ease, background 0.2s ease;
     z-index: 1;
+  }
+
+  .stack-section.in .stack-card {
+    animation: card-enter 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) backwards;
+    animation-delay: var(--enter-delay, 0ms);
+  }
+
+  @keyframes card-enter {
+    from { opacity: 0; transform: translateX(-36px); }
+    to   { opacity: 1; transform: translateX(0); }
   }
 
   .stack-card:hover {
@@ -188,7 +218,7 @@ const groups = [
   .card-hit {
     display: flex;
     flex-direction: column;
-    gap: 0.45rem;
+    gap: 0.6rem;
     width: 100%;
     padding: 0;
     border: none;
@@ -206,13 +236,12 @@ const groups = [
 
   .stack-icon {
     display: inline-flex;
-    color: var(--text-dim);
-    transition: color 0.2s ease, filter 0.2s ease;
+    filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.4));
+    transition: transform 0.2s ease;
   }
 
   .stack-card:hover .stack-icon {
-    color: var(--text);
-    filter: brightness(1.5);
+    transform: translateY(-2px);
   }
 
   .reveal-cue {
@@ -235,7 +264,7 @@ const groups = [
 
   .card-name {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.75rem;
+    font-size: 0.92rem;
     font-weight: 500;
     color: var(--text);
     line-height: 1.35;
@@ -244,12 +273,12 @@ const groups = [
   .status-badge {
     align-self: flex-start;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.56rem;
+    font-size: 0.68rem;
     font-weight: 500;
     letter-spacing: 0.06em;
     border: 1px solid currentColor;
     border-radius: 999px;
-    padding: 0.15rem 0.45rem;
+    padding: 0.15rem 0.55rem;
     color: var(--text-dim);
   }
 
@@ -261,7 +290,7 @@ const groups = [
     position: absolute;
     top: calc(100% + 12px);
     left: 50%;
-    width: min(300px, calc(100vw - 2rem));
+    width: min(340px, calc(100vw - 2rem));
     transform: translateX(-50%) translateY(-4px);
     background: var(--surface-2);
     border: 1px solid var(--accent-2);
@@ -294,7 +323,7 @@ const groups = [
 
   .reveal-copy {
     font-family: 'Inter', sans-serif;
-    font-size: 0.8rem;
+    font-size: 0.82rem;
     line-height: 1.5;
     color: var(--text);
     margin-bottom: 0.45rem;
@@ -329,7 +358,8 @@ const groups = [
       mask-image: none;
     }
 
-    .marquee-track {
+    .marquee-track,
+    .stack-section.in .stack-card {
       animation: none;
     }
 

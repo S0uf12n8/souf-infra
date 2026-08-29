@@ -5,9 +5,9 @@
   --border:       #22293380;
   --text:         #d8dee9;
   --text-dim:     #838fa1;
-  --accent:       #d99a4e;   /* desaturated amber — dominant, interactive */
-  --accent-2:     #5b7a9d;   /* cold slate-blue — secondary, links */
-  --accent-hover: #e5b06a;   /* lighter amber — button hovers */
-  --warn:         #f5b942;   /* bright amber — "in progress" / status badges */
-  --danger:       #ff5f5f;   /* red — rarely used, e.g. "deprecated" tag */
+  --accent:       #d99a4e;   /* desaturated amber: dominant, interactive */
+  --accent-2:     #5b7a9d;   /* cold slate-blue: secondary, links */
+  --accent-hover: #e5b06a;   /* lighter amber: button hovers */
+  --warn:         #f5b942;   /* bright amber: "in progress" / status badges */
+  --danger:       #ff5f5f;   /* red: rarely used, e.g. "deprecated" tag */
 }

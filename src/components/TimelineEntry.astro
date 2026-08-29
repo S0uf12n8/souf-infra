@@ -1,0 +1,151 @@
+---
+// TimelineEntry.astro: one timeline row: rail node + image slot + text
+interface Props {
+  tag: string;
+  title: string;
+  meta: string;
+  imageAlt: string;
+  last?: boolean;
+}
+
+const { tag, title, meta, imageAlt, last = false } = Astro.props;
+---
+
+<div class:list={['t-entry', { last }]}>
+  <div class="t-rail" aria-hidden="true">
+    <span class="t-node"></span>
+    <span class="t-line"></span>
+  </div>
+  <figure class="t-media">
+    <div class="media-placeholder" role="img" aria-label={imageAlt}>
+      <span class="ph-glyph" aria-hidden="true">▦</span>
+      <span class="ph-label">[ image pending ]</span>
+    </div>
+  </figure>
+  <div class="t-body">
+    <span class="t-tag">{tag}</span>
+    <h3 class="t-title">{title}</h3>
+    <p class="t-meta">{meta}</p>
+  </div>
+</div>
+
+<style>
+  .t-entry {
+    display: grid;
+    grid-template-columns: 36px 200px minmax(0, 1fr);
+    grid-template-areas: 'rail media body';
+    gap: 1.15rem;
+    align-items: start;
+  }
+
+  .t-rail {
+    grid-area: rail;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .t-node {
+    margin-top: 0.3rem;
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    background: var(--accent);
+    box-shadow: 0 0 10px rgba(217, 154, 78, 0.45);
+    position: relative;
+    z-index: 1;
+  }
+
+  .t-line {
+    flex: 1;
+    width: 1px;
+    background: repeating-linear-gradient(180deg, var(--border) 0 5px, transparent 5px 10px);
+  }
+
+  .t-entry.last .t-line {
+    flex: 0 0 1.5rem;
+  }
+
+  .t-media {
+    grid-area: media;
+    margin: 0;
+  }
+
+  .media-placeholder {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    min-height: 108px;
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    background:
+      linear-gradient(135deg, rgba(23, 29, 38, 0.5), rgba(17, 22, 29, 0.7)),
+      repeating-linear-gradient(0deg, transparent 0 12px, rgba(91, 122, 157, 0.05) 12px 13px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+  }
+
+  .ph-glyph {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.4rem;
+    color: var(--accent-2);
+    opacity: 0.5;
+    line-height: 1;
+  }
+
+  .ph-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.56rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    opacity: 0.75;
+  }
+
+  .t-body {
+    grid-area: body;
+    padding-top: 0.1rem;
+  }
+
+  .t-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--accent-2);
+    display: block;
+    margin-bottom: 0.4rem;
+  }
+
+  .t-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.02rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.2rem;
+  }
+
+  .t-meta {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.84rem;
+    color: var(--text-dim);
+  }
+
+  @media (max-width: 620px) {
+    .t-entry {
+      grid-template-columns: 24px minmax(0, 1fr);
+      grid-template-areas:
+        'rail media'
+        'rail body';
+      gap: 1rem;
+      column-gap: 0.9rem;
+    }
+
+    .media-placeholder {
+      aspect-ratio: 16 / 9;
+    }
+  }
+</style>

@@ -22,7 +22,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Shared full-width section container — sections are zones, not centered columns */
+/* Shared full-width section container: sections are zones, not centered columns */
 .wrap {
   width: 100%;
   max-width: 1400px;

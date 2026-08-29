@@ -1,10 +1,10 @@
 ---
-// Nav.astro — fixed minimal nav: System · Lab · Stack · Comms + live uptime
+// Nav.astro: fixed minimal nav: About · Lab · Stack · Comms + live uptime
 ---
 
 <nav class="nav">
   <div class="nav-links">
-    <a href="#system" class="nav-link">System</a>
+    <a href="#about" class="nav-link">About</a>
     <span class="nav-sep">·</span>
     <a href="#lab" class="nav-link">Lab</a>
     <span class="nav-sep">·</span>
@@ -81,5 +81,22 @@
     letter-spacing: 0.04em;
     white-space: nowrap;
     opacity: 0.7;
+  }
+
+  @media (max-width: 760px) {
+    .nav-uptime {
+      display: none;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .nav {
+      padding: 0.7rem 1rem;
+      font-size: 0.72rem;
+    }
+
+    .nav-links {
+      gap: 0.35rem;
+    }
   }
 </style>

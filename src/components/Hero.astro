@@ -1,5 +1,5 @@
 ---
-// Hero.astro — asymmetric split: terminal boot sequence + infra-topology visual
+// Hero.astro: asymmetric split: terminal boot sequence + homelab topology (real nodes only)
 ---
 
 <section class="hero">
@@ -17,13 +17,13 @@
           <p class="line dim">Connecting...</p>
           <p class="line dim">Authenticated as S0uf12n8</p>
           <p class="line"><span class="prompt">></span> whoami</p>
-          <p class="line">Souf — CS student with a Systems &amp; Network technician background, building toward DevOps/DevSecOps.</p>
+          <p class="line">Souf: CS student with a Systems &amp; Network technician background, building toward DevOps/DevSecOps.</p>
           <p class="line"><span class="prompt">></span> status</p>
           <p class="line">Final-year Licence GI · Faculty of Taroudant, Morocco</p>
         </div>
       </div>
       <div class="hero-actions">
-        <a href="#lab" class="btn btn-primary">[ View Lab ]</a>
+        <a href="#about" class="btn btn-primary">[ View Profile ]</a>
         <a href="#comms" class="btn btn-secondary">[ Contact ]</a>
       </div>
     </div>
@@ -31,48 +31,39 @@
     <div class="hero-visual" aria-hidden="true">
       <div class="viz-panel">
         <div class="viz-head">// INFRA TOPOLOGY</div>
-        <svg class="viz-svg" viewBox="0 0 560 380">
-          <!-- spine bus -->
-          <line class="v-spine" x1="280" y1="36" x2="280" y2="324" />
+        <svg class="viz-svg" viewBox="0 0 560 252">
+          <!-- lab-net spine -->
+          <line class="v-spine" x1="280" y1="36" x2="280" y2="196" />
           <circle class="v-pulse" cx="280" cy="64" r="4" />
           <!-- taps -->
           <line class="v-tap" x1="180" y1="76" x2="280" y2="76" />
-          <line class="v-tap" x1="180" y1="188" x2="280" y2="188" />
-          <line class="v-tap" x1="180" y1="300" x2="280" y2="300" />
+          <line class="v-tap" x1="180" y1="176" x2="280" y2="176" />
           <line class="v-tap" x1="280" y1="76" x2="380" y2="76" />
-          <line class="v-tap" x1="280" y1="188" x2="380" y2="188" />
-          <line class="v-tap" x1="280" y1="300" x2="380" y2="300" />
+          <line class="v-tap" x1="280" y1="176" x2="380" y2="176" />
           <!-- node dots -->
           <circle class="v-drop" cx="280" cy="76" r="3" />
-          <circle class="v-drop" cx="280" cy="188" r="3" />
-          <circle class="v-drop" cx="280" cy="300" r="3" />
+          <circle class="v-drop" cx="280" cy="176" r="3" />
           <!-- left column -->
           <rect class="v-rect" x="40" y="48" width="140" height="56" rx="6" />
           <circle class="v-dot-ok" cx="58" cy="76" r="4" />
           <text class="v-txt" x="110" y="79" text-anchor="middle">gateway</text>
-          <rect class="v-rect" x="40" y="160" width="140" height="56" rx="6" />
-          <circle class="v-dot-ok" cx="58" cy="188" r="4" />
-          <text class="v-txt" x="110" y="191" text-anchor="middle">app-svc</text>
-          <rect class="v-rect" x="40" y="272" width="140" height="56" rx="6" />
-          <circle class="v-dot-warn" cx="58" cy="300" r="4" />
-          <text class="v-txt" x="110" y="303" text-anchor="middle">db-primary</text>
+          <rect class="v-rect" x="40" y="148" width="140" height="56" rx="6" />
+          <circle class="v-dot-pending" cx="58" cy="176" r="4" />
+          <text class="v-txt" x="110" y="179" text-anchor="middle">app-svc</text>
           <!-- right column -->
           <rect class="v-rect" x="380" y="48" width="140" height="56" rx="6" />
           <circle class="v-dot-ok" cx="398" cy="76" r="4" />
           <text class="v-txt" x="450" y="79" text-anchor="middle">worker-01</text>
-          <rect class="v-rect" x="380" y="160" width="140" height="56" rx="6" />
-          <circle class="v-dot-ok" cx="398" cy="188" r="4" />
-          <text class="v-txt" x="450" y="191" text-anchor="middle">prometheus</text>
-          <rect class="v-rect" x="380" y="272" width="140" height="56" rx="6" />
-          <circle class="v-dot-warn" cx="398" cy="300" r="4" />
-          <text class="v-txt" x="450" y="303" text-anchor="middle">grafana</text>
-          <!-- spine annotation -->
-          <text class="v-cap" x="280" y="26" text-anchor="middle">spine</text>
+          <rect class="v-rect" x="380" y="148" width="140" height="56" rx="6" />
+          <circle class="v-dot-pending" cx="398" cy="176" r="4" />
+          <text class="v-txt" x="450" y="179" text-anchor="middle">db-primary</text>
+          <!-- bus annotation -->
+          <text class="v-cap" x="280" y="26" text-anchor="middle">lab-net</text>
         </svg>
         <div class="viz-status">
-          <span class="viz-line"><i class="viz-dot ok"></i> k8s-control-plane&nbsp;&nbsp;&nbsp;ok</span>
-          <span class="viz-line"><i class="viz-dot ok"></i> object-store&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ok</span>
-          <span class="viz-line"><i class="viz-dot warn"></i> gitops-sync&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;deploying</span>
+          <span class="viz-line"><i class="viz-dot ok"></i> ssh-hardened&nbsp;&nbsp;&nbsp;ok</span>
+          <span class="viz-line"><i class="viz-dot ok"></i> ufw · fail2ban&nbsp;&nbsp;active</span>
+          <span class="viz-line"><i class="viz-dot pending"></i> docker-platform&nbsp;building</span>
         </div>
       </div>
     </div>
@@ -316,20 +307,20 @@
     fill: rgba(131, 143, 161, 0.5);
   }
 
-  .v-dot-ok   { fill: var(--accent); }
-  .v-dot-warn { fill: var(--warn); }
+  .v-dot-ok      { fill: var(--accent-2); }
+  .v-dot-pending { fill: var(--warn); }
 
   .v-pulse {
     fill: var(--accent);
     opacity: 0;
-    animation: pulse-spine 10s linear infinite;
+    animation: pulse-spine 8s linear infinite;
   }
 
   @keyframes pulse-spine {
     0%   { opacity: 0; transform: translateY(0); }
-    6%   { opacity: 0.9; }
-    92%  { opacity: 0.9; transform: translateY(300px); }
-    100% { opacity: 0; transform: translateY(300px); }
+    8%   { opacity: 0.9; }
+    92%  { opacity: 0.9; transform: translateY(176px); }
+    100% { opacity: 0; transform: translateY(176px); }
   }
 
   .viz-status {
@@ -359,12 +350,12 @@
   }
 
   .viz-dot.ok {
-    background: var(--accent);
-    box-shadow: 0 0 6px rgba(217, 154, 78, 0.5);
+    background: var(--accent-2);
+    box-shadow: 0 0 6px rgba(91, 122, 157, 0.5);
     animation: viz-blink 3s ease-in-out infinite;
   }
 
-  .viz-dot.warn {
+  .viz-dot.pending {
     background: var(--warn);
     box-shadow: 0 0 6px rgba(245, 185, 66, 0.5);
     animation: viz-blink 1.6s ease-in-out infinite;
