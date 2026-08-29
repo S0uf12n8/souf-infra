@@ -20,35 +20,28 @@ export interface Project {
 
 export const projects: Project[] = [
   {
-    name: 'ACOMED',
+    name: 'ACOMED Mobile',
     description:
-      'Offline-first healthcare audit platform built for a Moroccan Ministry of Health use case. Souf owns mobile dev and the offline-sync layer: delta sync via updated_at timestamps, last-write-wins conflict resolution. 3-person team, protected main branch, biweekly demo cadence.',
-    stack: ['React Native', 'SQLite', 'Node.js', 'PostgreSQL'],
-    status: 'PRIVATE',
-    url: null,
+      'Offline-first React Native audit app for healthcare facility inspections, built for a Moroccan Ministry of Health workflow. Changes are queued locally and deduplicated on a composite key, then reconciled with a Node.js/PostgreSQL backend using Last-Write-Wins conflict resolution on updated_at timestamps. Dynamic form rendering with conditional branching and photo evidence capture keep the full audit usable offline.',
+    stack: ['React Native', 'Expo SDK 54', 'TypeScript', 'React Navigation v7', 'AsyncStorage'],
+    status: 'PUBLIC',
+    url: 'https://github.com/ACOMED/acomed-mobile',
     featured: true,
   },
   {
-    name: 'rpg-combat-cpp',
-    description:
-      "C++ RPG combat engine, OOP coursework project. Souf built the repo structure, Makefile, branching strategy, and work-order docs the rest of the team worked against — as much a 'got a team project under control' story as a combat-engine one.",
-    stack: ['C++'],
-    status: 'PUBLIC',
-    url: 'https://github.com/S0uf12n8/rpg-combat-cpp',
-  },
-  {
     name: 'CVBuilder',
-    description: 'TODO — pull actual description/stack from the repo before writing final copy.',
-    stack: ['TODO'],
+    description:
+      'Resume builder web app with client-side AI assistance for content and ATS-keyword suggestions. TensorFlow.js runs text analysis entirely in-browser — no server-side AI calls, nothing leaves the page. Resumes persist to LocalStorage and export to PDF/DOCX/HTML.',
+    stack: ['HTML/CSS/JS', 'TensorFlow.js'],
     status: 'PUBLIC',
     url: 'https://github.com/S0uf12n8/CVBuilder',
   },
   {
-    name: 'Infra Lab',
+    name: 'Homelab-as-Code',
     description:
-      'Personal DevOps sandbox: containerizing services with Docker/Compose, deploying to k3s on Oracle Cloud free tier, GitHub Actions pipelines, Prometheus/Grafana monitoring.',
-    stack: ['Docker', 'k3s', 'GitHub Actions', 'Prometheus', 'Grafana'],
+      "Production-inspired DevOps homelab built as Infrastructure-as-Code on Oracle Cloud. Phase 0 (environment setup) and Phase 1 (Ansible Linux hardening — SSH hardening, UFW, Fail2Ban) are complete; Phase 2 (Docker platform) is in progress. Kubernetes, GitOps, and observability are roadmap items — not built yet.",
+    stack: ['Ansible', 'Docker', 'Oracle Cloud', 'Ubuntu Server'],
     status: 'IN PROGRESS',
-    url: null,
+    url: 'https://github.com/S0uf12n8/homelab-as-code',
   },
 ];
