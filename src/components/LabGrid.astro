@@ -1,6 +1,6 @@
 ---
 // LabGrid.astro — projects zone, iterates over projects.ts data
-import { projects } from '../data/projects';
+import { projects, projectSlug } from '../data/projects';
 import ProjectCard from './ProjectCard.astro';
 import ProjectDetail from './ProjectDetail.astro';
 ---
@@ -11,7 +11,7 @@ import ProjectDetail from './ProjectDetail.astro';
     <div class="lab-grid">
       {projects.map((project) => (
         <ProjectCard
-          id={project.name.toLowerCase().replace(/\s+/g, '-')}
+          id={projectSlug(project.name)}
           name={project.name}
           tagline={project.tagline}
           description={project.description}
