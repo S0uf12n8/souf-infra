@@ -1,5 +1,6 @@
 ---
-// Nav.astro: fixed minimal nav: About · Lab · Stack · Comms + live uptime
+// Nav.astro: fixed minimal nav: About · Lab · Stack · Comms + live uptime + sound toggle
+import SoundToggle from './SoundToggle.astro';
 ---
 
 <nav class="nav">
@@ -12,7 +13,10 @@
     <span class="nav-sep">·</span>
     <a href="#comms" class="nav-link">Comms</a>
   </div>
-  <span class="nav-uptime" id="uptime">uptime: 00:00:00</span>
+  <div class="nav-right">
+    <SoundToggle />
+    <span class="nav-uptime" id="uptime">uptime: 00:00:00</span>
+  </div>
 </nav>
 
 <script>
@@ -81,6 +85,12 @@
     letter-spacing: 0.04em;
     white-space: nowrap;
     opacity: 0.7;
+  }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
   }
 
   @media (max-width: 760px) {

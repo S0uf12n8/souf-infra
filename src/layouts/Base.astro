@@ -189,12 +189,25 @@ import '../styles/global.css';
   .bg-grid {
     position: absolute;
     inset: 0;
+  }
+
+  /* grid pattern lives on an oversized layer so it can drift via GPU transform */
+  .bg-grid::before {
+    content: '';
+    position: absolute;
+    inset: -160px;
     background-image:
       linear-gradient(rgba(91, 122, 157, 0.028) 1px, transparent 1px),
       linear-gradient(90deg, rgba(91, 122, 157, 0.028) 1px, transparent 1px),
       linear-gradient(rgba(91, 122, 157, 0.013) 1px, transparent 1px),
       linear-gradient(90deg, rgba(91, 122, 157, 0.013) 1px, transparent 1px);
     background-size: 160px 160px, 160px 160px, 32px 32px, 32px 32px;
+    animation: grid-drift 240s linear infinite;
+  }
+
+  @keyframes grid-drift {
+    from { transform: translate3d(0, 0, 0); }
+    to   { transform: translate3d(160px, 160px, 0); }
   }
 
   .bg-schematic {
@@ -211,6 +224,12 @@ import '../styles/global.css';
     width: min(1400px, 120vw);
     height: auto;
     opacity: 0.22;
+    animation: schematic-breathe 18s ease-in-out infinite;
+  }
+
+  @keyframes schematic-breathe {
+    0%, 100% { opacity: 0.2; }
+    50%      { opacity: 0.25; }
   }
 
   .s-frame {
@@ -320,6 +339,14 @@ import '../styles/global.css';
 
   @media (prefers-reduced-motion: reduce) {
     .log-track {
+      animation: none;
+    }
+
+    .bg-grid::before {
+      animation: none;
+    }
+
+    .bg-schematic svg {
       animation: none;
     }
   }
