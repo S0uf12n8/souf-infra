@@ -1,0 +1,122 @@
+---
+// 404.astro: route not found — same terminal voice as the hero, no dead ends.
+import Base from '../layouts/Base.astro';
+---
+
+<Base>
+  <main class="e404">
+    <div class="term">
+      <div class="term-chrome">
+        <span class="dot dot-red"></span>
+        <span class="dot dot-yellow"></span>
+        <span class="dot dot-green"></span>
+        <span class="term-title">souf@infra:~</span>
+      </div>
+      <div class="term-body">
+        <p class="l"><span class="prompt">$</span> curl --request GET /this-page</p>
+        <p class="l dim">curl: (22) The requested URL returned error: 404</p>
+        <p class="l dim">route not found · connection refused</p>
+        <p class="l empty">&nbsp;</p>
+        <p class="l"><span class="prompt">></span> diagnostics</p>
+        <p class="l dim">→ you're either off-map or the link is stale.</p>
+        <p class="l dim">→ all known routes live on the index.</p>
+      </div>
+    </div>
+    <nav class="e404-actions" aria-label="Return to home">
+      <a class="btn btn-primary" href="/">[ return to index ]</a>
+    </nav>
+  </main>
+</Base>
+
+<style>
+  .e404 {
+    min-height: 100svh;
+    display: grid;
+    place-content: center;
+    gap: 1.5rem;
+    padding: 2rem clamp(1.25rem, 4vw, 3rem);
+  }
+
+  .term {
+    width: min(460px, 100%);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .term-chrome {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0.65rem 1rem;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+
+  .dot-red    { background: var(--danger); }
+  .dot-yellow { background: var(--warn); }
+  .dot-green  { background: var(--accent); }
+
+  .term-title {
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+  }
+
+  .term-body {
+    padding: 1.1rem 1.25rem;
+    font-family: 'JetBrains Mono', monospace;
+    line-height: 1.75;
+  }
+
+  .l {
+    font-size: 0.83rem;
+    color: var(--text);
+  }
+
+  .l.dim {
+    font-size: 0.73rem;
+    color: var(--text-dim);
+  }
+
+  .l.empty {
+    line-height: 0.5;
+  }
+
+  .prompt {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-right: 0.5rem;
+  }
+
+  .e404-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 0.5rem;
+  }
+
+  .btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.875rem;
+    padding: 0.6rem 1.2rem;
+    background: var(--accent);
+    color: var(--bg);
+    border: 1px solid var(--accent);
+    border-radius: 4px;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .btn:hover {
+    text-decoration: none;
+    background: var(--accent-hover);
+  }
+</style>

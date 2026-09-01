@@ -74,12 +74,20 @@
   document.addEventListener('DOMContentLoaded', () => {
     const lines = document.querySelectorAll<HTMLElement>('.hero .line');
     const actions = document.querySelector<HTMLElement>('.hero-actions');
+    const prefersReduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+
+    if (prefersReduced) {
+      lines.forEach((line) => line.classList.add('visible'));
+      actions?.classList.add('visible');
+      return;
+    }
+
     let delay = 400;
 
     lines.forEach((line) => {
       const len = line.textContent?.trim().length ?? 0;
       setTimeout(() => line.classList.add('visible'), delay);
-      delay += len * 25 + 180;
+      delay += Math.min(len, 18) * 11 + 110;
     });
 
     setTimeout(() => actions?.classList.add('visible'), delay);
@@ -215,7 +223,12 @@
     position: relative;
   }
 
-  /* ambient glow that peaks behind the panel */
+  /* ambient glow that peaks behind the panel (clipped so the 15% bleed can't
+     stretch the document horizontally at tablet widths) */
+  .hero-visual {
+    overflow: clip;
+  }
+
   .hero-visual::before {
     content: '';
     position: absolute;

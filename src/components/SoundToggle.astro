@@ -10,7 +10,7 @@
   id="sound-toggle"
   class="snd-toggle"
   aria-pressed="false"
-  aria-label="Enable UI sounds"
+  aria-label="sfx: off, enable UI sounds"
   title="UI sounds: off"
 >
   <svg class="snd-icon" viewBox="0 0 16 16" aria-hidden="true">
@@ -34,7 +34,10 @@
 
     let enabled = false;
     try {
-      enabled = localStorage.getItem(KEY) === '1';
+      // Don't auto-enable sounds for users who asked for reduced motion; the
+      // toggle still lets them opt back in explicitly.
+      const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+      enabled = !reduce && localStorage.getItem(KEY) === '1';
     } catch {
       enabled = false;
     }
@@ -48,7 +51,7 @@
 
     const setUi = () => {
       btn.setAttribute('aria-pressed', String(enabled));
-      btn.setAttribute('aria-label', enabled ? 'Mute UI sounds' : 'Enable UI sounds');
+      btn.setAttribute('aria-label', enabled ? 'sfx: on, mute UI sounds' : 'sfx: off, enable UI sounds');
       btn.title = enabled ? 'UI sounds: on' : 'UI sounds: off';
       if (stateEl) stateEl.textContent = enabled ? 'on' : 'off';
     };

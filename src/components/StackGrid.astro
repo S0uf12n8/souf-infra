@@ -83,7 +83,7 @@ const groups = [
         ))}
       </div>
     </div>
-    <p class="section-note">hover to pause · click a tool card for how it maps into a Lab project</p>
+    <p class="section-note">click a tool card for how it maps into a Lab project · hover to pause, drag to browse</p>
   </div>
 </section>
 
@@ -345,10 +345,30 @@ const groups = [
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.62rem;
     color: var(--text-dim);
-    opacity: 0.6;
     letter-spacing: 0.03em;
     text-align: center;
     margin-top: 0.75rem;
+  }
+
+  /* Touch/coarse-pointer devices can't hover to pause and can't swipe an
+     overflow-hidden box, so the marquee drops to a plain scrollable strip. */
+  @media (hover: none) and (pointer: coarse) {
+    .marquee {
+      overflow-x: auto;
+      padding-bottom: 8.5rem;
+      mask-image: none;
+      -webkit-mask-image: none;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .marquee::-webkit-scrollbar {
+      display: none;
+    }
+
+    .marquee-track {
+      animation: none;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {

@@ -49,7 +49,7 @@ export const projects: Project[] = [
   {
     name: 'ACOMED Mobile',
     description:
-      'Offline-first React Native audit app for healthcare facility inspections, built for a Moroccan Ministry of Health workflow. Changes are queued locally and deduplicated on a composite key, then reconciled with a Node.js/PostgreSQL backend using Last-Write-Wins conflict resolution on updated_at timestamps. Dynamic form rendering with conditional branching and photo evidence capture keep the full audit usable offline.',
+      'An offline-first audit platform built for a healthcare ministry field-inspection workflow, where network connectivity is the exception, not the default. Every core action, template loading, form completion, evidence capture, works fully offline; synchronization is a deferred operation resolved server-side via Last-Write-Wins conflict resolution against a Node.js/PostgreSQL backend. The sync queue deduplicates on a composite key, so repeated edits to the same field never produce duplicate writes. Built with React Native, Expo SDK 54, and TypeScript, and documented with the same rigor it\'s built: known limitations (unencrypted token storage, no automated test coverage yet) are tracked openly rather than hidden.',
     stack: ['React Native', 'Expo SDK 54', 'TypeScript', 'React Navigation v7', 'AsyncStorage'],
     status: 'PUBLIC',
     url: 'https://github.com/ACOMED/acomed-mobile',
@@ -58,7 +58,7 @@ export const projects: Project[] = [
   {
     name: 'CVBuilder',
     description:
-      'Resume builder web app with client-side AI assistance for content and ATS-keyword suggestions. TensorFlow.js runs text analysis entirely in-browser: no server-side AI calls, and nothing leaves the page. Resumes persist to LocalStorage and export to PDF/DOCX/HTML.',
+      'A resume-building tool where the AI assistance runs entirely client-side. TensorFlow.js handles content suggestions and ATS-keyword analysis in the browser, so no resume data is ever sent to a server. Exports to PDF, DOCX, or HTML, with template-based formatting.',
     stack: ['HTML/CSS/JS', 'TensorFlow.js'],
     status: 'PUBLIC',
     url: 'https://github.com/S0uf12n8/CVBuilder',
@@ -66,7 +66,7 @@ export const projects: Project[] = [
   {
     name: 'Homelab-as-Code',
     description:
-      "Production-inspired DevOps homelab built as Infrastructure-as-Code on Oracle Cloud. Phase 0 (environment setup) and Phase 1 (Ansible Linux hardening: SSH hardening, UFW, Fail2Ban) are complete; Phase 2 (Docker platform) is in progress. Kubernetes, GitOps, and observability are roadmap items, not built yet.",
+      "A production-inspired homelab, built and documented as Infrastructure as Code rather than manually configured. The guiding constraint: if it's not in Git, it doesn't exist. Linux hardening (SSH key auth, UFW, Fail2Ban, automatic security updates) is fully automated via Ansible; containerized workloads via Docker are in active buildout, with Kubernetes, GitOps, and observability tooling staged as the next phases. Every change is incremental, reproducible, and version-controlled by design.",
     stack: ['Ansible', 'Docker', 'Oracle Cloud', 'Ubuntu Server'],
     status: 'IN PROGRESS',
     url: 'https://github.com/S0uf12n8/homelab-as-code',
@@ -74,7 +74,7 @@ export const projects: Project[] = [
   {
     name: 'rpg-combat-cpp',
     description:
-      'C++ RPG combat engine, OOP coursework project. Souf built the repo structure, Makefile, branching strategy, and work-order docs the rest of the team worked against.',
+      'A C++ combat engine built for an OOP coursework project, and as much a systems-coordination exercise as a technical one: repo structure, Makefile, branching strategy, and work-order documentation were set up to keep a team project shippable despite inconsistent collaborator availability.',
     stack: ['C++'],
     status: 'PUBLIC',
     url: 'https://github.com/S0uf12n8/rpg-combat-cpp',

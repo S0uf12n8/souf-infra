@@ -9,6 +9,45 @@ import '../styles/global.css';
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Souf · DevOps Portfolio</title>
+    <meta
+      name="description"
+      content="Souf — CS student with a Systems & Network background building toward DevOps/DevSecOps. Lab projects, stack inventory, and contact."
+    />
+    <meta name="theme-color" content="#0b0e14" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Web fonts loaded async so the CSS fetch never blocks first paint -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap"
+      />
+    </noscript>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%230b0e14'/%3E%3Cpath d='M3.5 5h7M3.5 8h5M3.5 11h7' stroke='%2339ff88' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Souf · DevOps Portfolio" />
+    <meta
+      property="og:description"
+      content="CS student with a Systems & Network background building toward DevOps/DevSecOps. Lab projects, stack inventory, and contact."
+    />
+    <meta property="og:image" content="/og-image.png" />
+    <meta property="og:locale" content="en_US" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Souf · DevOps Portfolio" />
+    <meta
+      name="twitter:description"
+      content="CS student with a Systems & Network background building toward DevOps/DevSecOps."
+    />
+    <meta name="twitter:image" content="/og-image.png" />
   </head>
   <body>
     <div class="site-bg" aria-hidden="true">
@@ -191,23 +230,16 @@ import '../styles/global.css';
     inset: 0;
   }
 
-  /* grid pattern lives on an oversized layer so it can drift via GPU transform */
   .bg-grid::before {
     content: '';
     position: absolute;
-    inset: -160px;
+    inset: 0;
     background-image:
       linear-gradient(rgba(91, 122, 157, 0.028) 1px, transparent 1px),
       linear-gradient(90deg, rgba(91, 122, 157, 0.028) 1px, transparent 1px),
       linear-gradient(rgba(91, 122, 157, 0.013) 1px, transparent 1px),
       linear-gradient(90deg, rgba(91, 122, 157, 0.013) 1px, transparent 1px);
     background-size: 160px 160px, 160px 160px, 32px 32px, 32px 32px;
-    animation: grid-drift 240s linear infinite;
-  }
-
-  @keyframes grid-drift {
-    from { transform: translate3d(0, 0, 0); }
-    to   { transform: translate3d(160px, 160px, 0); }
   }
 
   .bg-schematic {
@@ -224,12 +256,6 @@ import '../styles/global.css';
     width: min(1400px, 120vw);
     height: auto;
     opacity: 0.22;
-    animation: schematic-breathe 18s ease-in-out infinite;
-  }
-
-  @keyframes schematic-breathe {
-    0%, 100% { opacity: 0.2; }
-    50%      { opacity: 0.25; }
   }
 
   .s-frame {
@@ -320,14 +346,15 @@ import '../styles/global.css';
     display: flex;
     flex-direction: column;
     gap: 0.2rem;
-    animation: scroll-logs 60s linear infinite;
+    animation: scroll-logs 75s linear infinite;
   }
 
   .log-line {
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.7rem;
     color: var(--text-dim);
-    opacity: 0.017;
+    /* single ambient layer, read at ~9%: visible up close, never loud */
+    opacity: 0.09;
     white-space: nowrap;
     line-height: 1.6;
   }
@@ -339,14 +366,6 @@ import '../styles/global.css';
 
   @media (prefers-reduced-motion: reduce) {
     .log-track {
-      animation: none;
-    }
-
-    .bg-grid::before {
-      animation: none;
-    }
-
-    .bg-schematic svg {
       animation: none;
     }
   }
