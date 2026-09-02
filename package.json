@@ -9,11 +9,11 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
     "astro": "^5.12.0"
   },
   "description": "Personal portfolio — CS student building toward DevOps/DevSecOps. Terminal/infra aesthetic: the site presents itself as a system you're SSH'd into, not a resume page.",
   "main": "index.js",
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/S0uf12n8/souf-infra.git"

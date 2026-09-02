@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="6" fill="#0b0e14"/>
+  <rect width="32" height="32" rx="6" fill="none" stroke="#2b3444" stroke-width="1.5"/>
+  <!-- terminal prompt glyph: >_ -->
+  <path d="M7 11 L13 16 L7 21" fill="none" stroke="#39ff88" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M15.5 21 H25" fill="none" stroke="#39ff88" stroke-width="2.6" stroke-linecap="round"/>
+</svg>
