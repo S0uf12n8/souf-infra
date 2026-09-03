@@ -1,37 +1,62 @@
 ---
-// Nav.astro: fixed minimal nav: About · Lab · Stack · Comms + live uptime + sound toggle
+// Nav.astro: fixed minimal nav: System · Lab · Stack · Comms + language switch + live uptime + sound toggle
 import SoundToggle from './SoundToggle.astro';
+import type { Dictionary } from '../i18n/translations/en';
+import type { Locale } from '../i18n/locale';
+import { localizedHref } from '../i18n/locale';
+
+interface Props {
+  t: Dictionary;
+  locale: Locale;
+  prefix: string;
+  path: string;
+}
+
+const { t, locale, path } = Astro.props;
+
+const links = [
+  { id: 'system', label: t.nav.about, href: '#about' },
+  { id: 'lab', label: t.nav.lab, href: '#lab' },
+  { id: 'stack', label: t.nav.stack, href: '#stack' },
+  { id: 'comms', label: t.nav.comms, href: '#comms' },
+];
+
+const otherLocale: Locale = locale === 'fr' ? 'en' : 'fr';
+const otherHref = localizedHref(otherLocale, locale, path);
+const langLabel = otherLocale === 'fr' ? 'FR' : 'EN';
 ---
 
 <nav class="nav">
   <div class="nav-links">
-    <a href="#about" class="nav-link">About</a>
-    <span class="nav-sep">·</span>
-    <a href="#lab" class="nav-link">Lab</a>
-    <span class="nav-sep">·</span>
-    <a href="#stack" class="nav-link">Stack</a>
-    <span class="nav-sep">·</span>
-    <a href="#comms" class="nav-link">Comms</a>
+    {links.map((l, i) => (
+      <Fragment key={l.id}>
+        <a href={l.href} class="nav-link">{l.label}</a>
+        {i < links.length - 1 && <span class="nav-sep">·</span>}
+      </Fragment>
+    ))}
   </div>
   <div class="nav-right">
-    <SoundToggle />
+    <a class="nav-lang" href={otherHref} aria-label={t.langSwitcherLabel}>{langLabel}</a>
+    <SoundToggle t={t} />
     <span class="nav-uptime" id="uptime">uptime: 00:00:00</span>
   </div>
 </nav>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const el = document.getElementById('uptime');
-    if (!el) return;
-    const start = Date.now();
-    const pad = (n: number) => String(n).padStart(2, '0');
-    const tick = () => {
-      const s = Math.floor((Date.now() - start) / 1000);
-      el.textContent = `uptime: ${pad(Math.floor(s / 3600))}:${pad(Math.floor((s % 3600) / 60))}:${pad(s % 60)}`;
-      setTimeout(tick, 1000);
-    };
-    tick();
-  });
+  if (typeof document !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', () => {
+      const el = document.getElementById('uptime');
+      if (!el) return;
+      const start = Date.now();
+      const pad = (n: number) => String(n).padStart(2, '0');
+      const tick = () => {
+        const s = Math.floor((Date.now() - start) / 1000);
+        el.textContent = `uptime: ${pad(Math.floor(s / 3600))}:${pad(Math.floor((s % 3600) / 60))}:${pad(s % 60)}`;
+        setTimeout(tick, 1000);
+      };
+      tick();
+    });
+  }
 </script>
 
 <style>
@@ -76,6 +101,27 @@ import SoundToggle from './SoundToggle.astro';
   .nav-sep {
     color: var(--border);
     user-select: none;
+  }
+
+  .nav-lang {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+    background: transparent;
+    border: 1px solid var(--accent);
+    border-radius: 4px;
+    padding: 0.2rem 0.45rem;
+    line-height: 1;
+    transition: background 0.2s, color 0.2s;
+    text-decoration: none;
+  }
+
+  .nav-lang:hover {
+    background: var(--accent);
+    color: var(--bg);
+    text-decoration: none;
   }
 
   .nav-uptime {

@@ -1,6 +1,9 @@
 ---
 // ProjectDetail.astro: expandable terminal panel for project details
+import type { Dictionary } from '../i18n/translations/en';
+
 interface Props {
+  t: Dictionary;
   name: string;
   description: string;
   sections?: { heading: string; items: string[] }[];
@@ -9,7 +12,7 @@ interface Props {
   url: string | null;
 }
 
-const { name, description, sections, stack, status, url } = Astro.props;
+const { t, name, description, sections, stack, status, url } = Astro.props;
 
 const statusColor: Record<string, string> = {
   'PUBLIC': 'var(--accent-2)',
@@ -22,7 +25,7 @@ const statusColor: Record<string, string> = {
 const pillColor = statusColor[status] ?? 'var(--text-dim)';
 ---
 
-<div class="detail-overlay" id="project-detail" role="dialog" aria-modal="true" aria-label="Project details" hidden>
+<div class="detail-overlay" id="project-detail" role="dialog" aria-modal="true" aria-label={t.projectDetail.dialogAria} hidden data-no-link={t.projectDetail.noPublicLink}>
   <div class="detail-backdrop"></div>
   <div class="detail-panel">
     <div class="terminal-window">
@@ -31,7 +34,7 @@ const pillColor = statusColor[status] ?? 'var(--text-dim)';
         <span class="dot dot-yellow"></span>
         <span class="dot dot-green"></span>
         <span class="terminal-title" id="detail-title">project</span>
-        <button class="detail-close" id="detail-close" aria-label="Close detail panel">✕</button>
+        <button class="detail-close" id="detail-close" aria-label={t.projectDetail.closeAria}>✕</button>
       </div>
       <div class="terminal-body">
         <div class="detail-header">

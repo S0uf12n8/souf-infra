@@ -1,5 +1,12 @@
 ---
 // Comms.astro: contact/socials section + form (Formspree wired at deploy time)
+import type { Dictionary } from '../i18n/translations/en';
+
+interface Props {
+  t: Dictionary;
+}
+const { t } = Astro.props;
+
 const links = [
   { label: 'GitHub', url: 'https://github.com/S0uf12n8', display: 'github.com/S0uf12n8' },
   { label: 'LinkedIn', url: 'https://www.linkedin.com/in/soufiane-oulkadi/', display: 'linkedin.com/in/soufiane-oulkadi' },
@@ -8,7 +15,7 @@ const links = [
 
 <section id="comms" class="comms-section zone">
   <div class="wrap">
-    <h2 class="section-label">// COMMS / CONTACT</h2>
+    <h2 class="section-label">{t.comms.label}</h2>
     <div class="comms-grid">
     <div class="terminal-window">
       <div class="terminal-chrome">
@@ -18,7 +25,7 @@ const links = [
         <span class="terminal-title">souf@infra:~</span>
       </div>
       <div class="terminal-body">
-        <p class="comms-line"><span class="caret">></span> Reach out via:</p>
+        <p class="comms-line"><span class="caret">></span> {t.comms.reachOut}</p>
         {links.map((link) => (
           <p class="comms-line">
             <span class="comms-label">{link.label}</span>{' '}
@@ -29,7 +36,7 @@ const links = [
             )}
           </p>
         ))}
-        <p class="comms-line"><span class="caret">></span> Or send a message:</p>
+        <p class="comms-line"><span class="caret">></span> {t.comms.orSend}</p>
       </div>
     </div>
 
@@ -43,19 +50,19 @@ const links = [
       <div class="terminal-body">
         <form class="contact-form" action="TODO_FORMSPREE_URL" method="POST">
           <div class="form-row">
-            <label class="form-label" for="comms-name">name_</label>
+            <label class="form-label" for="comms-name">{t.comms.formName}</label>
             <input class="form-input" type="text" id="comms-name" name="name" required autocomplete="name" placeholder="$ " />
           </div>
           <div class="form-row">
-            <label class="form-label" for="comms-email">email_</label>
+            <label class="form-label" for="comms-email">{t.comms.formEmail}</label>
             <input class="form-input" type="email" id="comms-email" name="email" required autocomplete="email" placeholder="$ " />
           </div>
           <div class="form-row">
-            <label class="form-label" for="comms-message">message_</label>
+            <label class="form-label" for="comms-message">{t.comms.formMessage}</label>
             <textarea class="form-input form-textarea" id="comms-message" name="message" rows="5" required placeholder="$ "></textarea>
           </div>
           <div class="form-actions">
-            <button type="submit" class="form-submit">[ send ]</button>
+            <button type="submit" class="form-submit">{t.comms.send}</button>
           </div>
         </form>
       </div>

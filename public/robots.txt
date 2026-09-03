@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://YOUR-DOMAIN-PLACEHOLDER.example/sitemap-index.xml
+Sitemap: https://your-domain-placeholder.example/sitemap-index.xml

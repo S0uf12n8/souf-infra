@@ -3,23 +3,37 @@
 import { projects, projectSlug } from '../data/projects';
 import ProjectCard from './ProjectCard.astro';
 import ProjectDetail from './ProjectDetail.astro';
+import type { Dictionary } from '../i18n/translations/en';
+
+interface Props {
+  t: Dictionary;
+}
+const { t } = Astro.props;
+
+const projectDescMap: Record<string, string> = {
+  'ACOMED Mobile': t.projects.acomedMobile.description,
+  CVBuilder: t.projects.cvBuilder.description,
+  'Homelab-as-Code': t.projects.homelab.description,
+  'rpg-combat-cpp': t.projects.rpg.description,
+};
 ---
 
 <section id="lab" class="lab-section zone">
   <div class="wrap">
-    <h2 class="section-label">// LAB / PROJECTS</h2>
+    <h2 class="section-label">{t.lab.label}</h2>
     <div class="lab-grid">
       {projects.map((project) => (
         <ProjectCard
           id={projectSlug(project.name)}
           name={project.name}
           tagline={project.tagline}
-          description={project.description}
+          description={projectDescMap[project.name] ?? project.description}
           sections={project.sections ?? []}
           stack={project.stack}
           status={project.status}
           url={project.url}
           featured={project.featured ?? false}
+          expandHint={t.lab.expandHint}
         />
       ))}
     </div>
@@ -27,6 +41,7 @@ import ProjectDetail from './ProjectDetail.astro';
 </section>
 
 <ProjectDetail
+  t={t}
   name=""
   description=""
   sections={[]}
@@ -102,7 +117,8 @@ import ProjectDetail from './ProjectDetail.astro';
         const label = url.includes('github.com') ? 'GitHub →' : 'Link →';
         linkEl.innerHTML = `<a href="${url}" target="_blank" rel="noopener noreferrer">${label}</a>`;
       } else {
-        linkEl.innerHTML = `<span class="no-link">no public link</span>`;
+        const noLink = overlay.dataset.noLink ?? 'no public link';
+        linkEl.innerHTML = `<span class="no-link">${noLink}</span>`;
       }
     }
 

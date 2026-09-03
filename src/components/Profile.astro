@@ -1,48 +1,53 @@
 ---
 // Profile.astro: vertical tab interface for About (whoami) / Experience / Education
 import TimelineEntry from './TimelineEntry.astro';
+import type { Dictionary } from '../i18n/translations/en';
+
+interface Props {
+  t: Dictionary;
+}
+const { t } = Astro.props;
 
 const tabs = [
-  { id: 'about', label: 'About' },
-  { id: 'experience', label: 'Experience' },
-  { id: 'education', label: 'Education' },
+  { id: 'about', label: t.profile.tabs.about },
+  { id: 'experience', label: t.profile.tabs.experience },
+  { id: 'education', label: t.profile.tabs.education },
 ];
 ---
 
 <section id="about" class="profile-section zone">
   <div class="wrap">
-    <h2 class="section-label">// PROFILE</h2>
+    <h2 class="section-label">{t.profile.label}</h2>
     <div class="terminal-window">
       <div class="terminal-chrome">
         <span class="dot dot-red"></span>
         <span class="dot dot-yellow"></span>
         <span class="dot dot-green"></span>
-        <span class="terminal-title">souf@infra: ~/profile</span>
+        <span class="terminal-title">{t.profile.terminalTitle}</span>
       </div>
       <div class="profile-actions">
-        <!-- TODO: place the real CV at /public/cv.pdf, then remove this comment -->
-        <a class="profile-btn profile-btn-primary" href="/cv.pdf" title="CV upload pending">[ Download CV ]</a>
+        <a class="profile-btn profile-btn-primary" href="/cv.pdf" title={t.profile.cvTitle}>[ {t.profile.downloadCV.slice(1, -1)} ]</a>
         <a
           class="profile-btn profile-btn-secondary"
           href="https://www.linkedin.com/in/soufiane-oulkadi/"
           target="_blank"
           rel="noopener noreferrer"
-        >[ View Profile ]</a>
+        >[ {t.profile.viewProfile.slice(1, -1)} ]</a>
       </div>
       <div class="profile-body">
-        <div class="tab-rail" role="tablist" aria-label="Profile sections" aria-orientation="vertical">
-          {tabs.map((t, i) => (
+        <div class="tab-rail" role="tablist" aria-label={t.profile.tabRailAria} aria-orientation="vertical">
+          {tabs.map((tabItem, i) => (
             <button
               type="button"
-              id={`ptab-${t.id}`}
+              id={`ptab-${tabItem.id}`}
               role="tab"
               aria-selected={i === 0 ? 'true' : 'false'}
-              aria-controls={`ppanel-${t.id}`}
-              data-tab={t.id}
+              aria-controls={`ppanel-${tabItem.id}`}
+              data-tab={tabItem.id}
               class:list={['tab-btn', { active: i === 0 }]}
             >
               <span class="tab-tick" aria-hidden="true">&gt;</span>
-              {t.label}
+              {tabItem.label}
             </button>
           ))}
         </div>
@@ -56,20 +61,15 @@ const tabs = [
             class="tab-panel"
           >
             <div class="whoami">
-              <p class="status-line"><span class="caret">&gt;</span> <span class="status-label">System_Status:</span> <span class="status-val status-active">Active</span></p>
-              <p class="status-line"><span class="caret">&gt;</span> <span class="status-label">Base:</span> <span class="status-val">Taroudant, Morocco</span></p>
-              <p class="status-line"><span class="caret">&gt;</span> <span class="status-label">Background:</span> <span class="status-val">Bac+2 DTS Systems &amp; Network (ISTA Taroudant) → Systems &amp; Network technician, Casablanca → Licence GI, final year</span></p>
-              <p class="status-line"><span class="caret">&gt;</span> <span class="status-label">Current_Focus:</span> <span class="status-val">[ Docker, Docker Compose, Kubernetes (k3s), CI/CD (GitHub Actions), Prometheus/Grafana observability ]</span></p>
-              <p class="status-line"><span class="caret">&gt;</span> <span class="status-label">Target:</span> <span class="status-val">Infrastructure engineering</span></p>
+              <p class="status-line"><span class="caret">&gt;</span> <span class="status-label">{t.profile.whoami.systemStatus}</span> <span class="status-val status-active">{t.profile.whoami.active}</span></p>
+              <p class="status-line"><span class="caret">&gt;</span> <span class="status-label">{t.profile.whoami.base}</span> <span class="status-val">{t.profile.whoami.baseVal}</span></p>
+              <p class="status-line"><span class="caret">&gt;</span> <span class="status-label">{t.profile.whoami.background}</span> <span class="status-val">{t.profile.whoami.backgroundVal}</span></p>
+              <p class="status-line"><span class="caret">&gt;</span> <span class="status-label">{t.profile.whoami.currentFocus}</span> <span class="status-val">{t.profile.whoami.currentFocusVal}</span></p>
+              <p class="status-line"><span class="caret">&gt;</span> <span class="status-label">{t.profile.whoami.target}</span> <span class="status-val">{t.profile.whoami.targetVal}</span></p>
             </div>
             <div class="profile-aside">
-              <p class="aside-kicker">// context</p>
-              <p class="bio">
-                Worked as a systems &amp; network technician at a networking enterprise in Casablanca.
-                It was enough time to learn that the interesting problems live upstream of the hardware, in the
-                pipelines and infrastructure that make deployments repeatable and failures observable. DevOps is
-                where that background meets the CS theory I'm finishing now.
-              </p>
+              <p class="aside-kicker">{t.profile.contextKicker}</p>
+              <p class="bio">{t.profile.bio}</p>
             </div>
           </div>
 
@@ -83,49 +83,40 @@ const tabs = [
           >
             <div class="panel-path">
               <TimelineEntry
-                tag="networking & voip"
-                title="DEWEB Technology"
-                meta="Casablanca, Morocco · on-site"
+                tag={t.experience.dewebKicker}
+                title={t.experience.dewebTitle}
+                meta={t.experience.dewebMeta}
                 image="/images/deweb.png"
                 imageAlt="DEWEB Technology logo"
                 subs={[
                   {
-                    title: 'Network & IT Technician',
-                    kind: 'full-time',
-                    period: 'Nov 2025 – Jan 2026',
-                    points: [
-                      'Configuration and administration of network equipment (switches, routers, VLANs, DHCP, IP addressing)',
-                      'Installation and management of IP telephony systems (SIP accounts, extensions, provisioning)',
-                    ],
-                    skills: ['Windows Server', 'VoIP'],
+                    title: t.experience.dewebSub1Title,
+                    kind: t.experience.fullTime,
+                    period: t.experience.dewebSub1Period,
+                    points: t.experience.dewebSub1Points,
+                    skills: t.experience.dewebSub1Skills,
                   },
                   {
-                    title: 'IT Infrastructure & Support Intern',
-                    kind: 'intern',
-                    period: 'Sep 2025 – Nov 2025',
-                    points: [
-                      'Assisted in configuring network devices, basic VLAN setup, and IP assignments',
-                      'Supported deployment of surveillance systems, NVR settings, and access control configurations',
-                    ],
+                    title: t.experience.dewebSub2Title,
+                    kind: t.experience.intern,
+                    period: t.experience.dewebSub2Period,
+                    points: t.experience.dewebSub2Points,
                   },
                 ]}
               />
               <TimelineEntry
-                tag="cctv & networking"
-                title="Access Point IT"
-                meta="Taroudant, Souss-Massa, Morocco · on-site"
+                tag={t.experience.accessKicker}
+                title={t.experience.accessTitle}
+                meta={t.experience.accessMeta}
                 image="/images/accesspoint.png"
                 imageAlt="Access Point IT logo"
                 subs={[
                   {
-                    title: 'Internship Trainee',
-                    kind: 'intern',
-                    period: 'Feb 2023 – Mar 2023',
-                    points: [
-                      'Assisted with network device configuration, Wi-Fi setup, and troubleshooting',
-                      'Participated in installation and maintenance of CCTV systems and security servers',
-                    ],
-                    skills: ['Networking', 'Cabling'],
+                    title: t.experience.accessSubTitle,
+                    kind: t.experience.intern,
+                    period: t.experience.accessPeriod,
+                    points: t.experience.accessPoints,
+                    skills: t.experience.accessSkills,
                   },
                 ]}
                 last
@@ -143,24 +134,24 @@ const tabs = [
           >
             <div class="panel-path">
               <TimelineEntry
-                tag="ofppt · ntic"
-                title="Specialized Technician, Digital Infrastructure / Network and System Administration"
-                meta="Specialized Institute of Applied Technology NTIC (OFPPT) · 2021–2023"
+                tag={t.education.techKicker}
+                title={t.education.techTitle}
+                meta={t.education.techMeta}
                 image="/images/ofppt.png"
                 imageAlt="OFPPT logo"
               />
               <TimelineEntry
-                tag="deug"
-                title="DEUG, Computer Science"
-                meta="Université Ibn Zohr · 2023–2026"
-                note="Two-year foundation: algorithmics, Python, C, object-oriented programming"
+                tag={t.education.deugKicker}
+                title={t.education.deugTitle}
+                meta={t.education.deugMeta}
+                note={t.education.deugNote}
                 image="/images/ibn-zohr.png"
                 imageAlt="Université Ibn Zohr logo"
               />
               <TimelineEntry
-                tag="licence · final year"
-                title="Licence, Computer Science"
-                meta="Université Ibn Zohr · 2023–2027 (final year)"
+                tag={t.education.licenceKicker}
+                title={t.education.licenceTitle}
+                meta={t.education.licenceMeta}
                 image="/images/ibn-zohr.png"
                 imageAlt="Université Ibn Zohr logo"
                 last

@@ -1,9 +1,17 @@
 ---
-// 404.astro: route not found — same terminal voice as the hero, no dead ends.
-import Base from '../layouts/Base.astro';
+// [locale]/404.astro: locale-aware 404 — same terminal voice, no dead ends.
+import Base from '../../layouts/Base.astro';
+import { langProps, locales } from '../../i18n/locale';
+
+export function getStaticPaths() {
+  return locales.map((locale) => ({ params: { locale } }));
+}
+
+const { locale, prefix, t } = langProps(Astro.params.locale);
+const path = '/404';
 ---
 
-<Base>
+<Base locale={locale} path={path}>
   <main class="e404">
     <div class="term">
       <div class="term-chrome">
@@ -13,17 +21,17 @@ import Base from '../layouts/Base.astro';
         <span class="term-title">souf@infra:~</span>
       </div>
       <div class="term-body">
-        <p class="l"><span class="prompt">$</span> curl --request GET /this-page</p>
-        <p class="l dim">curl: (22) The requested URL returned error: 404</p>
-        <p class="l dim">route not found · connection refused</p>
+        <p class="l"><span class="prompt">$</span> {t.notFound.curlCmd.replace('$ ', '')}</p>
+        <p class="l dim">{t.notFound.curlErr}</p>
+        <p class="l dim">{t.notFound.connRefused}</p>
         <p class="l empty">&nbsp;</p>
-        <p class="l"><span class="prompt">></span> diagnostics</p>
-        <p class="l dim">→ you're either off-map or the link is stale.</p>
-        <p class="l dim">→ all known routes live on the index.</p>
+        <p class="l"><span class="prompt">></span> {t.notFound.diagnostics.replace('> ', '')}</p>
+        <p class="l dim">{t.notFound.offMap}</p>
+        <p class="l dim">{t.notFound.knownRoutes}</p>
       </div>
     </div>
-    <nav class="e404-actions" aria-label="Return to home">
-      <a class="btn btn-primary" href="/">[ return to index ]</a>
+    <nav class="e404-actions" aria-label={t.notFound.ariaLabel}>
+      <a class="btn btn-primary" href={prefix + '/'}>{t.notFound.returnIndex}</a>
     </nav>
   </main>
 </Base>

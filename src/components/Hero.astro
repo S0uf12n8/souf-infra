@@ -1,5 +1,18 @@
 ---
 // Hero.astro: asymmetric split: terminal boot sequence + homelab topology (real nodes only)
+import type { Dictionary } from '../i18n/translations/en';
+
+interface Props {
+  t: Dictionary;
+}
+const { t } = Astro.props;
+
+const bootLines = t.hero.boot.map((line, i) => ({
+  text: line,
+  dim: t.hero.bootDim.includes(i),
+  hasPrompt: t.hero.bootPrompt.includes(i),
+  promptChar: t.hero.bootPrompt.includes(i) ? (i === 0 ? '$' : '>') : null,
+}));
 ---
 
 <section class="hero">
@@ -10,27 +23,26 @@
           <span class="dot dot-red"></span>
           <span class="dot dot-yellow"></span>
           <span class="dot dot-green"></span>
-          <span class="terminal-title">souf@infra:~</span>
+          <span class="terminal-title">{t.hero.terminalTitle}</span>
         </div>
         <div class="terminal-body">
-          <p class="line"><span class="prompt">$</span> ssh souf@infra</p>
-          <p class="line dim">Connecting...</p>
-          <p class="line dim">Authenticated as S0uf12n8</p>
-          <p class="line"><span class="prompt">></span> whoami</p>
-          <p class="line">Souf: CS student with a Systems &amp; Network technician background, building toward DevOps/DevSecOps.</p>
-          <p class="line"><span class="prompt">></span> status</p>
-          <p class="line">Final-year Licence GI · Faculty of Taroudant, Morocco</p>
+          {bootLines.map((line) => (
+            <p class:list={['line', { dim: line.dim }]}>
+              {line.hasPrompt && <span class="prompt">{line.promptChar}</span>}
+              {line.text.replace(/^[>$]\s?/, '')}
+            </p>
+          ))}
         </div>
       </div>
       <div class="hero-actions">
-        <a href="#about" class="btn btn-primary">[ View Profile ]</a>
-        <a href="#comms" class="btn btn-secondary">[ Contact ]</a>
+        <a href="#about" class="btn btn-primary">{t.hero.viewProfile}</a>
+        <a href="#comms" class="btn btn-secondary">{t.hero.contact}</a>
       </div>
     </div>
 
     <div class="hero-visual" aria-hidden="true">
       <div class="viz-panel">
-        <div class="viz-head">// INFRA TOPOLOGY</div>
+        <div class="viz-head">{t.hero.vizHead}</div>
         <svg class="viz-svg" viewBox="0 0 560 252">
           <!-- lab-net spine -->
           <line class="v-spine" x1="280" y1="36" x2="280" y2="196" />

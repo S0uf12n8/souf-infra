@@ -1,18 +1,39 @@
 ---
 // Base.astro: base layout: <html>, <head>, fonts, full-page background stack, custom cursor
+// i18n-aware: receives `locale`/`t`/`prefix` from [locale] routes so <html lang>,
+// title/description, and hreflang alternates all resolve to the active language.
 import '../styles/tokens.css';
 import '../styles/global.css';
+import { langProps, locales, localizedHref } from '../i18n/locale';
+
+interface Props {
+  locale: string;
+  path: string;
+}
+
+const { locale: localeRaw, path } = Astro.props;
+const { locale, prefix, t } = langProps(localeRaw);
+
+const title = t.siteTitle;
+const description = t.siteDescription;
+
+const origin = process.env.PORTFOLIO_URL || 'https://YOUR-DOMAIN-PLACEHOLDER.example';
+
+const canonicalPath = localizedHref(locale, locale, path);
+
+const hreflangLinks = locales.map((l) => ({
+  hrefLang: l,
+  href: `${origin}${localizedHref(l, locale, path)}`,
+}));
 ---
+
 <!doctype html>
-<html lang="en">
+<html lang={locale} data-locale={locale}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Souf · DevOps Portfolio</title>
-    <meta
-      name="description"
-      content="Souf — CS student with a Systems & Network background building toward DevOps/DevSecOps. Lab projects, stack inventory, and contact."
-    />
+    <title>{title}</title>
+    <meta name="description" content={description} />
     <meta name="theme-color" content="#0b0e14" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -31,21 +52,32 @@ import '../styles/global.css';
     </noscript>
     <link
       rel="icon"
-      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%230b0e14'/%3E%3Cpath d='M3.5 5h7M3.5 8h5M3.5 11h7' stroke='%2339ff88' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E"
+      type="image/svg+xml"
+      href="/favicon.svg"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/favicon-32x32.png"
     />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Souf · DevOps Portfolio" />
+    <meta property="og:title" content={title} />
+    <link rel="canonical" href={`${origin}${canonicalPath}`} />
+    {hreflangLinks.map((alt) => (
+      <link rel="alternate" hrefLang={alt.hrefLang} href={alt.href} />
+    ))}
     <meta
       property="og:description"
-      content="CS student with a Systems & Network background building toward DevOps/DevSecOps. Lab projects, stack inventory, and contact."
+      content={description}
     />
     <meta property="og:image" content="/og-image.png" />
-    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale" content={t.ogLocale} />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Souf · DevOps Portfolio" />
+    <meta name="twitter:title" content={title} />
     <meta
       name="twitter:description"
-      content="CS student with a Systems & Network background building toward DevOps/DevSecOps."
+      content={description}
     />
     <meta name="twitter:image" content="/og-image.png" />
   </head>

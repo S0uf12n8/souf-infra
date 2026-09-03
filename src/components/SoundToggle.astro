@@ -1,8 +1,14 @@
 ---
 // SoundToggle.astro: opt-in UI click sounds. Muted by default — sound is only
-// initialized after the user enables it (a required user gesture), and the
-// ~4KB click.wav is fetched lazily at that point, so it adds zero load weight
-// for visitors who never opt in.
+// initialized after the user enables it (a required user gesture). Clicks are
+// synthesized via Web Audio API (short noise burst with fast decay), so there
+// is zero network weight for visitors who never opt in.
+import type { Dictionary } from '../i18n/translations/en';
+
+interface Props {
+  t: Dictionary;
+}
+const { t } = Astro.props;
 ---
 
 <button
@@ -10,8 +16,12 @@
   id="sound-toggle"
   class="snd-toggle"
   aria-pressed="false"
-  aria-label="sfx: off, enable UI sounds"
-  title="UI sounds: off"
+  aria-label={t.sound.ariaOff}
+  title={t.sound.titleOff}
+  data-aria-off={t.sound.ariaOff}
+  data-aria-on={t.sound.ariaOn}
+  data-title-off={t.sound.titleOff}
+  data-title-on={t.sound.titleOn}
 >
   <svg class="snd-icon" viewBox="0 0 16 16" aria-hidden="true">
     <path class="ic-speaker" d="M2 6v4h2.8L8 12.7V3.3L4.8 6H2Z" />
@@ -19,7 +29,7 @@
     <path class="ic-wave" d="M12 3.2a6 6 0 0 1 0 9.6" />
     <path class="ic-mute" d="M3.4 3.4l9.2 9.2" />
   </svg>
-  <span class="snd-label">sfx: <strong class="snd-state">off</strong></span>
+  <span class="snd-label">{t.sound.label} <strong class="snd-state">off</strong></span>
 </button>
 
 <script>
@@ -27,15 +37,12 @@
     const btn = document.getElementById('sound-toggle') as HTMLButtonElement | null;
     if (!btn) return;
 
-    const SRC = '/sounds/click.wav';
     const KEY = 'souf:sfx';
     const INTERACTIVE =
       'a, button, [role="button"], summary, select, label, input[type="submit"], input[type="checkbox"], input[type="radio"]';
 
     let enabled = false;
     try {
-      // Don't auto-enable sounds for users who asked for reduced motion; the
-      // toggle still lets them opt back in explicitly.
       const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
       enabled = !reduce && localStorage.getItem(KEY) === '1';
     } catch {
@@ -44,58 +51,55 @@
 
     let ctx: AudioContext | null = null;
     let master: GainNode | null = null;
-    let bufferPromise: Promise<AudioBuffer | null> | null = null;
     let lastPlay = 0;
 
     const stateEl = btn.querySelector<HTMLElement>('.snd-state');
 
     const setUi = () => {
       btn.setAttribute('aria-pressed', String(enabled));
-      btn.setAttribute('aria-label', enabled ? 'sfx: on, mute UI sounds' : 'sfx: off, enable UI sounds');
-      btn.title = enabled ? 'UI sounds: on' : 'UI sounds: off';
+      btn.setAttribute('aria-label', enabled ? (btn.dataset.ariaOn ?? '') : (btn.dataset.ariaOff ?? ''));
+      btn.title = enabled ? (btn.dataset.titleOn ?? '') : (btn.dataset.titleOff ?? '');
       if (stateEl) stateEl.textContent = enabled ? 'on' : 'off';
     };
 
-    const getBuffer = (): Promise<AudioBuffer | null> => {
-      bufferPromise =
-        bufferPromise ??
-        fetch(SRC)
-          .then((r) => (r.ok ? r.arrayBuffer() : Promise.reject(new Error('fetch failed'))))
-          .then((ab) =>
-            ctx ? ctx.decodeAudioData(ab) : Promise.reject(new Error('no audio context'))
-          )
-          .catch(() => {
-            bufferPromise = null;
-            return null;
-          });
-      return bufferPromise;
-    };
+    function ensureCtx() {
+      if (ctx) return;
+      const AC =
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+      if (!AC) return;
+      ctx = new AC();
+      master = ctx.createGain();
+      master.gain.value = 0.18;
+      master.connect(ctx.destination);
+    }
 
-    const play = () => {
+    function play() {
       const now = performance.now();
       if (now - lastPlay < 45) return;
       lastPlay = now;
 
-      if (!ctx) {
-        const AC =
-          window.AudioContext ||
-          (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
-        if (!AC) return;
-        ctx = new AC();
-        master = ctx.createGain();
-        master.gain.value = 0.55;
-        master.connect(ctx.destination);
-      }
+      ensureCtx();
+      if (!ctx || !master) return;
       if (ctx.state === 'suspended') void ctx.resume();
 
-      getBuffer().then((buf) => {
-        if (!buf || !ctx || !master) return;
-        const src = ctx.createBufferSource();
-        src.buffer = buf;
-        src.connect(master);
-        src.start();
-      });
-    };
+      const sr = ctx.sampleRate;
+      const len = Math.round(sr * 0.025);
+      const buf = ctx.createBuffer(1, len, sr);
+      const data = buf.getChannelData(0);
+
+      for (let i = 0; i < len; i++) {
+        const t = i / sr;
+        const env = Math.exp(-t * 280);
+        data[i] = (Math.random() * 2 - 1) * env;
+      }
+      data[0] = 0.6;
+
+      const src = ctx.createBufferSource();
+      src.buffer = buf;
+      src.connect(master);
+      src.start();
+    }
 
     btn.addEventListener('click', () => {
       enabled = !enabled;

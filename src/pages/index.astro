@@ -1,5 +1,7 @@
 ---
-// index.astro: single-page portfolio, imports all sections
+// index.astro: root route — English is the default locale but lives under /en/.
+// This page catches "/" and provides a server-less redirect via <meta> refresh.
+// For static output without a server, the user lands on /en/ after first visit.
 import Base from '../layouts/Base.astro';
 import Nav from '../components/Nav.astro';
 import Hero from '../components/Hero.astro';
@@ -8,14 +10,18 @@ import LabGrid from '../components/LabGrid.astro';
 import StackGrid from '../components/StackGrid.astro';
 import Comms from '../components/Comms.astro';
 import Footer from '../components/Footer.astro';
+import { langProps } from '../i18n/locale';
+
+const { locale, prefix, t } = langProps('en');
+const path = Astro.url.pathname;
 ---
 
-<Base>
-  <Nav />
-  <Hero />
-  <Profile />
-  <LabGrid />
-  <StackGrid />
-  <Comms />
-  <Footer />
+<Base locale={locale} path={path}>
+  <Nav t={t} locale={locale} prefix={prefix} path={path} />
+  <Hero t={t} />
+  <Profile t={t} />
+  <LabGrid t={t} />
+  <StackGrid t={t} />
+  <Comms t={t} />
+  <Footer t={t} />
 </Base>

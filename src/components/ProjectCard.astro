@@ -1,5 +1,7 @@
 ---
 // ProjectCard.astro: single project card (standard or featured/full-width)
+import type { Dictionary } from '../i18n/translations/en';
+
 interface Props {
   id?: string;
   name: string;
@@ -10,9 +12,10 @@ interface Props {
   status: string;
   url: string | null;
   featured?: boolean;
+  expandHint?: string;
 }
 
-const { id, name, tagline, description, sections = [], stack, status, url, featured = false } = Astro.props;
+const { id, name, tagline, description, sections = [], stack, status, url, featured = false, expandHint = 'details →' } = Astro.props;
 
 const statusColor: Record<string, string> = {
   'PUBLIC': 'var(--accent-2)',
@@ -72,7 +75,7 @@ const pillColor = statusColor[status] ?? 'var(--text-dim)';
         <span class="tag">{tag}</span>
       ))}
     </div>
-    <span class="card-expand-hint">details →</span>
+    <span class="card-expand-hint">{expandHint}</span>
   </div>
 </div>
 

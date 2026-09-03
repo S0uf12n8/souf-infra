@@ -1,9 +1,25 @@
 ---
-// Footer.astro: minimal site footer
+// Footer.astro: minimal site footer with build-time "last deployed" readout
+import type { Dictionary } from '../i18n/translations/en';
+
+interface Props {
+  t: Dictionary;
+}
+const { t } = Astro.props;
+
+function formatBuildTime(): string | null {
+  const raw = import.meta.env.BUILD_TIME;
+  if (!raw) return null;
+  const d = new Date(raw);
+  if (Number.isNaN(d.getTime())) return null;
+  return d.toISOString().replace('T', ' ').replace('Z', ' UTC');
+}
+const deployed = formatBuildTime();
 ---
 
 <footer class="footer">
-  <span class="footer-text">© 2026 Souf · built with Astro</span>
+  <span class="footer-text">{t.footer.built}</span>
+  {deployed && <span class="footer-deploy">{t.footer.lastDeployed} {deployed}</span>}
 </footer>
 
 <style>
@@ -11,9 +27,14 @@
     padding: 3rem 2rem;
     text-align: center;
     border-top: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    align-items: center;
   }
 
-  .footer-text {
+  .footer-text,
+  .footer-deploy {
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.7rem;
     color: var(--text-dim);

@@ -1,6 +1,12 @@
 ---
 // StackGrid.astro: marquee row of stack cards; local brand SVGs; click reveals how each tool maps into Lab
 import { projects, projectSlug, stackTools } from '../data/projects';
+import type { Dictionary } from '../i18n/translations/en';
+
+interface Props {
+  t: Dictionary;
+}
+const { t } = Astro.props;
 
 const projectBySlug = new Map<string, { name: string; href: string }>();
 for (const p of projects) {
@@ -16,13 +22,25 @@ interface Card {
   project: { name: string; href: string } | null;
 }
 
-const cards: Card[] = stackTools.map((t) => ({
-  slug: t.tool.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-  tool: t.tool,
-  icon: t.icon,
-  status: t.status,
-  brief: t.brief,
-  project: projectBySlug.get(t.project) ?? null,
+const briefMap: Record<string, string> = {
+  TypeScript: t.stackBriefs.typescript,
+  'React Native': t.stackBriefs.reactNative,
+  'Expo (SDK 54)': t.stackBriefs.expo,
+  JavaScript: t.stackBriefs.javascript,
+  'HTML/CSS': t.stackBriefs.htmlcss,
+  Docker: t.stackBriefs.docker,
+  'Docker Compose': t.stackBriefs.compose,
+  Ansible: t.stackBriefs.ansible,
+  'C++': t.stackBriefs.cpp,
+};
+
+const cards: Card[] = stackTools.map((st) => ({
+  slug: st.tool.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+  tool: st.tool,
+  icon: st.icon,
+  status: st.status,
+  brief: briefMap[st.tool] ?? st.brief,
+  project: projectBySlug.get(st.project) ?? null,
 }));
 
 const statusClass: Record<string, string> = {
@@ -39,7 +57,7 @@ const groups = [
 
 <section id="stack" class="stack-section zone">
   <div class="wrap">
-    <h2 class="section-label">// STACK / INVENTORY</h2>
+    <h2 class="section-label">{t.stack.label}</h2>
     <div class="marquee">
       <div class="marquee-track">
         {groups.map((g) => (
@@ -70,7 +88,7 @@ const groups = [
                   </button>
 
                   <div class="card-reveal" id={revealId}>
-                    <span class="reveal-kicker">&gt; how it's used</span>
+                    <span class="reveal-kicker">{t.stack.revealKicker}</span>
                     <p class="reveal-copy">{card.brief}</p>
                     {card.project && (
                       <a class="reveal-link" href={card.project.href}>{card.project.name} →</a>
@@ -83,7 +101,7 @@ const groups = [
         ))}
       </div>
     </div>
-    <p class="section-note">click a tool card for how it maps into a Lab project · hover to pause, drag to browse</p>
+    <p class="section-note">{t.stack.note}</p>
   </div>
 </section>
 
