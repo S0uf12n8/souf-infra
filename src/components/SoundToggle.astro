@@ -29,7 +29,6 @@ const { t } = Astro.props;
     <path class="ic-wave" d="M12 3.2a6 6 0 0 1 0 9.6" />
     <path class="ic-mute" d="M3.4 3.4l9.2 9.2" />
   </svg>
-  <span class="snd-label">{t.sound.label} <strong class="snd-state">off</strong></span>
 </button>
 
 <script>
@@ -53,13 +52,10 @@ const { t } = Astro.props;
     let master: GainNode | null = null;
     let lastPlay = 0;
 
-    const stateEl = btn.querySelector<HTMLElement>('.snd-state');
-
     const setUi = () => {
       btn.setAttribute('aria-pressed', String(enabled));
       btn.setAttribute('aria-label', enabled ? (btn.dataset.ariaOn ?? '') : (btn.dataset.ariaOff ?? ''));
       btn.title = enabled ? (btn.dataset.titleOn ?? '') : (btn.dataset.titleOff ?? '');
-      if (stateEl) stateEl.textContent = enabled ? 'on' : 'off';
     };
 
     function ensureCtx() {
@@ -135,18 +131,16 @@ const { t } = Astro.props;
   .snd-toggle {
     display: inline-flex;
     align-items: center;
-    gap: 0.45rem;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.04em;
+    justify-content: center;
     color: var(--text-dim);
     background: transparent;
     border: 1px solid var(--border);
     border-radius: 4px;
-    padding: 0.3rem 0.55rem;
+    padding: 0.4rem;
     cursor: pointer;
     white-space: nowrap;
     transition: color 0.2s, border-color 0.2s, background 0.2s;
+    line-height: 0;
   }
 
   .snd-toggle:hover {
@@ -201,9 +195,5 @@ const { t } = Astro.props;
 
   .snd-toggle[aria-pressed='true'] .ic-wave {
     display: block;
-  }
-
-  .snd-state {
-    font-weight: 700;
   }
 </style>
