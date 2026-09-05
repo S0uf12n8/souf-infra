@@ -48,30 +48,36 @@ export function localizedHref(
   hash = ''
 ): string {
   let canonical: string;
-  if (path === '/') {
+  if (path === '/' || path.endsWith('/index') || path.endsWith('/index/')) {
+    // Root/`/en` is the default locale's URL — canonicalized as `/` (no prefix).
     canonical = '/';
-  } else if (path.endsWith('/index') || path.endsWith('/index/')) {
-    canonical = '/';
-  } else {
-    // path already has the locale prefix from Astro.url.pathname — keep it
+  } else if (path.startsWith('/fr/')) {
+    // French paths keep their `/fr` prefix.
     canonical = path.replace(/\/index\/?$/, '');
+    if (!canonical.endsWith('/')) canonical += '/';
+  } else {
+    // Default-locale (en) paths are prefix-less.
+    canonical = path.replace(/^\/en/, '').replace(/\/index\/?$/, '');
+    if (!canonical.startsWith('/')) canonical = '/' + canonical;
     if (!canonical.endsWith('/')) canonical += '/';
   }
 
-  // For the target locale, replace the current prefix with the target's
+  // Resolve the target path: only French carries a non-default `/fr` prefix.
   let href: string;
   if (target === defaultLocale) {
-    // Strip any /en or /fr prefix to get the canonical path
-    href = canonical.replace(/^\/(en|fr)(\/|$)/, '/$2' === '/' ? '' : '/');
+    // English lives at the prefix-less path (e.g. `/` from `/fr/`).
+    href = canonical.replace(/^\/fr\/?/, '/');
     if (!href.startsWith('/')) href = '/' + href;
+    if (!href.endsWith('/')) href += '/';
   } else {
-    // Ensure the target prefix is present
-    href = canonical.replace(/^\/(en|fr)(\/|$)/, `/${target}$2`);
-    if (!href.startsWith('/')) href = `/${target}${href}`;
+    // French always carries the `/fr` prefix (e.g. `/fr/` from `/` or `/en/`).
+    href = canonical.replace(/^\/fr\/?/, `/fr/`);
+    if (!href.startsWith('/fr/')) href = '/fr' + href;
+    if (!href.endsWith('/')) href += '/';
   }
 
-  if (href.endsWith('/404')) {
-    href = target === defaultLocale ? '/404' : `/${target}/404`;
+  if (href.endsWith('/404/')) {
+    href = target === defaultLocale ? '/404/' : `/${target}/404/`;
   }
   if (hash) href += hash;
   return href;

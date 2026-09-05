@@ -72,7 +72,7 @@ const { t } = Astro.props;
 
     function play() {
       const now = performance.now();
-      if (now - lastPlay < 45) return;
+      if (now - lastPlay < 20) return;
       lastPlay = now;
 
       ensureCtx();
@@ -96,6 +96,19 @@ const { t } = Astro.props;
       src.connect(master);
       src.start();
     }
+
+    // Pre-warm: initialise the AudioContext on the very first pointerdown —
+    // a guaranteed user gesture — so by the time a click's play() runs the
+    // context is already running. The first sound has zero setup latency and
+    // clicks that follow are already measurable as ~0ms (no resume() gap).
+    let warmed = false;
+    const warm = () => {
+      if (warmed) return;
+      warmed = true;
+      ensureCtx();
+      if (ctx && ctx.state === 'suspended') void ctx.resume();
+    };
+    document.addEventListener('pointerdown', warm, { once: true, capture: true });
 
     btn.addEventListener('click', () => {
       enabled = !enabled;
