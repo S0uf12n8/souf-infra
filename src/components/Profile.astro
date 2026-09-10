@@ -26,7 +26,7 @@ const tabs = [
         <span class="terminal-title">{t.profile.terminalTitle}</span>
       </div>
       <div class="profile-actions">
-        <a class="profile-btn profile-btn-primary" href="/cv.pdf" title={t.profile.cvTitle}>[ {t.profile.downloadCV.slice(1, -1)} ]</a>
+        <a class="profile-btn profile-btn-primary" href="/cv.pdf" target="_blank" rel="noopener" title={t.profile.cvTitle}>[ {t.profile.downloadCV.slice(1, -1)} ]</a>
         <a
           class="profile-btn profile-btn-secondary"
           href="https://www.linkedin.com/in/soufiane-oulkadi/"
@@ -400,6 +400,9 @@ const tabs = [
     line-height: 1.7;
     color: var(--text-dim);
     max-width: 68ch;
+    text-align: justify;
+    hyphens: auto;
+    -webkit-hyphens: auto;
   }
 
   .panel-path {
